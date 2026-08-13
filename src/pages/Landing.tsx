@@ -121,7 +121,7 @@ function Nav() {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="fixed inset-x-0 top-5 z-50 flex justify-center px-4 sm:top-6"
     >
-      <motion.nav className="flex items-center gap-1.5 rounded-[18px] border border-white/15 bg-[#0d0d0d]/80 p-2 backdrop-blur-xl">
+      <motion.nav className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 p-2 backdrop-blur-md">
         <a
           href="#top"
           aria-label="ZakariaHQ home"
@@ -144,7 +144,7 @@ function Nav() {
         <Button
           asChild
           size="sm"
-          className="h-9 gap-2 rounded-xl bg-[#212121] px-4 text-sm font-medium text-white hover:bg-[#2e2e2e]"
+          className="h-9 gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/10"
         >
           <a href={BOOKING_URL}>
             Book a Call
@@ -162,7 +162,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
       href={href}
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-xl text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+      className="flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
     >
       {children}
     </a>
@@ -211,7 +211,8 @@ function Hero() {
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
           className="mt-8"
         >
-          <span className="inline-flex items-center rounded-full bg-[#e1fadc] px-4 py-1.5 text-[13px] font-medium tracking-[-0.01em] text-[#178d00]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-1.5 text-[13px] font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
+            <span className="size-1.5 animate-pulse rounded-full bg-[#71b25c]" />
             3 spots left in August
           </span>
         </motion.div>
@@ -225,7 +226,7 @@ function Hero() {
           <Button
             asChild
             size="lg"
-            className="group h-12 w-full gap-2 rounded-full bg-[#212121] px-8 text-white hover:bg-[#2e2e2e] sm:w-auto"
+            className="group h-12 w-full gap-2 rounded-full border border-white/10 bg-white/5 px-8 text-white backdrop-blur-md transition-colors hover:bg-white/10 sm:w-auto"
           >
             <a href={BOOKING_URL}>
               Book a Call
@@ -236,7 +237,7 @@ function Hero() {
             asChild
             variant="ghost"
             size="lg"
-            className="h-12 w-full gap-2 rounded-full px-6 text-white hover:bg-white/10 sm:w-auto"
+            className="h-12 w-full gap-2 rounded-full border border-white/10 px-6 text-white transition-colors hover:bg-white/10 sm:w-auto"
           >
             <a href="#work">
               <Play className="size-4 fill-current" />
@@ -385,7 +386,7 @@ function ProjectCard({
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, delay: (index % 3) * 0.09, ease: "easeOut" }}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border-2 border-[#262626] bg-[#0e0e0e] p-2 pb-3 transition-colors duration-300 hover:border-[#3d3d3d]",
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]",
         featured && "sm:col-span-2",
       )}
     >
@@ -444,7 +445,7 @@ function CtaCard() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, delay: 0.18, ease: "easeOut" }}
-      className="group relative flex flex-col items-center justify-center gap-5 overflow-hidden rounded-2xl border-2 border-dashed border-[#333] p-10 text-center transition-colors duration-300 hover:border-[#71b25c]/70 sm:col-span-2"
+      className="group relative flex flex-col items-center justify-center gap-5 overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-10 text-center backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)] sm:col-span-2"
     >
       <div
         aria-hidden
@@ -551,7 +552,7 @@ function Faqs() {
           <Button
             asChild
             variant="outline"
-            className="mt-9 rounded-full border-white/15 bg-transparent text-white hover:bg-white/10 hover:text-white"
+            className="mt-9 rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
           >
             <a href={BOOKING_URL} className="gap-2">
               Request a Project
@@ -586,7 +587,7 @@ function Faqs() {
 function FinalCta() {
   return (
     <section id="request-cal" className="scroll-mt-24 px-4 pb-24 pt-8 sm:px-6">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-white/10 px-6 py-14 sm:px-10 sm:py-20">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/40 px-6 py-14 backdrop-blur-sm sm:px-10 sm:py-20">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/3 h-72 w-[560px] rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
@@ -702,7 +703,7 @@ function RequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-white/10 bg-[#121212]/80 p-6 backdrop-blur-sm sm:p-7"
+      className="rounded-2xl border border-white/10 bg-neutral-900/60 p-6 backdrop-blur-sm sm:p-7"
     >
       {/* Honeypot — hidden from humans, irresistible to bots. */}
       <input
@@ -830,7 +831,7 @@ function SocialChip({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-white backdrop-blur transition-colors hover:border-[#71b25c]/70 hover:text-[#71b25c]"
+      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-[#71b25c]/60 hover:bg-white/10 hover:text-[#71b25c]"
     >
       {icon}
       {label}
