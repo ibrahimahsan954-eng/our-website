@@ -42,6 +42,7 @@ const schema = defineSchema(
       timeline: v.optional(v.string()),
       message: v.string(),
       status: v.union(v.literal("new"), v.literal("archived")),
+      readAt: v.optional(v.number()),
       createdAt: v.number(),
     }).index("by_status", ["status", "createdAt"]),
   },

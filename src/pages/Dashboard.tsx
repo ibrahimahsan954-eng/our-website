@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Archive,
+  Check,
   Inbox,
   LogOut,
   Mail,
@@ -27,6 +28,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const inquiries = useQuery(api.inquiries.listInquiries);
   const archiveInquiry = useMutation(api.inquiries.archiveInquiry);
+  const markInquiryRead = useMutation(api.inquiries.markInquiryRead);
 
   const handleSignOut = async () => {
     await signOut();
@@ -88,10 +90,17 @@ export default function Dashboard() {
           </div>
         ) : (
           <ul className="flex flex-col gap-3">
-            {list.map((inquiry) => (
+            {list.map((inquiry) => {
+              const unread = inquiry.readAt == null;
+              return (
               <li
                 key={inquiry._id}
-                className="rounded-2xl border border-white/10 bg-[#121212] p-5 transition-colors hover:border-white/20"
+                className={cn(
+                  "rounded-2xl border p-5 transition-colors",
+                  unread
+                    ? "border-[#71b25c]/35 bg-[#141414] hover:border-[#71b25c]/60"
+                    : "border-white/10 bg-[#121212] hover:border-white/20",
+                )}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
@@ -99,10 +108,16 @@ export default function Dashboard() {
                       <h2 className="font-display text-base font-semibold text-white">
                         {inquiry.name}
                       </h2>
+                      {unread && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-[#71b25c]">
+                          <span className="size-1.5 rounded-full bg-[#71b25c]" />
+                          New
+                        </span>
+                      )}
                       {inquiry.company && (
                         <span className="text-sm text-[#86868b]">· {inquiry.company}</span>
                       )}
-                      <span className="rounded-full border border-[#71b25c]/40 bg-[#71b25c]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#71b25c]">
+                      <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-medium text-[#a1a1a6]">
                         {inquiry.projectType}
                       </span>
                     </div>
@@ -114,17 +129,43 @@ export default function Dashboard() {
                       {inquiry.email}
                     </a>
                   </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="shrink-0 gap-1.5 rounded-full text-[#86868b] hover:bg-white/5 hover:text-white"
-                    onClick={() => archiveInquiry({ id: inquiry._id })}
-                    title="Archive"
-                  >
-                    <Archive className="size-4" />
-                    <span className="hidden sm:inline">Archive</span>
-                  </Button>
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    {unread ? (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="gap-1.5 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
+                        onClick={() => markInquiryRead({ id: inquiry._id, read: true })}
+                        title="Mark as read"
+                      >
+                        <Check className="size-4" />
+                        <span className="hidden sm:inline">Mark read</span>
+                      </Button>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="gap-1.5 rounded-full text-[#86868b] hover:bg-white/5 hover:text-white"
+                        onClick={() => markInquiryRead({ id: inquiry._id, read: false })}
+                        title="Mark as unread"
+                      >
+                        <span className="hidden sm:inline">Mark unread</span>
+                      </Button>
+                    )}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="shrink-0 gap-1.5 rounded-full text-[#86868b] hover:bg-white/5 hover:text-white"
+                      onClick={() => archiveInquiry({ id: inquiry._id })}
+                      title="Archive"
+                    >
+                      <Archive className="size-4" />
+                      <span className="hidden sm:inline">Archive</span>
+                    </Button>
+                  </div>
                 </div>
 
                 {(inquiry.budget || inquiry.timeline) && (
@@ -148,7 +189,8 @@ export default function Dashboard() {
 
                 <p className="mt-3 text-xs text-[#86868b]/70">{formatDate(inquiry.createdAt)}</p>
               </li>
-            ))}
+              );
+            })}
           </ul>
         )}
       </div>

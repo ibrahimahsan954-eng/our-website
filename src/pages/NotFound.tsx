@@ -1,26 +1,45 @@
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { ArrowLeft, Clapperboard } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen flex flex-col"
-    >
+    <div className="min-h-screen bg-background text-foreground antialiased">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="flex min-h-screen flex-col items-center justify-center px-6 text-center"
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+          className="flex size-16 items-center justify-center rounded-[22px] border border-white/10 bg-[#212121]"
+        >
+          <Clapperboard className="size-7 text-white/70" />
+        </motion.div>
 
-      
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="max-w-5xl mx-auto relative px-4">
-          <div className="flex items-center justify-center min-h-[200px]">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-              <p className="text-lg text-gray-600">Page Not Found</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
+        <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-[#71b25c]">
+          Error 404
+        </p>
+        <h1 className="mt-3 font-display text-5xl font-medium tracking-tight text-white sm:text-6xl">
+          Scene not found
+        </h1>
+        <p className="mt-4 max-w-md text-base leading-relaxed text-[#86868b]">
+          This frame didn&apos;t make the cut. Let&apos;s get you back to the showreel.
+        </p>
+
+        <Button
+          asChild
+          className="mt-8 h-12 gap-2 rounded-full bg-[#212121] px-7 text-white hover:bg-[#2e2e2e]"
+        >
+          <a href="/">
+            <ArrowLeft className="size-4" />
+            Back to the site
+          </a>
+        </Button>
+      </motion.div>
+    </div>
   );
 }

@@ -76,3 +76,17 @@ export const archiveInquiry = mutation({
     await ctx.db.patch(args.id, { status: "archived" });
   },
 });
+
+/**
+ * Owner-only mutation — toggles whether an inquiry has been read.
+ */
+export const markInquiryRead = mutation({
+  args: { id: v.id("projectInquiries"), read: v.boolean() },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) {
+      throw new Error("Not authenticated");
+    }
+    await ctx.db.patch(args.id, { readAt: args.read ? Date.now() : undefined });
+  },
+});
