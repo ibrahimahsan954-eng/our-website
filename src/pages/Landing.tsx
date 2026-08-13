@@ -1,19 +1,18 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
 import {
   ArrowRight,
   ArrowUpRight,
+  Check,
   Clapperboard,
   Instagram,
   Linkedin,
+  Loader2,
   MessageCircle,
   Play,
   Plus,
@@ -587,47 +586,223 @@ function Faqs() {
 function FinalCta() {
   return (
     <section id="request-cal" className="scroll-mt-24 px-4 pb-24 pt-8 sm:px-6">
-      <div className="relative mx-auto max-w-3xl overflow-hidden px-6 py-16 text-center sm:px-12 sm:py-24">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-white/10 px-6 py-14 sm:px-10 sm:py-20">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 left-1/2 h-72 w-[560px] -translate-x-1/2 rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
+          <div className="absolute -top-32 left-1/3 h-72 w-[560px] rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
         </div>
 
-        <div className="relative">
-          <SectionHeading
-            eyebrow="Book a call"
-            title={
-              <>
-                Let&apos;s talk scope, timeline &amp; budget —{" "}
-                <span className="font-medium text-[#71b25c]">no fluff, just clarity</span>
-              </>
-            }
-            sub="Shoot me a DM, let's discuss your next project."
-          />
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <SocialChip href={SOCIALS.x} icon={<MessageCircle className="size-4" />} label="@1zakariahq" />
-            <SocialChip
-              href={SOCIALS.instagram}
-              icon={<Instagram className="size-4" />}
-              label="@1zakariahq"
+        <div className="relative grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+          <div className="flex flex-col items-start">
+            <SectionHeading
+              align="left"
+              eyebrow="Request a project"
+              title={
+                <>
+                  Let&apos;s talk scope, timeline &amp; budget —{" "}
+                  <span className="font-medium text-[#71b25c]">no fluff, just clarity</span>
+                </>
+              }
+              sub="Tell me about your product and I'll get back to you within 24h with next steps. Prefer to chat? Shoot me a DM directly."
             />
-            <SocialChip href={SOCIALS.x} icon={<Send className="size-4" />} label="@zakaria" />
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <SocialChip href={SOCIALS.x} icon={<MessageCircle className="size-4" />} label="@1zakariahq" />
+              <SocialChip
+                href={SOCIALS.instagram}
+                icon={<Instagram className="size-4" />}
+                label="@1zakariahq"
+              />
+              <SocialChip href={SOCIALS.x} icon={<Send className="size-4" />} label="@zakaria" />
+            </div>
           </div>
 
-          <Button
-            asChild
-            size="lg"
-            className="mt-10 h-12 gap-2 rounded-full bg-[#2b7ced] px-8 text-white hover:bg-[#3d87f0]"
-          >
-            <a href={BOOKING_URL}>
-              Schedule a Call
-              <ArrowUpRight className="size-4" />
-            </a>
-          </Button>
+          <RequestForm />
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------------- Request form ---------------- */
+
+const PROJECT_TYPES = [
+  "Product launch video",
+  "Explainer video",
+  "Product demo",
+  "Short-form reel / UGC",
+  "VSL (video sales letter)",
+  "Keynote / presentation visuals",
+  "Something else",
+];
+
+const BUDGET_RANGES = ["$1k – $3k", "$3k – $7k", "$7k – $15k", "$15k+", "Not sure yet"];
+
+const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flexible"];
+
+function RequestForm() {
+  const submitInquiry = useMutation(api.inquiries.submitInquiry);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus("loading");
+    setError(null);
+    try {
+      const formData = new FormData(event.currentTarget);
+      await submitInquiry({
+        name: (formData.get("name") as string) ?? "",
+        email: (formData.get("email") as string) ?? "",
+        company: ((formData.get("company") as string) ?? "").trim() || undefined,
+        projectType: (formData.get("projectType") as string) ?? "",
+        budget: ((formData.get("budget") as string) ?? "") || undefined,
+        timeline: ((formData.get("timeline") as string) ?? "") || undefined,
+        message: (formData.get("message") as string) ?? "",
+      });
+      setStatus("success");
+    } catch (err) {
+      console.error("Inquiry submit error:", err);
+      setError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again.",
+      );
+      setStatus("error");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#71b25c]/40 bg-[#101810] p-10 text-center"
+      >
+        <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
+          <Check className="size-7" />
+        </span>
+        <h3 className="font-display text-2xl font-semibold text-white">Request received</h3>
+        <p className="max-w-sm text-sm leading-relaxed text-[#86868b]">
+          Thanks for reaching out — I&apos;ll get back to you within 24 hours to talk scope,
+          timeline, and budget.
+        </p>
+        <Button
+          type="button"
+          variant="ghost"
+          className="mt-2 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
+          onClick={() => setStatus("idle")}
+        >
+          Send another request
+        </Button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-2xl border border-white/10 bg-[#121212]/80 p-6 backdrop-blur-sm sm:p-7"
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Your name" required>
+          <input name="name" required maxLength={120} placeholder="Jane Doe" className={inputClass} />
+        </Field>
+        <Field label="Email" required>
+          <input name="email" type="email" required placeholder="jane@company.com" className={inputClass} />
+        </Field>
+        <Field label="Company (optional)">
+          <input name="company" maxLength={120} placeholder="Acme Inc." className={inputClass} />
+        </Field>
+        <Field label="Project type" required>
+          <select name="projectType" required defaultValue="" className={inputClass}>
+            <option value="" disabled>
+              Select a type
+            </option>
+            {PROJECT_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Budget (optional)">
+          <select name="budget" defaultValue="" className={inputClass}>
+            <option value="">Select a range</option>
+            {BUDGET_RANGES.map((range) => (
+              <option key={range} value={range}>
+                {range}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Timeline (optional)">
+          <select name="timeline" defaultValue="" className={inputClass}>
+            <option value="">When do you need it?</option>
+            {TIMELINES.map((timeline) => (
+              <option key={timeline} value={timeline}>
+                {timeline}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
+
+      <div className="mt-4">
+        <Field label="Tell me about your project" required>
+          <textarea
+            name="message"
+            required
+            rows={4}
+            maxLength={4000}
+            placeholder="Your product, the story you want to tell, links to anything relevant…"
+            className={cn(inputClass, "min-h-28 resize-y")}
+          />
+        </Field>
+      </div>
+
+      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+
+      <Button
+        type="submit"
+        disabled={status === "loading"}
+        className="mt-5 h-12 w-full gap-2 rounded-full bg-[#2b7ced] text-white hover:bg-[#3d87f0]"
+      >
+        {status === "loading" ? (
+          <>
+            <Loader2 className="size-4 animate-spin" />
+            Sending…
+          </>
+        ) : (
+          <>
+            Request a Project
+            <ArrowUpRight className="size-4" />
+          </>
+        )}
+      </Button>
+    </form>
+  );
+}
+
+const inputClass =
+  "w-full rounded-xl border border-white/15 bg-[#0d0d0d] px-4 py-2.5 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20 [&>option]:bg-[#1a1a1a]";
+
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-xs font-medium text-[#a1a1a6]">
+        {label}
+        {required && <span className="text-[#71b25c]"> *</span>}
+      </span>
+      {children}
+    </label>
   );
 }
 
