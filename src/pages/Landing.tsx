@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   Check,
   Clapperboard,
+  Home,
   Instagram,
   Linkedin,
   Loader2,
@@ -114,6 +115,11 @@ export default function Landing() {
 /* ---------------- Nav (floating pill) ---------------- */
 
 function Nav() {
+  const scrollToTop = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -16 }}
@@ -124,10 +130,12 @@ function Nav() {
       <motion.nav className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 p-2 backdrop-blur-md">
         <a
           href="#top"
-          aria-label="ZakariaHQ home"
-          className="flex size-9 items-center justify-center rounded-xl bg-[#212121] transition-colors hover:bg-[#2c2c2c]"
+          onClick={scrollToTop}
+          aria-label="Back to top"
+          title="Back to top"
+          className="flex size-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
         >
-          <span className="font-display text-base font-bold text-white">Z</span>
+          <Home className="size-[18px]" />
         </a>
 
         <span aria-hidden className="mx-1 h-4 w-px bg-white/15" />
