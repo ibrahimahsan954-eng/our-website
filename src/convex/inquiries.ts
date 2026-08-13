@@ -16,8 +16,15 @@ export const submitInquiry = mutation({
     budget: v.optional(v.string()),
     timeline: v.optional(v.string()),
     message: v.string(),
+    // Honeypot — bots fill this hidden field; real visitors never see it.
+    website: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // Silently discard bot submissions that filled the honeypot field.
+    if (args.website && args.website.trim().length > 0) {
+      return;
+    }
+
     const name = args.name.trim();
     const email = args.email.trim();
     const message = args.message.trim();
@@ -30,6 +37,17 @@ export const submitInquiry = mutation({
     }
     if (message.length === 0 || message.length > 4000) {
       throw new Error("Please describe your project (max 4000 characters).");
+    }
+
+    // Rate limit: at most one submission per email every 60 seconds, so bots
+    // can't flood the inbox or burn email credits.
+    const latest = await ctx.db
+      .query("projectInquiries")
+      .withIndex("by_email", (q) => q.eq("email", email))
+      .order("desc")
+      .first();
+    if (latest && Date.now() - latest.createdAt < 60_000) {
+      throw new Error("Thanks — please wait a moment before sending another request.");
     }
 
     await ctx.db.insert("projectInquiries", {

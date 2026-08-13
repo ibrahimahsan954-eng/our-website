@@ -44,7 +44,9 @@ const schema = defineSchema(
       status: v.union(v.literal("new"), v.literal("archived")),
       readAt: v.optional(v.number()),
       createdAt: v.number(),
-    }).index("by_status", ["status", "createdAt"]),
+    })
+      .index("by_status", ["status", "createdAt"])
+      .index("by_email", ["email"]),
   },
   {
     schemaValidation: false,

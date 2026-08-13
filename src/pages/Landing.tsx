@@ -659,6 +659,7 @@ function RequestForm() {
         budget: ((formData.get("budget") as string) ?? "") || undefined,
         timeline: ((formData.get("timeline") as string) ?? "") || undefined,
         message: (formData.get("message") as string) ?? "",
+        website: (formData.get("website") as string) ?? "",
       });
       setStatus("success");
     } catch (err) {
@@ -703,6 +704,15 @@ function RequestForm() {
       onSubmit={handleSubmit}
       className="rounded-2xl border border-white/10 bg-[#121212]/80 p-6 backdrop-blur-sm sm:p-7"
     >
+      {/* Honeypot — hidden from humans, irresistible to bots. */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-px w-px overflow-hidden"
+      />
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Your name" required>
           <input name="name" required maxLength={120} placeholder="Jane Doe" className={inputClass} />

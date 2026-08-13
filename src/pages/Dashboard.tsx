@@ -36,6 +36,7 @@ export default function Dashboard() {
   };
 
   const list = inquiries ?? [];
+  const unreadCount = list.filter((inquiry) => inquiry.readAt == null).length;
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -43,9 +44,17 @@ export default function Dashboard() {
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-medium text-[#86868b]">ZakariaHQ studio workspace</p>
-            <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-white">
-              Project inbox{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
-            </h1>
+            <div className="mt-1 flex items-center gap-3">
+              <h1 className="font-display text-3xl font-semibold tracking-tight text-white">
+                Project inbox{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
+              </h1>
+              {unreadCount > 0 && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-xs font-semibold text-[#71b25c]">
+                  <span className="size-1.5 rounded-full bg-[#71b25c]" />
+                  {unreadCount} new
+                </span>
+              )}
+            </div>
             <p className="mt-1 text-sm text-[#86868b]">
               Requests submitted from your site&apos;s booking form land here.
             </p>
