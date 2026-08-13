@@ -126,16 +126,11 @@ function Nav() {
         <a
           href="#top"
           onClick={scrollToTop}
-          aria-label="Ebad Ahsan — back to top"
+          aria-label="Back to top"
           title="Back to top"
-          className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 pl-1 pr-3 backdrop-blur-md transition-colors hover:bg-white/10"
+          className="flex size-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
         >
-          <span className="flex size-9 items-center justify-center rounded-full text-white/70 transition-colors hover:text-white">
-            <Home className="size-[18px]" />
-          </span>
-          <span className="hidden pr-0.5 font-display text-[15px] font-semibold tracking-tight text-white sm:block">
-            Ebad<span className="text-[#71b25c]">Ahsan</span>
-          </span>
+          <Home className="size-[18px]" />
         </a>
 
         <span aria-hidden className="mx-1 h-4 w-px bg-white/15" />
@@ -155,7 +150,7 @@ function Nav() {
           className="h-9 gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/10"
         >
           <a href={BOOKING_URL}>
-            Book a Call
+            Reserve a Spot
             <ArrowUpRight className="size-3.5" />
           </a>
         </Button>
