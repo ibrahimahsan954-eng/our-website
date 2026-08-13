@@ -131,7 +131,7 @@ function Nav() {
         <a
           href="#top"
           onClick={scrollToTop}
-          aria-label="ZakariaHQ — back to top"
+          aria-label="Ebad Ahsan — back to top"
           title="Back to top"
           className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 pl-1 pr-3 backdrop-blur-md transition-colors hover:bg-white/10"
         >
@@ -139,7 +139,7 @@ function Nav() {
             <Home className="size-[18px]" />
           </span>
           <span className="hidden pr-0.5 font-display text-[15px] font-semibold tracking-tight text-white sm:block">
-            Zakaria<span className="text-[#71b25c]">HQ</span>
+            Ebad<span className="text-[#71b25c]">Ahsan</span>
           </span>
         </a>
 
@@ -192,9 +192,9 @@ function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-14 select-none text-center font-display text-[15vw] font-semibold leading-[0.92] tracking-tighter text-white/[0.03] sm:top-10 sm:text-[9rem]"
       >
-        Zakaria
+        Ebad
         <br />
-        Nourine
+        Ahsan
       </div>
 
       <div className="relative mx-auto max-w-4xl text-center">
@@ -304,7 +304,7 @@ function Avatar() {
         {!failed && (
           <img
             src={AVATAR_URL}
-            alt="Zakaria Nourine"
+            alt="Ebad Ahsan"
             onError={() => setFailed(true)}
             className="relative h-full w-full object-cover"
           />
@@ -891,7 +891,7 @@ function Footer() {
               Z
             </span>
             <span className="font-display font-semibold tracking-tight text-white">
-              Zakaria<span className="text-[#71b25c]">HQ</span>
+              Ebad<span className="text-[#71b25c]">Ahsan</span>
             </span>
           </div>
           <p className="text-sm text-[#86868b]">
@@ -913,7 +913,7 @@ function Footer() {
           </div>
         </div>
         <p className="mt-10 text-center text-xs text-[#86868b]/60">
-          © {new Date().getFullYear()} ZakariaHQ. All rights reserved.
+          © {new Date().getFullYear()} Ebad Ahsan. All rights reserved.
         </p>
       </div>
     </footer>

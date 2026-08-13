@@ -43,7 +43,7 @@ export default function Dashboard() {
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-[#86868b]">ZakariaHQ studio workspace</p>
+            <p className="text-sm font-medium text-[#86868b]">Ebad Ahsan studio workspace</p>
             <div className="mt-1 flex items-center gap-3">
               <h1 className="font-display text-3xl font-semibold tracking-tight text-white">
                 Project inbox{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
