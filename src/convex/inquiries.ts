@@ -1,4 +1,5 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { api } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -42,6 +43,22 @@ export const submitInquiry = mutation({
       status: "new",
       createdAt: Date.now(),
     });
+
+    // Fire the emails after this mutation commits (visitor confirmation +
+    // optional owner alert). Scheduler failures don't affect the saved inquiry.
+    try {
+      await ctx.scheduler.runAfter(0, api.emails.sendInquiryEmails, {
+        name,
+        email,
+        company: args.company?.trim() || undefined,
+        projectType: args.projectType,
+        budget: args.budget || undefined,
+        timeline: args.timeline || undefined,
+        message,
+      });
+    } catch (error) {
+      console.error("Failed to schedule inquiry emails:", error);
+    }
   },
 });
 
