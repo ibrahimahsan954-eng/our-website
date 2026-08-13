@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { VideoModal } from "@/components/VideoModal";
+import { PROJECTS, type Project } from "@/data/projects";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import {
@@ -57,20 +59,6 @@ const STATS = [
   { value: 60, suffix: "+", label: "Projects Completed" },
   { value: 40, suffix: "+", label: "Satisfied Clients" },
   { value: 100, suffix: "M+", label: "Views" },
-];
-
-const PROJECTS = [
-  {
-    name: "FanBasis",
-    tagline: "Operating System for Modern Digital Businesses",
-    hue: 192,
-    featured: true,
-  },
-  { name: "MakeUGC", tagline: "Platform to Create AI UGC", hue: 262 },
-  { name: "MalocFr", tagline: "Cars Marketplace", hue: 24 },
-  { name: "ValeFi", tagline: "DeFi platform", hue: 158 },
-  { name: "Memorae", tagline: "AI agent that remembers everything for you", hue: 316 },
-  { name: "Anyformat", tagline: "Agentic Document Intelligence", hue: 212 },
 ];
 
 const CLIENTS = ["FanBasis", "MakeUGC", "ValeFi", "Memorae", "MalocFr", "Anyformat"];
@@ -443,6 +431,8 @@ function ClientMarquee() {
 /* ---------------- Portfolio ---------------- */
 
 function Portfolio() {
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+
   return (
     <section id="work" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
@@ -454,11 +444,24 @@ function Portfolio() {
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {PROJECTS.map((project, index) => (
-            <ProjectCard key={project.name} project={project} index={index} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+              onSelect={() => setActiveProject(project)}
+            />
           ))}
           <CtaCard />
         </div>
       </div>
+
+      <VideoModal
+        open={activeProject !== null}
+        onOpenChange={(open) => !open && setActiveProject(null)}
+        title={activeProject?.title ?? ""}
+        category={activeProject?.category ?? ""}
+        videoUrl={activeProject?.videoUrl ?? ""}
+      />
     </section>
   );
 }
@@ -466,67 +469,64 @@ function Portfolio() {
 function ProjectCard({
   project,
   index,
+  onSelect,
 }: {
-  project: (typeof PROJECTS)[number];
+  project: Project;
   index: number;
+  onSelect: () => void;
 }) {
   const featured = project.featured;
+  const [thumbStep, setThumbStep] = useState(0);
+  const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
+    Boolean,
+  ) as string[];
+
   return (
-    <motion.a
-      href={BOOKING_URL}
+    <motion.button
+      type="button"
+      onClick={onSelect}
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, delay: (index % 3) * 0.09, ease: "easeOut" }}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]",
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 text-left backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]",
         featured && "sm:col-span-2",
       )}
     >
-      {/* Stylized video thumbnail */}
       <div
         className="relative overflow-hidden rounded-xl"
         style={{ aspectRatio: featured ? "16 / 9" : "16 / 10" }}
       >
-        <div
-          className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.04]"
-          style={{
-            background: `radial-gradient(130% 130% at 18% 0%, hsl(${project.hue} 60% 45% / 0.55), transparent 62%)`,
-          }}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_52%,rgba(10,10,10,0.8))]" />
-        <span className="absolute left-5 top-3 font-display text-6xl font-bold tracking-tight text-white/85 drop-shadow-sm sm:text-7xl">
-          {project.name[0]}
+        {thumbStep < thumbnails.length ? (
+          <img
+            src={thumbnails[thumbStep]}
+            onError={() => setThumbStep((step) => step + 1)}
+            alt={`${project.title} video thumbnail`}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_18%_0%,#1c2b1e_0%,#0e0e0e_62%)]" />
+        )}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.15),transparent_45%,rgba(10,10,10,0.72))]" />
+        {/* Watch hint on hover */}
+        <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/85 opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
+          Watch
         </span>
-        {/* Fake editor timeline */}
-        <div className="absolute inset-x-3 bottom-3 flex items-center gap-2.5 rounded-lg border border-white/10 bg-black/45 px-3 py-2 backdrop-blur-sm">
-          <span className="size-1.5 shrink-0 rounded-full bg-white/70" />
-          <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/15">
-            <div
-              className="h-full w-2/3 rounded-full"
-              style={{ background: `hsl(${project.hue} 70% 60%)` }}
-            />
-          </div>
-          <span className="font-mono text-[10px] uppercase tracking-wider text-white/70">
-            00:0{index + 1}
-          </span>
-        </div>
-        {/* Green play button */}
-        <span className="absolute bottom-3 right-3 flex size-8 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e] shadow-[0_4px_14px_rgba(113,178,92,0.4)] transition-transform duration-300 group-hover:scale-110">
-          <Play className="size-3.5 fill-current" />
+        {/* Play button */}
+        <span className="absolute bottom-3 right-3 flex size-10 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e] shadow-[0_4px_18px_rgba(113,178,92,0.45)] transition-transform duration-300 group-hover:scale-110">
+          <Play className="ml-0.5 size-4 fill-current" />
         </span>
       </div>
 
       <div className="flex items-start justify-between gap-4 px-2 pt-3">
         <div>
-          <h3 className="font-display text-lg font-semibold text-white">{project.name}</h3>
-          <p className="mt-0.5 text-sm leading-relaxed text-[#86868b]">
-            {project.tagline}
-          </p>
+          <h3 className="font-display text-lg font-semibold text-white">{project.title}</h3>
+          <p className="mt-0.5 text-sm leading-relaxed text-[#86868b]">{project.category}</p>
         </div>
-        <ArrowUpRight className="size-5 shrink-0 text-white/35 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
+        <ArrowUpRight className="size-5 shrink-0 text-white/35 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#71b25c]" />
       </div>
-    </motion.a>
+    </motion.button>
   );
 }
 
