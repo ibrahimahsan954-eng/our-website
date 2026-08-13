@@ -82,7 +82,23 @@ export default function Dashboard() {
           </div>
         </header>
 
-        {list.length === 0 ? (
+        {inquiries === null ? (
+          <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-[#121212] px-6 py-16 text-center">
+            <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#86868b]">
+              <Inbox className="size-6" />
+            </span>
+            <div>
+              <h2 className="font-display text-xl font-semibold text-white">Inbox restricted</h2>
+              <p className="mx-auto mt-1 max-w-md text-sm leading-relaxed text-[#86868b]">
+                This inbox is owner-only. Sign in with the email set as{" "}
+                <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs text-white/80">
+                  OWNER_NOTIFICATION_EMAIL
+                </code>{" "}
+                in the project&apos;s Keys/API keys tab to view requests.
+              </p>
+            </div>
+          </div>
+        ) : list.length === 0 ? (
           <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-[#121212] px-6 py-16 text-center">
             <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#86868b]">
               <Inbox className="size-6" />

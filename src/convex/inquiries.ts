@@ -1,7 +1,30 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { api } from "./_generated/api";
-import { mutation, query } from "./_generated/server";
+import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
 import { v } from "convex/values";
+
+/**
+ * Resolve the current user id, but only when they're the site owner.
+ *
+ * The owner is identified by the OWNER_NOTIFICATION_EMAIL environment
+ * variable (set in the project's Keys/API keys tab). While that variable is
+ * unset, any authenticated user can access the inbox so the owner isn't
+ * locked out before configuring it.
+ */
+async function getOwnerUserId(ctx: QueryCtx | MutationCtx) {
+  const userId = await getAuthUserId(ctx);
+  if (userId === null) {
+    return null;
+  }
+  const ownerEmail = process.env.OWNER_NOTIFICATION_EMAIL;
+  if (ownerEmail) {
+    const user = await ctx.db.get(userId);
+    if (!user || user.email !== ownerEmail) {
+      return null;
+    }
+  }
+  return userId;
+}
 
 /**
  * Public mutation — anyone can submit a project inquiry from the landing page.
@@ -86,7 +109,7 @@ export const submitInquiry = mutation({
 export const listInquiries = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
+    const userId = await getOwnerUserId(ctx);
     if (userId === null) {
       return null;
     }
@@ -104,9 +127,9 @@ export const listInquiries = query({
 export const archiveInquiry = mutation({
   args: { id: v.id("projectInquiries") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
+    const userId = await getOwnerUserId(ctx);
     if (userId === null) {
-      throw new Error("Not authenticated");
+      throw new Error("Not the site owner");
     }
     await ctx.db.patch(args.id, { status: "archived" });
   },
@@ -118,9 +141,9 @@ export const archiveInquiry = mutation({
 export const markInquiryRead = mutation({
   args: { id: v.id("projectInquiries"), read: v.boolean() },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
+    const userId = await getOwnerUserId(ctx);
     if (userId === null) {
-      throw new Error("Not authenticated");
+      throw new Error("Not the site owner");
     }
     await ctx.db.patch(args.id, { readAt: args.read ? Date.now() : undefined });
   },
