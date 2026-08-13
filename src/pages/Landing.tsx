@@ -29,9 +29,11 @@ import { cn } from "@/lib/utils";
 // or point at your real Cal.com link (e.g. "https://cal.com/zakariahq").
 const BOOKING_URL = "#request-cal";
 
-// Public showreel from zakariahq.com — replace with your own video URL.
-const SHOWREEL_URL =
-  "https://res.cloudinary.com/dqtjfwyak/video/upload/v1775838949/1920_g6doeu.mp4";
+// Primary showreel — YouTube.
+// Source: https://youtu.be/T7pNvhwRNBU?si=ogXx4LKdKcYi_YLx
+const SHOWREEL_ID = "T7pNvhwRNBU";
+const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
+const SHOWREEL_THUMBNAIL_FALLBACK = `https://i.ytimg.com/vi/${SHOWREEL_ID}/hqdefault.jpg`;
 
 // Your portrait (square GIF/photo) — falls back to a monogram tile if it fails.
 const AVATAR_URL =
@@ -320,6 +322,9 @@ function Avatar() {
 }
 
 function Showreel() {
+  const [playing, setPlaying] = useState(false);
+  const [thumbFailed, setThumbFailed] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 26 }}
@@ -332,16 +337,51 @@ function Showreel() {
         aria-hidden
         className="absolute inset-0 bg-[radial-gradient(120%_120%_at_20%_0%,#1c2b1e_0%,#0e0e0e_62%)]"
       />
-      <video
-        className="relative aspect-video w-full object-cover"
-        src={SHOWREEL_URL}
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+
+      <div className="relative aspect-video w-full">
+        {playing ? (
+          <iframe
+            className="absolute inset-0 h-full w-full"
+            src={`https://www.youtube.com/embed/${SHOWREEL_ID}?autoplay=1&rel=0&playsinline=1&color=white`}
+            title="Ebad Ahsan — Showreel"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            aria-label="Play showreel"
+            className="group absolute inset-0 block h-full w-full cursor-pointer overflow-hidden text-left"
+          >
+            <img
+              src={thumbFailed ? SHOWREEL_THUMBNAIL_FALLBACK : SHOWREEL_THUMBNAIL}
+              onError={() => setThumbFailed(true)}
+              alt="Showreel thumbnail"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+            <span
+              aria-hidden
+              className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.3),transparent_35%,transparent_60%,rgba(10,10,10,0.55))]"
+            />
+            {/* Center play button */}
+            <span className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+              <span className="absolute inset-0 animate-ping rounded-full bg-[#71b25c]/25 [animation-duration:2.2s]" />
+              <span className="relative flex size-16 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e] shadow-[0_8px_32px_rgba(113,178,92,0.45)] transition-transform duration-300 group-hover:scale-110">
+                <Play className="ml-0.5 size-7 fill-current" />
+              </span>
+            </span>
+            <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-black/55 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-white/85 backdrop-blur transition-colors group-hover:border-[#71b25c]/60 group-hover:text-[#71b25c]">
+              Click to play · Full quality
+            </span>
+          </button>
+        )}
+      </div>
+
+      {/* Showreel badge */}
       <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-white/80 backdrop-blur">
-        Showreel · 1:00
+        Showreel - 1:00
       </span>
     </motion.div>
   );
