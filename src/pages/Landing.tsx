@@ -131,11 +131,16 @@ function Nav() {
         <a
           href="#top"
           onClick={scrollToTop}
-          aria-label="Back to top"
+          aria-label="ZakariaHQ — back to top"
           title="Back to top"
-          className="flex size-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
+          className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 pl-1 pr-3 backdrop-blur-md transition-colors hover:bg-white/10"
         >
-          <Home className="size-[18px]" />
+          <span className="flex size-9 items-center justify-center rounded-full text-white/70 transition-colors hover:text-white">
+            <Home className="size-[18px]" />
+          </span>
+          <span className="hidden pr-0.5 font-display text-[15px] font-semibold tracking-tight text-white sm:block">
+            Zakaria<span className="text-[#71b25c]">HQ</span>
+          </span>
         </a>
 
         <span aria-hidden className="mx-1 h-4 w-px bg-white/15" />
