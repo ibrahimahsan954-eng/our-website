@@ -11,7 +11,7 @@ import {
 } from "@/lib/embed-video";
 import { useChromeFreeYouTubePlayer } from "@/hooks/use-chrome-free-youtube";
 import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Check,
@@ -96,6 +96,42 @@ function openWhatsApp(message: string) {
       window.location.href = targetUrl;
     }
   };
+}
+
+// Web3Forms — contact forms POST here so every submission lands straight in
+// the owner's inbox (the access key is bound to the destination email on
+// web3forms.com). The hidden-field equivalents of access_key/subject are sent
+// in the JSON body so the SPA never navigates away from the page.
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+const WEB3FORMS_ACCESS_KEY = "29857f35-c5a0-46fb-b8a4-3d7930ace8b0";
+const WEB3FORMS_SUBJECT = "New Portfolio Contact Submission!";
+
+// POSTs form fields to Web3Forms and returns a clean result so raw provider
+// error strings never reach the UI.
+async function submitToWeb3Forms(
+  payload: Record<string, string>,
+): Promise<{ success: boolean; message?: string }> {
+  try {
+    const response = await fetch(WEB3FORMS_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: WEB3FORMS_SUBJECT,
+        ...payload,
+      }),
+    });
+    const data = (await response.json().catch(() => null)) as {
+      success?: boolean;
+      message?: string;
+    } | null;
+    if (!response.ok || !data?.success) {
+      return { success: false, message: "Please try again in a moment." };
+    }
+    return { success: true };
+  } catch {
+    return { success: false, message: "Please try again in a moment." };
+  }
 }
 
 // Social profiles — paste your real profile URLs here. Any entry left as ""
@@ -757,7 +793,6 @@ const BUDGET_RANGES = ["$1k – $3k", "$3k – $7k", "$7k – $15k", "$15k+", "N
 const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flexible"];
 
 function RequestForm() {
-  const submitInquiry = useMutation(api.inquiries.submitInquiry);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -767,15 +802,14 @@ function RequestForm() {
     setError(null);
     try {
       const formData = new FormData(event.currentTarget);
-      const result = await submitInquiry({
+      const result = await submitToWeb3Forms({
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
-        company: ((formData.get("company") as string) ?? "").trim() || undefined,
-        projectType: (formData.get("projectType") as string) ?? "",
+        company: ((formData.get("company") as string) ?? "").trim(),
+        project_type: (formData.get("projectType") as string) ?? "",
         budget: (formData.get("budget") as string) ?? "",
         timeline: (formData.get("timeline") as string) ?? "",
         message: (formData.get("message") as string) ?? "",
-        website: (formData.get("website") as string) ?? "",
       });
       if (result.success) {
         setStatus("success");
@@ -803,10 +837,9 @@ function RequestForm() {
         <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
           <Check className="size-7" />
         </span>
-        <h3 className="font-display text-3xl font-semibold text-white">Request received</h3>
+        <h3 className="font-display text-3xl font-semibold text-white">Message sent successfully!</h3>
         <p className="max-w-sm text-base leading-relaxed text-[#86868b]">
-          Thanks for reaching out — I&apos;ll get back to you within 24 hours to talk scope,
-          timeline, and budget.
+          I will get back to you soon.
         </p>
         <Button
           type="button"
@@ -924,7 +957,7 @@ function RequestForm() {
         {status === "loading" ? (
           <>
             <Loader2 className="size-4 animate-spin" />
-            Sending…
+            Sending...
           </>
         ) : (
           <>
@@ -970,7 +1003,6 @@ const RESERVE_PROJECT_TYPES = [
 ];
 
 function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const submitInquiry = useMutation(api.inquiries.submitInquiry);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle",
   );
@@ -1007,14 +1039,11 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
     setError(null);
     try {
       const formData = new FormData(event.currentTarget);
-      const result = await submitInquiry({
+      const result = await submitToWeb3Forms({
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
-        projectType: (formData.get("projectType") as string) ?? "",
-        budget: "Not specified",
-        timeline: "Not specified",
+        project_type: (formData.get("projectType") as string) ?? "",
         message: (formData.get("message") as string) ?? "",
-        website: (formData.get("website") as string) ?? "",
       });
       if (result.success) {
         setStatus("success");
@@ -1076,16 +1105,15 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
             </div>
 
             {status === "success" ? (
-              <div className="flex flex-col items-center gap-3 px-6 py-12 text-center">
+              <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#71b25c]/40 bg-[#101810] px-6 py-12 text-center">
                 <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
                   <Check className="size-7" />
                 </span>
                 <h4 className="font-display text-2xl font-semibold text-white">
-                  Spot reserved
+                  Message sent successfully!
                 </h4>
                 <p className="max-w-sm text-base leading-relaxed text-[#86868b]">
-                  Thanks for reaching out — I&apos;ll get back to you within 24
-                  hours to talk scope, timeline, and budget.
+                  I will get back to you soon.
                 </p>
                 <Button
                   type="button"
@@ -1159,7 +1187,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                   {status === "loading" ? (
                     <>
                       <Loader2 className="size-4 animate-spin" />
-                      Submitting…
+                      Sending...
                     </>
                   ) : (
                     <>
