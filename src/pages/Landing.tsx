@@ -176,7 +176,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
 
 function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden px-4 pb-20 pt-32 sm:px-6 sm:pt-36">
+    <section id="top" className="relative overflow-hidden px-2 pb-16 pt-32 sm:pt-36 md:px-6">
       {/* Giant watermark name behind the hero */}
       <div
         aria-hidden
@@ -187,7 +187,7 @@ function Hero() {
         Ahsan
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl text-center">
+      <div className="relative mx-auto w-full text-center">
         <Avatar />
 
         <motion.h1
@@ -273,7 +273,7 @@ function Showreel() {
       initial={{ opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65, delay: 0.56, ease: "easeOut" }}
-      className="relative mx-auto mt-14 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#141414]"
+      className="relative mx-auto mt-8 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#141414] sm:mt-10"
     >
       {/* Fallback gradient behind the video */}
       <div
