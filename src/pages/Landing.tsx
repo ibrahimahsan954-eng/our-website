@@ -58,17 +58,29 @@ const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.
 const AVATAR_URL =
   "https://framerusercontent.com/images/PJGkejOvzUY4nwrdSlLOKfS2jvE.gif?width=512&height=512";
 
-// WhatsApp — this one is wired up and always shown. Pre-fills a message so
-// clients land straight in the conversation.
-const WHATSAPP_URL =
-  "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project!";
-
-// Dedicated link for the "Schedule a Call" button — pre-fills a call-specific message.
-const SCHEDULE_CALL_URL =
-  "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20schedule%20a%20call%20to%20discuss%20a%20video%20editing%20project!";
+// WhatsApp — wired up everywhere. Every trigger is a plain native <a> link
+// (target="_blank" rel="noopener noreferrer") — no JS navigation handlers.
+const WHATSAPP_PHONE = "923136494619";
+const WHATSAPP_MESSAGE =
+  "Hi Ebad, I saw your portfolio and would like to discuss a project!";
+const SCHEDULE_CALL_MESSAGE =
+  "Hi Ebad, I saw your portfolio and would like to schedule a call to discuss a video editing project!";
 
 // Copy-to-clipboard fallback for visitors whose network blocks WhatsApp.
 const WHATSAPP_NUMBER_DISPLAY = "+92 313 6494619";
+
+// Bulletproof href selection: wa.me (universal — app on mobile, web on
+// desktop) on desktop; on mobile, deep-link straight into the native app via
+// the whatsapp:// scheme so no redirect to api.whatsapp.com is ever needed.
+function getWhatsAppHref(message: string): string {
+  const encoded = encodeURIComponent(message);
+  const isMobile =
+    typeof navigator !== "undefined" &&
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  return isMobile
+    ? `whatsapp://send?phone=${WHATSAPP_PHONE}&text=${encoded}`
+    : `https://wa.me/${WHATSAPP_PHONE}?text=${encoded}`;
+}
 
 // Social profiles — paste your real profile URLs here. Any entry left as ""
 // is treated as unset and hidden automatically from the contact chips and footer.
@@ -133,7 +145,7 @@ export default function Landing() {
 
       {/* Floating WhatsApp — reachable from anywhere on the page */}
       <motion.a
-        href={WHATSAPP_URL}
+        href={getWhatsAppHref(WHATSAPP_MESSAGE)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
@@ -675,7 +687,7 @@ function FinalCta() {
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
-                href={WHATSAPP_URL}
+                href={getWhatsAppHref(WHATSAPP_MESSAGE)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 py-3 text-base font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
@@ -1138,7 +1150,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                 <p className="text-center text-sm text-[#86868b]">
                   Prefer direct chat?{" "}
                   <a
-                    href={WHATSAPP_URL}
+                    href={getWhatsAppHref(WHATSAPP_MESSAGE)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-glow-green font-medium text-[#25d366] transition-colors hover:text-[#4be07f]"
@@ -1172,7 +1184,7 @@ function DmSection() {
 
         <div className="mx-auto mt-10 grid w-full max-w-4xl gap-4 sm:grid-cols-3">
           <DmCard
-            href={WHATSAPP_URL}
+            href={getWhatsAppHref(WHATSAPP_MESSAGE)}
             icon={<WhatsAppIcon className="size-5" />}
             label="WhatsApp"
             note="Fastest reply"
@@ -1199,7 +1211,7 @@ function DmSection() {
             className="h-12 gap-2 rounded-full bg-[#2b7ced] px-8 text-white hover:bg-[#3d87f0]"
           >
             <a
-              href={SCHEDULE_CALL_URL}
+              href={getWhatsAppHref(SCHEDULE_CALL_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
             >
