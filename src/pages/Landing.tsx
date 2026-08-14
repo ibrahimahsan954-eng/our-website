@@ -58,8 +58,8 @@ const SOCIALS = {
 
 // Stats shown in the counters section (animated on scroll) — update to your real numbers
 const STATS = [
-  { value: 10, suffix: "+", label: "Happy clients" },
-  { value: 10, suffix: "+", label: "Projects completed" },
+  { value: 60, suffix: "+", label: "Happy clients" },
+  { value: 90, suffix: "+", label: "Projects completed" },
   { value: 100, suffix: "K+", label: "Views" },
 ];
 
