@@ -293,10 +293,6 @@ function Showreel() {
         />
       </div>
 
-      {/* Showreel badge */}
-      <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/50 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-white/80 backdrop-blur">
-        Showreel - 1:00
-      </span>
     </motion.div>
   );
 }
