@@ -691,8 +691,8 @@ function RequestForm() {
         email: (formData.get("email") as string) ?? "",
         company: ((formData.get("company") as string) ?? "").trim() || undefined,
         projectType: (formData.get("projectType") as string) ?? "",
-        budget: ((formData.get("budget") as string) ?? "") || undefined,
-        timeline: ((formData.get("timeline") as string) ?? "") || undefined,
+        budget: (formData.get("budget") as string) ?? "",
+        timeline: (formData.get("timeline") as string) ?? "",
         message: (formData.get("message") as string) ?? "",
         website: (formData.get("website") as string) ?? "",
       });
@@ -775,9 +775,20 @@ function RequestForm() {
             ))}
           </select>
         </Field>
-        <Field label="Budget (optional)">
-          <select name="budget" defaultValue="" className={inputClass}>
-            <option value="">Select a range</option>
+        <Field label="Budget" required>
+          <select
+            name="budget"
+            required
+            defaultValue=""
+            onInvalid={(e) =>
+              e.currentTarget.setCustomValidity("Please select a budget range.")
+            }
+            onInput={(e) => e.currentTarget.setCustomValidity("")}
+            className={inputClass}
+          >
+            <option value="" disabled>
+              Select a range
+            </option>
             {BUDGET_RANGES.map((range) => (
               <option key={range} value={range}>
                 {range}
@@ -785,9 +796,20 @@ function RequestForm() {
             ))}
           </select>
         </Field>
-        <Field label="Timeline (optional)">
-          <select name="timeline" defaultValue="" className={inputClass}>
-            <option value="">When do you need it?</option>
+        <Field label="Timeline" required>
+          <select
+            name="timeline"
+            required
+            defaultValue=""
+            onInvalid={(e) =>
+              e.currentTarget.setCustomValidity("Please select your timeline.")
+            }
+            onInput={(e) => e.currentTarget.setCustomValidity("")}
+            className={inputClass}
+          >
+            <option value="" disabled>
+              When do you need it?
+            </option>
             {TIMELINES.map((timeline) => (
               <option key={timeline} value={timeline}>
                 {timeline}
