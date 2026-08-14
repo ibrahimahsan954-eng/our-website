@@ -44,10 +44,11 @@ const CALENDAR_EMBED_URL = "";
 // Source: https://youtu.be/T7pNvhwRNBU?si=ogXx4LKdKcYi_YLx
 const SHOWREEL_ID = "T7pNvhwRNBU";
 
-// Direct MP4 file for the hero showreel — the hero renders a native <video>
-// player (muted, loop, autoplay, no controls, playsInline) instead of any
-// YouTube facade. An MP4 uploaded from the dashboard overrides this.
-const SHOWREEL_MP4 = "https://files.catbox.moe/bxi5ea.mp4";
+// Local MP4 for the hero showreel (public/showreel.mp4) — the hero renders a
+// native <video> player (muted, loop, autoplay, no controls, playsInline)
+// instead of any YouTube facade. An MP4 uploaded from the dashboard overrides
+// this.
+const SHOWREEL_MP4 = "/showreel.mp4";
 
 const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
 
