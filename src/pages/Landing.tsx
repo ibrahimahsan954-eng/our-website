@@ -62,6 +62,10 @@ const AVATAR_URL =
 const WHATSAPP_URL =
   "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project!";
 
+// Dedicated link for the "Schedule a Call" button — pre-fills a call-specific message.
+const SCHEDULE_CALL_URL =
+  "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20schedule%20a%20call%20to%20discuss%20a%20video%20editing%20project!";
+
 // Social profiles — paste your real profile URLs here. Any entry left as ""
 // is treated as unset and hidden automatically from the contact chips and footer.
 const SOCIALS = {
@@ -1183,7 +1187,11 @@ function DmSection() {
             size="lg"
             className="h-12 gap-2 rounded-full bg-[#2b7ced] px-8 text-white hover:bg-[#3d87f0]"
           >
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+            <a
+              href={SCHEDULE_CALL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Schedule a Call
               <ArrowUpRight className="size-4" />
             </a>
