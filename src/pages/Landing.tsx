@@ -44,10 +44,10 @@ const CALENDAR_EMBED_URL = "";
 // Source: https://youtu.be/T7pNvhwRNBU?si=ogXx4LKdKcYi_YLx
 const SHOWREEL_ID = "T7pNvhwRNBU";
 
-// Optional direct MP4 file for the hero showreel — when set, the hero renders
-// a native <video> player (muted, loop, autoplay, no controls) instead of the
-// YouTube facade, e.g. "https://cdn.example.com/showreel.mp4".
-const SHOWREEL_MP4 = "";
+// Direct MP4 file for the hero showreel — the hero renders a native <video>
+// player (muted, loop, autoplay, no controls, playsInline) instead of any
+// YouTube facade. An MP4 uploaded from the dashboard overrides this.
+const SHOWREEL_MP4 = "https://files.catbox.moe/bxi5ea.mp4";
 
 const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
 
