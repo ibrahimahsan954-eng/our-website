@@ -303,7 +303,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-70" />
               <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
             </span>
-            3 spots left in August
+            3 spots left
           </span>
           <button
             type="button"
