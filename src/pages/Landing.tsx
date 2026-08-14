@@ -395,25 +395,23 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             ) : (
               <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_18%_0%,#1c2b1e_0%,#0e0e0e_62%)]" />
             )}
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.15),transparent_45%,rgba(10,10,10,0.72))]" />
-            <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/85 opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
-              Watch
-            </span>
-            {/* Play button over the card — clicking anywhere on the card starts playback */}
-            <span className="absolute bottom-3 right-3 flex size-11 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e] shadow-[0_4px_18px_rgba(113,178,92,0.45)] transition-transform duration-300 group-hover:scale-110">
-              <Play className="ml-0.5 size-5 fill-current" />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.2),transparent_50%,rgba(10,10,10,0.4))]" />
+            {/* Centered minimal play button — clicking anywhere on the card starts playback */}
+            <span className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-white/60 group-hover:bg-white/35">
+              <Play className="ml-0.5 size-6 fill-current" />
             </span>
           </>
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-4 px-2 pt-3">
+      <div className="flex items-end justify-between gap-4 px-2 pt-3">
         <div className="min-w-0">
           <h3 className="truncate font-display text-lg font-semibold text-white">
             {project.title}
           </h3>
           <p className="mt-0.5 text-sm leading-relaxed text-[#86868b]">{project.category}</p>
         </div>
+        <ArrowUpRight className="size-5 shrink-0 text-white/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#71b25c]" />
       </div>
     </motion.div>
   );
