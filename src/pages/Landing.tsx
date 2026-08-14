@@ -299,7 +299,7 @@ function Showreel() {
             playsInline
             autoPlay
             preload="auto"
-            className="absolute inset-0 h-full w-full bg-black object-cover"
+            className="absolute inset-0 h-full w-full rounded-2xl bg-black object-cover"
           />
         ) : (
           <>
@@ -430,7 +430,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               playsInline
               autoPlay
               preload="auto"
-              className="h-full w-full bg-black object-cover"
+              className="h-full w-full rounded-2xl bg-black object-cover"
             />
           ) : (
             <>
