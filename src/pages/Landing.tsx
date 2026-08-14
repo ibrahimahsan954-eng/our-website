@@ -304,6 +304,7 @@ function Showreel() {
       <div className="relative aspect-video w-full">
         {showreelMp4 ? (
           <video
+            key={showreelMp4}
             src={showreelMp4}
             poster={SHOWREEL_THUMBNAIL}
             muted
@@ -315,7 +316,7 @@ function Showreel() {
           />
         ) : (
           <>
-            <div ref={ytHostRef} className="absolute inset-0 h-full w-full" />
+            <div ref={ytHostRef} key="yt-host" className="absolute inset-0 h-full w-full" />
             {/* Invisible overlay — blocks hover/click events from reaching
                 YouTube so its title bar, share buttons, and overlays never appear. */}
             <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
@@ -440,6 +441,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {showPlayer ? (
           directSrc ? (
             <video
+              key={directSrc}
               ref={videoRef}
               src={directSrc}
               poster={project.thumbnailUrl}
@@ -452,13 +454,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             />
           ) : ytId ? (
             <>
-              <div ref={ytHostRef} className="absolute inset-0 h-full w-full" />
+              <div ref={ytHostRef} key="yt-host" className="absolute inset-0 h-full w-full" />
               {/* Invisible overlay — blocks YouTube hover/click UI (title bar, share, overlays). */}
               <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
             </>
           ) : (
             <>
               <iframe
+                key={facadeSrc ?? "facade"}
                 src={facadeSrc ?? undefined}
                 title={`${project.title} — video player`}
                 className="absolute inset-0 h-full w-full"
@@ -473,6 +476,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <>
             {thumbStep < thumbnails.length ? (
               <img
+                key={thumbnails[thumbStep]}
                 src={thumbnails[thumbStep]}
                 onError={() => setThumbStep((step) => step + 1)}
                 alt={`${project.title} video thumbnail`}

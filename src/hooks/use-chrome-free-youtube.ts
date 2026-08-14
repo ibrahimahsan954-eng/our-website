@@ -47,6 +47,16 @@ if (typeof window !== "undefined") {
  *
  * The player is destroyed when `enabled` flips to false or on unmount, which
  * also stops playback when a card scrolls out of view.
+ *
+ * IMPORTANT — why we never pass `hostRef.current` to `YT.Player`:
+ * the IFrame API *replaces* the element it is given with its own <iframe>,
+ * which desyncs React's virtual DOM from the real DOM. When React later tries
+ * to unmount that node it throws
+ *   NotFoundError: Failed to execute 'removeChild' on 'Node'.
+ * Instead we create a fresh, JS-owned child <div> inside the host and build
+ * the player on that. React only ever manages the host div, so reconciliation
+ * (mount/unmount, state flips) stays clean. On cleanup we destroy the player
+ * and empty the host so nothing is left behind.
  */
 export function useChromeFreeYouTubePlayer(
   hostRef: RefObject<HTMLDivElement | null>,
@@ -60,7 +70,11 @@ export function useChromeFreeYouTubePlayer(
 
     const createPlayer = () => {
       if (cancelled || !window.YT || !hostRef.current) return;
-      player = new window.YT.Player(hostRef.current, {
+      const playerHost = document.createElement("div");
+      playerHost.style.width = "100%";
+      playerHost.style.height = "100%";
+      hostRef.current.appendChild(playerHost);
+      player = new window.YT.Player(playerHost, {
         videoId,
         width: "100%",
         height: "100%",
@@ -103,7 +117,16 @@ export function useChromeFreeYouTubePlayer(
 
     return () => {
       cancelled = true;
-      player?.destroy();
+      try {
+        player?.destroy();
+      } catch {
+        // The API may have already torn the player down — nothing to do.
+      }
+      // Remove the JS-owned child (if any) so the host returns to a clean,
+      // React-only subtree before React unmounts it.
+      if (hostRef.current) {
+        hostRef.current.replaceChildren();
+      }
     };
   }, [enabled, videoId, hostRef]);
 }
