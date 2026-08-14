@@ -147,7 +147,7 @@ export default function Dashboard() {
                 Project inbox{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
               </h1>
               {unreadCount > 0 && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-xs font-semibold text-[#71b25c]">
+                <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-xs font-semibold text-[#71b25c]">
                   <span className="size-1.5 rounded-full bg-[#71b25c]" />
                   {unreadCount} new
                 </span>
@@ -184,7 +184,7 @@ export default function Dashboard() {
         <section className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 p-5 backdrop-blur-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-display text-base font-semibold text-white">
-              <Mail className="size-4 text-[#71b25c]" />
+              <Mail className="text-glow-green size-4 text-[#71b25c]" />
               Email delivery
             </h2>
             <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-medium text-[#a1a1a6]">
@@ -219,7 +219,7 @@ export default function Dashboard() {
         <section className="flex flex-col gap-4">
           <div>
             <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-white">
-              <Clapperboard className="size-5 text-[#71b25c]" />
+              <Clapperboard className="text-glow-green size-5 text-[#71b25c]" />
               Video library
             </h2>
             <p className="mt-1 text-sm leading-relaxed text-[#86868b]">
@@ -248,7 +248,7 @@ export default function Dashboard() {
                       <p className="mt-0.5 text-xs text-[#86868b]">
                         {override ? (
                           <>
-                            <span className="text-[#71b25c]">MP4 uploaded</span>
+                            <span className="text-[#71b25c] text-glow-green">MP4 uploaded</span>
                             {" · "}
                             <span className="truncate">{override.fileName}</span>
                           </>
@@ -314,7 +314,7 @@ export default function Dashboard() {
                       className={cn(
                         "mt-2 text-xs",
                         slotStatus.kind === "ok"
-                          ? "text-[#71b25c]"
+                          ? "text-[#71b25c] text-glow-green"
                           : "text-red-400",
                       )}
                     >
@@ -383,7 +383,7 @@ export default function Dashboard() {
                         {inquiry.name}
                       </h2>
                       {unread && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-[#71b25c]">
+                        <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-[#71b25c]">
                           <span className="size-1.5 rounded-full bg-[#71b25c]" />
                           New
                         </span>

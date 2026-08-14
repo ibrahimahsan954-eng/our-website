@@ -251,7 +251,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
+          <span className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
             <span className="size-1.5 animate-pulse rounded-full bg-[#71b25c]" />
             3 spots left in August
           </span>
@@ -628,7 +628,7 @@ function Faqs() {
               value={`item-${index}`}
               className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-sm transition-colors data-[state=open]:border-[#71b25c]/50"
             >
-              <AccordionTrigger className="px-6 py-5 text-left font-display text-lg font-medium text-white hover:no-underline [&[data-state=open]]:text-[#71b25c]">
+              <AccordionTrigger className="px-6 py-5 text-left font-display text-lg font-medium text-white hover:no-underline [&[data-state=open]]:text-[#71b25c] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(113,178,92,0.5)]">
                 {faq.q}
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6 text-[15px] leading-relaxed text-[#86868b]">
@@ -661,7 +661,7 @@ function FinalCta() {
               title={
                 <>
                   Reserve a spot —{" "}
-                  <span className="font-medium text-[#71b25c]">
+                  <span className="font-medium text-[#71b25c] text-glow-green">
                     let&apos;s discuss your video project
                   </span>
                 </>
@@ -673,7 +673,7 @@ function FinalCta() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-5 py-2.5 text-sm font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
+              className="text-glow-green mt-8 inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-5 py-2.5 text-sm font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
             >
               <WhatsAppIcon className="size-4" />
               Chat on WhatsApp
@@ -770,7 +770,7 @@ function RequestForm() {
         <Button
           type="button"
           variant="ghost"
-          className="mt-2 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
+          className="text-glow-green mt-2 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
           onClick={() => setStatus("idle")}
         >
           Send another request
@@ -1049,7 +1049,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                 <Button
                   type="button"
                   variant="ghost"
-                  className="mt-2 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
+                  className="text-glow-green mt-2 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
                   onClick={onClose}
                 >
                   Close
@@ -1134,7 +1134,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     href={WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-[#25d366] transition-colors hover:text-[#4be07f]"
+                    className="text-glow-green font-medium text-[#25d366] transition-colors hover:text-[#4be07f]"
                   >
                     Reach out on WhatsApp
                   </a>
@@ -1249,7 +1249,7 @@ function Footer() {
               </svg>
             </span>
             <span className="font-display font-semibold tracking-tight text-white">
-              Ebad <span className="text-[#71b25c]">Ahsan</span>
+              Ebad <span className="text-[#71b25c] text-glow-green">Ahsan</span>
             </span>
           </div>
           <p className="text-sm text-[#86868b]">
@@ -1337,7 +1337,7 @@ function SectionHeading({
       transition={{ duration: 0.55, ease: "easeOut" }}
       className={cn("flex flex-col gap-4", align === "center" && "items-center text-center")}
     >
-      <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#71b25c]">
+      <span className="text-glow-green text-[11px] font-medium uppercase tracking-[0.28em] text-[#71b25c]">
         {eyebrow}
       </span>
       <h2 className="max-w-2xl font-display text-4xl font-medium tracking-tight text-white sm:text-5xl">
