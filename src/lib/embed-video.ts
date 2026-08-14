@@ -54,10 +54,9 @@ export function getAutoplayEmbedSrc(url: string): string | null {
 
   const yt = getYouTubeId(url);
   if (yt) {
-    // Fully chrome-free embed: no controls, no branding, no annotations, no
-    // keyboard, no captions/subtitles by default. loop+playlist are kept so
-    // the ambient autoplay still loops seamlessly.
-    return `https://www.youtube.com/embed/${yt}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&cc_load_policy=0&cc_lang_pref=off&loop=1&playlist=${yt}&playsinline=1`;
+    // Strict caption opt-out + chrome-free embed. loop+playlist are kept so
+    // the ambient autoplay still loops seamlessly, playsinline for mobile.
+    return `https://www.youtube.com/embed/${yt}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=off&hl=en&loop=1&playlist=${yt}&playsinline=1`;
   }
 
   const vimeo = getVimeoId(url);
