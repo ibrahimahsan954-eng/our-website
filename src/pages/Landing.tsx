@@ -56,8 +56,10 @@ const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.
 const AVATAR_URL =
   "https://framerusercontent.com/images/PJGkejOvzUY4nwrdSlLOKfS2jvE.gif?width=512&height=512";
 
-// WhatsApp — this one is wired up and always shown.
-const WHATSAPP_URL = "https://api.whatsapp.com/send?phone=923136494619";
+// WhatsApp — this one is wired up and always shown. Pre-fills a message so
+// clients land straight in the conversation.
+const WHATSAPP_URL =
+  "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20video%20editing%20project!";
 
 // Social profiles — paste your real profile URLs here. Any entry left as ""
 // is treated as unset and hidden automatically from the contact chips and footer.
@@ -116,6 +118,21 @@ export default function Landing() {
         <DmSection />
       </main>
       <Footer />
+
+      {/* Floating WhatsApp — reachable from anywhere on the page */}
+      <motion.a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        title="Chat on WhatsApp"
+        initial={{ opacity: 0, scale: 0.7 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
+        className="fixed bottom-5 right-5 z-50 flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0b141a] shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-transform duration-300 hover:scale-110 hover:shadow-[0_8px_34px_rgba(37,211,102,0.5)]"
+      >
+        <WhatsAppIcon className="size-7" />
+      </motion.a>
     </div>
   );
 }
@@ -650,7 +667,7 @@ function FinalCta() {
               className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-5 py-2.5 text-sm font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
             >
               <WhatsAppIcon className="size-4" />
-              WhatsApp
+              Chat on WhatsApp
             </a>
           </div>
 
