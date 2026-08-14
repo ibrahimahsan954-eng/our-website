@@ -82,14 +82,19 @@ function getWhatsAppHref(message: string): string {
     : `https://web.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encoded}`;
 }
 
-// Force top-level opening: preventDefault + window.open with noopener so the
-// link always opens outside the preview iframe (sandboxed panes can block
-// plain _blank navigation). The <a href> stays in place as a backup.
-function handleWhatsAppClick(message: string) {
+// Iframe-escape handler: forces the link to open at top-level. Inside the
+// preview iframe (window.top !== window.self) we pop a fresh top-level window;
+// on the real site we navigate directly. The <a href> stays as a backup.
+function openWhatsApp(message: string) {
   return (e: ReactMouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    window.open(getWhatsAppHref(message), "_blank", "noopener,noreferrer");
+    const targetUrl = getWhatsAppHref(message);
+    if (window.top !== window.self) {
+      window.open(targetUrl, "_blank", "noopener,noreferrer");
+    } else {
+      window.location.href = targetUrl;
+    }
   };
 }
 
@@ -154,21 +159,24 @@ export default function Landing() {
 
       <ReserveModal open={reserveOpen} onClose={() => setReserveOpen(false)} />
 
-      {/* Floating WhatsApp — reachable from anywhere on the page */}
-      <motion.a
-        href={getWhatsAppHref(WHATSAPP_MESSAGE)}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
-        aria-label="Chat on WhatsApp"
-        title="Chat on WhatsApp"
-        initial={{ opacity: 0, scale: 0.7 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
-        className="fixed bottom-5 right-5 z-50 flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0b141a] shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-transform duration-300 hover:scale-110 hover:shadow-[0_8px_34px_rgba(37,211,102,0.5)]"
-      >
-        <WhatsAppIcon className="size-7" />
-      </motion.a>
+      {/* Floating contact cluster — WhatsApp + 1-tap copy-number fallback */}
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-center gap-3">
+        <CopyNumberButton iconOnly />
+        <motion.a
+          href={getWhatsAppHref(WHATSAPP_MESSAGE)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={openWhatsApp(WHATSAPP_MESSAGE)}
+          aria-label="Chat on WhatsApp"
+          title="Chat on WhatsApp"
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
+          className="flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0b141a] shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-transform duration-300 hover:scale-110 hover:shadow-[0_8px_34px_rgba(37,211,102,0.5)]"
+        >
+          <WhatsAppIcon className="size-7" />
+        </motion.a>
+      </div>
     </div>
   );
 }
@@ -702,7 +710,7 @@ function FinalCta() {
                 href={getWhatsAppHref(WHATSAPP_MESSAGE)}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
+                onClick={openWhatsApp(WHATSAPP_MESSAGE)}
                 className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 py-3 text-base font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
               >
                 <WhatsAppIcon className="size-4" />
@@ -1166,7 +1174,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     href={getWhatsAppHref(WHATSAPP_MESSAGE)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
+                    onClick={openWhatsApp(WHATSAPP_MESSAGE)}
                     className="text-glow-green font-medium text-[#25d366] transition-colors hover:text-[#4be07f]"
                   >
                     Reach out on WhatsApp
@@ -1202,7 +1210,7 @@ function DmSection() {
             icon={<WhatsAppIcon className="size-5" />}
             label="WhatsApp"
             note="Fastest reply"
-            onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
+            onClick={openWhatsApp(WHATSAPP_MESSAGE)}
           />
           <DmCard
             href={SOCIALS.instagram}
@@ -1229,7 +1237,7 @@ function DmSection() {
               href={getWhatsAppHref(SCHEDULE_CALL_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handleWhatsAppClick(SCHEDULE_CALL_MESSAGE)}
+              onClick={openWhatsApp(SCHEDULE_CALL_MESSAGE)}
             >
               Schedule a Call
               <ArrowUpRight className="size-4" />
@@ -1397,7 +1405,13 @@ function SectionHeading({
 
 /* ---------------- Copy WhatsApp number fallback ---------------- */
 
-function CopyNumberButton({ compact }: { compact?: boolean }) {
+function CopyNumberButton({
+  compact,
+  iconOnly,
+}: {
+  compact?: boolean;
+  iconOnly?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
@@ -1427,21 +1441,24 @@ function CopyNumberButton({ compact }: { compact?: boolean }) {
     timeoutRef.current = window.setTimeout(() => setCopied(false), 2000);
   };
 
-  return (
+  const button = (
     <button
       type="button"
       onClick={handleCopy}
       aria-live="polite"
+      aria-label={copied ? "Number copied" : "Copy WhatsApp number"}
       title={copied ? "Number copied" : "Copy WhatsApp number"}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border font-medium transition-all duration-300",
-        compact ? "px-4 py-2 text-sm" : "px-5 py-3 text-base",
+        "inline-flex items-center justify-center rounded-full border font-medium transition-all duration-300",
+        iconOnly ? "size-11" : compact ? "px-4 py-2 text-sm" : "px-5 py-3 text-base",
         copied
           ? "text-glow-green border-[#71b25c]/60 bg-[#71b25c]/15 text-[#71b25c]"
           : "border-white/10 bg-white/5 text-[#a1a1a6] hover:border-[#71b25c]/40 hover:bg-white/10 hover:text-white",
       )}
     >
-      {copied ? (
+      {iconOnly ? (
+        copied ? <Check className="size-5" /> : <Copy className="size-5" />
+      ) : copied ? (
         <>
           <Check className="size-4" />
           Copied!
@@ -1453,5 +1470,24 @@ function CopyNumberButton({ compact }: { compact?: boolean }) {
         </>
       )}
     </button>
+  );
+
+  if (!iconOnly) return button;
+
+  // Icon-only (floating) variant: hover tooltip, green "Copied!" tooltip on copy.
+  return (
+    <span className="group relative inline-flex">
+      {button}
+      <span
+        className={cn(
+          "pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-all duration-200",
+          copied
+            ? "text-glow-green border-[#71b25c]/60 bg-[#71b25c]/15 text-[#71b25c] opacity-100"
+            : "border-white/10 bg-black/80 text-[#a1a1a6] opacity-0 group-hover:opacity-100",
+        )}
+      >
+        {copied ? "Copied!" : "Copy number"}
+      </span>
+    </span>
   );
 }
