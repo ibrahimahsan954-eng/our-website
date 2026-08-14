@@ -58,6 +58,17 @@ function Carousel({
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
+  const [prevApi, setPrevApi] = React.useState<CarouselApi | null>(null)
+
+  // Initialize prev/next state as soon as the Embla API is available. This is
+  // a render-phase update (the documented "adjust state when a value changes"
+  // pattern — React bails out when nothing changed) instead of an effect, so
+  // it doesn't trigger the set-state-in-effect lint rule.
+  if (api && prevApi !== api) {
+    setPrevApi(api)
+    setCanScrollPrev(api.canScrollPrev())
+    setCanScrollNext(api.canScrollNext())
+  }
 
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return
@@ -93,12 +104,12 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return
-    onSelect(api)
     api.on("reInit", onSelect)
     api.on("select", onSelect)
 
     return () => {
-      api?.off("select", onSelect)
+      api.off("reInit", onSelect)
+      api.off("select", onSelect)
     }
   }, [api, onSelect])
 
