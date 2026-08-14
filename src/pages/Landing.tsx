@@ -4,9 +4,14 @@ import { motion, useInView } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { PROJECTS, type Project } from "@/data/projects";
-import { getAutoplayEmbedSrc, isDirectVideo } from "@/lib/embed-video";
+import {
+  getAutoplayEmbedSrc,
+  getYouTubeId,
+  isDirectVideo,
+} from "@/lib/embed-video";
+import { useChromeFreeYouTubePlayer } from "@/hooks/use-chrome-free-youtube";
 import { api } from "@/convex/_generated/api";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Check,
@@ -274,90 +279,13 @@ function Avatar() {
   );
 }
 
-/* Minimal typings for the YouTube IFrame API (used to strip the captions module). */
-declare global {
-  interface Window {
-    YT?: {
-      Player: new (
-        element: HTMLElement,
-        options: {
-          videoId?: string;
-          width?: string;
-          height?: string;
-          playerVars?: Record<string, string | number>;
-          events?: {
-            onReady?: (event: {
-              target: {
-                playVideo: () => void;
-                unloadModule?: (moduleName: string) => void;
-              };
-            }) => void;
-          };
-        },
-      ) => { destroy: () => void };
-    };
-    onYouTubeIframeAPIReady?: () => void;
-  }
-}
-
 function Showreel() {
-  const playerHostRef = useRef<HTMLDivElement>(null);
-
-  // YouTube facade: create the player through the IFrame API so the captions
-  // module can be unloaded — subtitles can NEVER appear, even if the viewer's
-  // YouTube account has captions enabled globally (cc_load_policy=0 alone does
-  // not override that saved preference). The native <video> path is used
-  // instead when SHOWREEL_MP4 is set (no captions at all).
-  useEffect(() => {
-    if (SHOWREEL_MP4) return;
-    let player: { destroy: () => void } | null = null;
-    let cancelled = false;
-
-    const createPlayer = () => {
-      if (cancelled || !window.YT || !playerHostRef.current) return;
-      player = new window.YT.Player(playerHostRef.current, {
-        videoId: SHOWREEL_ID,
-        width: "100%",
-        height: "100%",
-        playerVars: {
-          autoplay: 1,
-          mute: 1,
-          controls: 0,
-          modestbranding: 1,
-          rel: 0,
-          iv_load_policy: 3,
-          showinfo: 0,
-          disablekb: 1,
-          cc_load_policy: 0,
-          hl: "en",
-          loop: 1,
-          playlist: SHOWREEL_ID,
-          playsinline: 1,
-        },
-        events: {
-          onReady: (event) => {
-            // Physically remove the captions module so no subtitles can load.
-            event.target.unloadModule?.("captions");
-            event.target.playVideo();
-          },
-        },
-      });
-    };
-
-    if (window.YT) {
-      createPlayer();
-    } else {
-      window.onYouTubeIframeAPIReady = createPlayer;
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(tag);
-    }
-
-    return () => {
-      cancelled = true;
-      player?.destroy();
-    };
-  }, []);
+  const media = useQuery(api.videoAssets.listVideoOverrides);
+  const ytHostRef = useRef<HTMLDivElement>(null);
+  // Use the uploaded MP4 when one exists; otherwise build a fully chrome-free
+  // YouTube player (captions module unloaded — subtitles can never appear).
+  const showreelMp4 = media?.showreel?.url ?? SHOWREEL_MP4;
+  useChromeFreeYouTubePlayer(ytHostRef, SHOWREEL_ID, !showreelMp4);
 
   return (
     <motion.div
@@ -374,9 +302,9 @@ function Showreel() {
 
       {/* Autoplay on load: muted + loop + playsinline so browsers allow it */}
       <div className="relative aspect-video w-full">
-        {SHOWREEL_MP4 ? (
+        {showreelMp4 ? (
           <video
-            src={SHOWREEL_MP4}
+            src={showreelMp4}
             poster={SHOWREEL_THUMBNAIL}
             muted
             loop
@@ -387,7 +315,7 @@ function Showreel() {
           />
         ) : (
           <>
-            <div ref={playerHostRef} className="absolute inset-0 h-full w-full" />
+            <div ref={ytHostRef} className="absolute inset-0 h-full w-full" />
             {/* Invisible overlay — blocks hover/click events from reaching
                 YouTube so its title bar, share buttons, and overlays never appear. */}
             <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
@@ -443,15 +371,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [thumbStep, setThumbStep] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const ytHostRef = useRef<HTMLDivElement>(null);
+  const media = useQuery(api.videoAssets.listVideoOverrides);
   const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
     Boolean,
   ) as string[];
-  // Native HTML5 video source: an explicit MP4 file if provided, else a direct
-  // video URL. When absent, fall back to the chrome-free YouTube/Vimeo facade.
+  // Native HTML5 video source: an MP4 uploaded from the dashboard (slot
+  // override) wins, then an explicit videoFile, then a direct video URL. When
+  // none exists, fall back to the chrome-free YouTube/Vimeo facade.
   const directSrc =
+    media?.[project.id]?.url ??
     project.videoFile ??
     (isDirectVideo(project.videoUrl) ? project.videoUrl : null);
   const facadeSrc = directSrc ? null : getAutoplayEmbedSrc(project.videoUrl);
+  const ytId = getYouTubeId(project.videoUrl);
 
   // Scroll-triggered playback: the card is watched with an Intersection
   // Observer (via useInView, threshold 0.4). While in view the muted player is
@@ -473,6 +406,15 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   }, [inView]);
 
   const showPlayer = Boolean(inView || playing) && Boolean(directSrc || facadeSrc);
+
+  // Chrome-free YouTube player for the facade: the captions module is unloaded
+  // so subtitles can never appear (viewer preferences don't matter), and
+  // destroying the player when the card scrolls out of view pauses playback.
+  useChromeFreeYouTubePlayer(
+    ytHostRef,
+    ytId ?? "",
+    showPlayer && !directSrc && Boolean(ytId),
+  );
 
   return (
     <motion.div
@@ -508,6 +450,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               preload="auto"
               className="h-full w-full rounded-2xl bg-black object-cover"
             />
+          ) : ytId ? (
+            <>
+              <div ref={ytHostRef} className="absolute inset-0 h-full w-full" />
+              {/* Invisible overlay — blocks YouTube hover/click UI (title bar, share, overlays). */}
+              <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
+            </>
           ) : (
             <>
               <iframe
@@ -517,7 +465,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
-              {/* Invisible overlay — blocks YouTube hover/click UI (title bar, share, overlays). */}
+              {/* Invisible overlay — blocks hover/click UI. */}
               <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
             </>
           )

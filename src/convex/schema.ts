@@ -47,6 +47,16 @@ const schema = defineSchema(
     })
       .index("by_status", ["status", "createdAt"])
       .index("by_email", ["email"]),
+
+    // Uploaded MP4 video assets (hero showreel + portfolio projects), keyed by
+    // slot name ("showreel" | "project-N"). The landing page reads these as
+    // native <video> overrides over the default YouTube sources.
+    videoAssets: defineTable({
+      slot: v.string(),
+      url: v.string(),
+      fileName: v.string(),
+      updatedAt: v.number(),
+    }).index("by_slot", ["slot"]),
   },
   {
     schemaValidation: false,

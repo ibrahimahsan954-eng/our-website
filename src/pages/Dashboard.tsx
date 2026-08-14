@@ -1,14 +1,20 @@
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
+import { PROJECTS } from "@/data/projects";
 import { useAuth } from "@/hooks/use-auth";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Archive,
   Check,
+  Clapperboard,
   Inbox,
+  Loader2,
   LogOut,
   Mail,
+  RotateCcw,
+  UploadCloud,
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { cn } from "@/lib/utils";
@@ -29,6 +35,79 @@ export default function Dashboard() {
   const inquiries = useQuery(api.inquiries.listInquiries);
   const archiveInquiry = useMutation(api.inquiries.archiveInquiry);
   const markInquiryRead = useMutation(api.inquiries.markInquiryRead);
+  const overrides = useQuery(api.videoAssets.listVideoOverrides);
+  const getUploadUrl = useAction(api.media.getUploadUrl);
+  const registerVideo = useMutation(api.videoAssets.registerVideo);
+  const removeVideo = useMutation(api.videoAssets.removeVideo);
+  const [busySlot, setBusySlot] = useState<string | null>(null);
+  const [fileMap, setFileMap] = useState<Record<string, File | null>>({});
+  const [status, setStatus] = useState<{
+    slot: string;
+    kind: "ok" | "error";
+    msg: string;
+  } | null>(null);
+  const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
+
+  const mediaSlots = [
+    { slot: "showreel", label: "Hero showreel" },
+    ...PROJECTS.map((p) => ({ slot: p.id, label: p.title })),
+  ];
+
+  const handleUpload = async (slot: string, label: string) => {
+    const file = fileMap[slot];
+    if (!file) return;
+    setBusySlot(slot);
+    setStatus(null);
+    try {
+      const { uploadUrl, publicUrl } = await getUploadUrl({
+        slot,
+        fileName: file.name,
+        contentType: file.type || "video/mp4",
+      });
+      const res = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type || "video/mp4" },
+        body: file,
+      });
+      if (!res.ok) {
+        throw new Error("Upload failed — check your storage bucket configuration.");
+      }
+      if (!publicUrl) {
+        throw new Error(
+          "S3_PUBLIC_BASE_URL isn't set — the site can't serve this video publicly.",
+        );
+      }
+      await registerVideo({ slot, url: publicUrl, fileName: file.name });
+      setStatus({ slot, kind: "ok", msg: `${label} updated — live on the site.` });
+      setFileMap((m) => ({ ...m, [slot]: null }));
+      if (fileInputs.current[slot]) fileInputs.current[slot].value = "";
+    } catch (err) {
+      setStatus({
+        slot,
+        kind: "error",
+        msg: err instanceof Error ? err.message : "Something went wrong — try again.",
+      });
+    } finally {
+      setBusySlot(null);
+    }
+  };
+
+  const handleRemove = async (slot: string, label: string) => {
+    setBusySlot(slot);
+    setStatus(null);
+    try {
+      await removeVideo({ slot });
+      setStatus({ slot, kind: "ok", msg: `${label} reset to its default source.` });
+    } catch (err) {
+      setStatus({
+        slot,
+        kind: "error",
+        msg: err instanceof Error ? err.message : "Something went wrong — try again.",
+      });
+    } finally {
+      setBusySlot(null);
+    }
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -81,6 +160,122 @@ export default function Dashboard() {
             </Button>
           </div>
         </header>
+
+        {/* ---------------- Video library ---------------- */}
+        <section className="flex flex-col gap-4">
+          <div>
+            <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-white">
+              <Clapperboard className="size-5 text-[#71b25c]" />
+              Video library
+            </h2>
+            <p className="mt-1 text-sm leading-relaxed text-[#86868b]">
+              Upload MP4s straight to your S3/R2 bucket. The hero showreel and
+              project cards switch to native HTML5 playback instantly — the
+              YouTube facade (and any subtitles) disappears for any slot you
+              fill.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {mediaSlots.map(({ slot, label }) => {
+              const override = overrides?.[slot];
+              const busy = busySlot === slot;
+              const slotStatus = status?.slot === slot ? status : null;
+              return (
+                <div
+                  key={slot}
+                  className="rounded-2xl border border-white/10 bg-neutral-900/60 p-4 backdrop-blur-sm"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <p className="truncate font-display text-sm font-semibold text-white">
+                        {label}
+                      </p>
+                      <p className="mt-0.5 text-xs text-[#86868b]">
+                        {override ? (
+                          <>
+                            <span className="text-[#71b25c]">MP4 uploaded</span>
+                            {" · "}
+                            <span className="truncate">{override.fileName}</span>
+                          </>
+                        ) : (
+                          "Default source (YouTube facade)"
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 flex-wrap items-center gap-2">
+                      <input
+                        ref={(el) => {
+                          fileInputs.current[slot] = el;
+                        }}
+                        type="file"
+                        accept="video/mp4,video/webm,video/quicktime"
+                        className="hidden"
+                        id={`file-${slot}`}
+                        onChange={(e) =>
+                          setFileMap((m) => ({
+                            ...m,
+                            [slot]: e.target.files?.[0] ?? null,
+                          }))
+                        }
+                      />
+                      <label
+                        htmlFor={`file-${slot}`}
+                        className="max-w-[220px] cursor-pointer truncate rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-[#d4d4d8] transition-colors hover:bg-white/10"
+                        title={fileMap[slot]?.name}
+                      >
+                        {fileMap[slot] ? fileMap[slot].name : "Choose file"}
+                      </label>
+                      <Button
+                        type="button"
+                        size="sm"
+                        disabled={!fileMap[slot] || busy}
+                        className="gap-1.5 rounded-full bg-[#71b25c] font-semibold text-black hover:bg-[#71b25c]/90 disabled:opacity-40"
+                        onClick={() => handleUpload(slot, label)}
+                      >
+                        {busy ? (
+                          <Loader2 className="size-3.5 animate-spin" />
+                        ) : (
+                          <UploadCloud className="size-3.5" />
+                        )}
+                        {busy ? "Uploading…" : "Upload"}
+                      </Button>
+                      {override && (
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          disabled={busy}
+                          className="gap-1.5 rounded-full text-[#86868b] hover:bg-white/5 hover:text-white"
+                          onClick={() => handleRemove(slot, label)}
+                        >
+                          <RotateCcw className="size-3.5" />
+                          Reset
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  {slotStatus && (
+                    <p
+                      className={cn(
+                        "mt-2 text-xs",
+                        slotStatus.kind === "ok"
+                          ? "text-[#71b25c]"
+                          : "text-red-400",
+                      )}
+                    >
+                      {slotStatus.msg}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {overrides === undefined && (
+            <p className="text-xs text-[#86868b]">Loading video library…</p>
+          )}
+        </section>
 
         {inquiries === null ? (
           <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 px-6 py-16 text-center backdrop-blur-sm">

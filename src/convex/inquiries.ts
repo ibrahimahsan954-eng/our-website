@@ -11,7 +11,7 @@ import { v } from "convex/values";
  * unset, any authenticated user can access the inbox so the owner isn't
  * locked out before configuring it.
  */
-async function getOwnerUserId(ctx: QueryCtx | MutationCtx) {
+export async function getOwnerUserId(ctx: QueryCtx | MutationCtx) {
   const userId = await getAuthUserId(ctx);
   if (userId === null) {
     return null;

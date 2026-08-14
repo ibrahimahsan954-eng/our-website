@@ -4,14 +4,14 @@
  * Returns null for unrecognized URLs.
  */
 
-function getYouTubeId(url: string): string | null {
+export function getYouTubeId(url: string): string | null {
   const match = url.match(
     /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/,
   );
   return match ? match[1] : null;
 }
 
-function getVimeoId(url: string): string | null {
+export function getVimeoId(url: string): string | null {
   const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   return match ? match[1] : null;
 }
