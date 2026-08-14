@@ -489,10 +489,7 @@ function ProjectCard({
         featured && "sm:col-span-2",
       )}
     >
-      <div
-        className="relative overflow-hidden rounded-xl"
-        style={{ aspectRatio: featured ? "16 / 9" : "16 / 10" }}
-      >
+      <div className="relative aspect-video overflow-hidden rounded-xl">
         {thumbStep < thumbnails.length ? (
           <img
             src={thumbnails[thumbStep]}
