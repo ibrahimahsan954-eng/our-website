@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { PROJECTS, type Project } from "@/data/projects";
-import { getEmbedSrc, isDirectVideo } from "@/lib/embed-video";
+import { getAutoplayEmbedSrc, isDirectVideo } from "@/lib/embed-video";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import {
@@ -340,13 +340,38 @@ function Portfolio() {
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [playing, setPlaying] = useState(false);
   const [thumbStep, setThumbStep] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
     Boolean,
   ) as string[];
-  const embedSrc = getEmbedSrc(project.videoUrl);
+  const isDirect = isDirectVideo(project.videoUrl);
+  const autoplaySrc = getAutoplayEmbedSrc(project.videoUrl);
+
+  // Scroll-triggered playback: the card is watched with an Intersection
+  // Observer (via useInView, threshold 0.4). While in view the muted player is
+  // mounted and plays automatically; when it scrolls out, the player unmounts
+  // (YouTube) or is explicitly paused (direct files) to save resources.
+  const inView = useInView(cardRef, { amount: 0.4 });
+
+  // Direct-video files: drive .play()/.pause() as the card enters/leaves view.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (inView) {
+      video.play().catch(() => {
+        // Muted + playsInline keeps autoplay allowed; ignore transient blocks.
+      });
+    } else {
+      video.pause();
+    }
+  }, [inView]);
+
+  const showPlayer = Boolean(inView || playing) && Boolean(autoplaySrc);
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -363,20 +388,23 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       }}
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 text-left backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]"
     >
-      {/* Media area — fixed 16:9 frame; the thumbnail swaps for the player in place. */}
+      {/* Media area — fixed 16:9 frame; auto-plays muted while in view. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
-        {playing && embedSrc ? (
-          isDirectVideo(embedSrc) ? (
+        {showPlayer ? (
+          isDirect ? (
             <video
-              src={embedSrc}
-              controls
-              autoPlay
+              ref={videoRef}
+              src={autoplaySrc ?? undefined}
+              muted
+              loop
               playsInline
+              autoPlay
+              controls
               className="h-full w-full bg-black object-contain"
             />
           ) : (
             <iframe
-              src={embedSrc}
+              src={autoplaySrc ?? undefined}
               title={`${project.title} — video player`}
               className="absolute inset-0 h-full w-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

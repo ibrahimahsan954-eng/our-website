@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { getEmbedSrc, isDirectVideo } from "../src/lib/embed-video";
+import {
+  getAutoplayEmbedSrc,
+  getEmbedSrc,
+  isDirectVideo,
+} from "../src/lib/embed-video";
 
 describe("getEmbedSrc", () => {
   test("parses youtu.be short links", () => {
@@ -47,6 +51,31 @@ describe("getEmbedSrc", () => {
   test("returns null for empty or unknown URLs", () => {
     expect(getEmbedSrc("")).toBeNull();
     expect(getEmbedSrc("https://example.com/not-a-video")).toBeNull();
+  });
+});
+
+describe("getAutoplayEmbedSrc", () => {
+  test("adds mute, loop and playlist params for YouTube", () => {
+    expect(getAutoplayEmbedSrc("https://youtu.be/T7pNvhwRNBU")).toBe(
+      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&loop=1&playlist=T7pNvhwRNBU&playsinline=1&rel=0&color=white&controls=1",
+    );
+  });
+
+  test("adds muted and loop params for Vimeo", () => {
+    expect(getAutoplayEmbedSrc("https://vimeo.com/123456789")).toBe(
+      "https://player.vimeo.com/video/123456789?autoplay=1&muted=1&loop=1",
+    );
+  });
+
+  test("returns direct video files unchanged", () => {
+    expect(getAutoplayEmbedSrc("https://cdn.example.com/reel.mp4")).toBe(
+      "https://cdn.example.com/reel.mp4",
+    );
+  });
+
+  test("returns null for empty or unknown URLs", () => {
+    expect(getAutoplayEmbedSrc("")).toBeNull();
+    expect(getAutoplayEmbedSrc("https://example.com/not-a-video")).toBeNull();
   });
 });
 
