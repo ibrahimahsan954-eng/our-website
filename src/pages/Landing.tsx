@@ -187,14 +187,14 @@ function Hero() {
         Ahsan
       </div>
 
-      <div className="relative mx-auto max-w-4xl text-center">
+      <div className="relative mx-auto w-full max-w-7xl text-center">
         <Avatar />
 
         <motion.h1
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.08, ease: "easeOut" }}
-          className="mt-10 font-display text-4xl font-medium leading-[1.05] tracking-[-0.02em] text-white sm:mt-12 sm:text-5xl"
+          className="mx-auto mt-10 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.02em] text-white sm:mt-12 sm:text-5xl"
         >
           Motion That Makes Brands Unforgettable
         </motion.h1>
@@ -212,7 +212,7 @@ function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
             <span className="size-1.5 animate-pulse rounded-full bg-[#71b25c]" />
@@ -273,7 +273,7 @@ function Showreel() {
       initial={{ opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65, delay: 0.56, ease: "easeOut" }}
-      className="relative mx-auto mt-14 w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-[#141414]"
+      className="relative mx-auto mt-14 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#141414]"
     >
       {/* Fallback gradient behind the video */}
       <div
@@ -320,14 +320,14 @@ function DiscordIcon({ className }: { className?: string }) {
 function Portfolio() {
   return (
     <section id="work" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto w-full max-w-7xl">
         <SectionHeading
           eyebrow="Portfolio"
           title="Our latest projects"
           sub="some case studies"
         />
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2">
+        <div className="mt-14 grid w-full gap-6 sm:grid-cols-2">
           {PROJECTS.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
