@@ -179,6 +179,36 @@
       drop-shadow(0 0 18px rgba(113, 178, 92, 0.25));
   }
 
+  /* Premium backlit headings: crisp white-to-silver gradient + soft white
+     halo. The gradient keeps the top edge near-white for sharp contrast on
+     dark backgrounds; drop-shadow follows the glyphs so nothing blurs. */
+  .text-gradient-silver {
+    background-image: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #e8e8ea 55%,
+      #a3a3ab 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.22));
+  }
+
+  /* Neon emerald gradient + glow for big metric numbers (counters). */
+  .text-glow-metric {
+    background-image: linear-gradient(
+      180deg,
+      #a7f3d0 0%,
+      #34d399 55%,
+      #71b25c 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.35));
+  }
+
   /* Subtle film grain overlay */
   .bg-noise {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");

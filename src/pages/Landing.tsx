@@ -263,14 +263,25 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
       <div className="relative mx-auto w-full text-center">
         <Avatar />
 
-        <motion.h1
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.08, ease: "easeOut" }}
-          className="mx-auto mt-10 max-w-3xl font-display text-5xl font-medium leading-[1.05] tracking-[-0.02em] text-white sm:mt-12 sm:text-6xl"
-        >
-          Motion That Makes Brands Unforgettable
-        </motion.h1>
+        <div className="relative mx-auto mt-10 max-w-3xl sm:mt-12">
+          {/* Ambient light behind the headline — soft 3D illumination */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 size-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-3xl"
+          />
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.08, ease: "easeOut" }}
+            className="relative mx-auto max-w-3xl font-display text-5xl font-medium leading-[1.05] tracking-[-0.02em] text-gradient-silver sm:text-6xl"
+          >
+            Motion That Makes Brands Unforgettable
+          </motion.h1>
+        </div>
 
         <motion.p
           initial={{ opacity: 0, y: 14 }}
@@ -582,7 +593,7 @@ function Stats() {
               transition={{ duration: 0.5, delay: index * 0.12, ease: "easeOut" }}
               className="flex-1 px-8 text-center"
             >
-              <p className="font-display text-6xl font-medium tracking-tight text-white sm:text-7xl">
+              <p className="font-display text-6xl font-medium tracking-tight text-glow-metric sm:text-7xl">
                 <Counter value={stat.value} suffix={stat.suffix} />
               </p>
               <p className="mt-2 text-base font-medium tracking-[-0.01em] text-[#f2f4f6]/80">{stat.label}</p>
@@ -1046,7 +1057,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
           >
             <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
               <div>
-                <h3 className="font-display text-2xl font-semibold tracking-tight text-white">
+                <h3 className="font-display text-2xl font-semibold tracking-tight text-gradient-silver">
                   Reserve Your Video Editing Spot
                 </h3>
                 <p className="mt-1 text-base leading-relaxed text-[#86868b]">
@@ -1385,9 +1396,16 @@ function SectionHeading({
       <span className="text-glow-green text-xs font-medium uppercase tracking-[0.28em] text-[#71b25c]">
         {eyebrow}
       </span>
-      <h2 className="max-w-3xl font-display text-4xl font-medium tracking-tight text-white sm:text-5xl lg:text-6xl">
-        {title}
-      </h2>
+      <div className="relative max-w-3xl">
+        {/* Ambient light behind the section title */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-3xl"
+        />
+        <h2 className="relative font-display text-4xl font-medium tracking-tight text-gradient-silver sm:text-5xl lg:text-6xl">
+          {title}
+        </h2>
+      </div>
       {sub && <p className="max-w-xl text-base leading-relaxed text-[#86868b]">{sub}</p>}
     </motion.div>
   );
