@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { VideoModal } from "@/components/VideoModal";
 import { PROJECTS, type Project } from "@/data/projects";
+import { getEmbedSrc, isDirectVideo } from "@/lib/embed-video";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import {
@@ -394,8 +394,6 @@ function ClientMarquee() {
 /* ---------------- Portfolio ---------------- */
 
 function Portfolio() {
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
-
   return (
     <section id="work" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
@@ -407,67 +405,78 @@ function Portfolio() {
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2">
           {PROJECTS.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-              onSelect={() => setActiveProject(project)}
-            />
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
       </div>
-
-      <VideoModal
-        open={activeProject !== null}
-        onOpenChange={(open) => !open && setActiveProject(null)}
-        title={activeProject?.title ?? ""}
-        category={activeProject?.category ?? ""}
-        videoUrl={activeProject?.videoUrl ?? ""}
-      />
     </section>
   );
 }
 
-function ProjectCard({
-  project,
-  index,
-  onSelect,
-}: {
-  project: Project;
-  index: number;
-  onSelect: () => void;
-}) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const [playing, setPlaying] = useState(false);
   const [thumbStep, setThumbStep] = useState(0);
   const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
     Boolean,
   ) as string[];
+  const embedSrc = getEmbedSrc(project.videoUrl);
 
   return (
-    <motion.button
-      type="button"
-      onClick={onSelect}
+    <motion.div
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay: (index % 3) * 0.09, ease: "easeOut" }}
+      transition={{ duration: 0.55, delay: (index % 2) * 0.09, ease: "easeOut" }}
+      role="button"
+      tabIndex={0}
+      aria-label={playing ? `${project.title} — now playing` : `Play ${project.title}`}
+      onClick={() => !playing && setPlaying(true)}
+      onKeyDown={(event) => {
+        if (!playing && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault();
+          setPlaying(true);
+        }
+      }}
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 text-left backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]"
     >
-      <div className="relative aspect-video overflow-hidden rounded-xl">
-        {thumbStep < thumbnails.length ? (
-          <img
-            src={thumbnails[thumbStep]}
-            onError={() => setThumbStep((step) => step + 1)}
-            alt={`${project.title} video thumbnail`}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-          />
+      {/* Media area — fixed 16:9 frame; the thumbnail swaps for the player in place. */}
+      <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
+        {playing && embedSrc ? (
+          isDirectVideo(embedSrc) ? (
+            <video
+              src={embedSrc}
+              controls
+              autoPlay
+              playsInline
+              className="h-full w-full bg-black object-contain"
+            />
+          ) : (
+            <iframe
+              src={embedSrc}
+              title={`${project.title} — video player`}
+              className="absolute inset-0 h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          )
         ) : (
-          <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_18%_0%,#1c2b1e_0%,#0e0e0e_62%)]" />
+          <>
+            {thumbStep < thumbnails.length ? (
+              <img
+                src={thumbnails[thumbStep]}
+                onError={() => setThumbStep((step) => step + 1)}
+                alt={`${project.title} video thumbnail`}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_18%_0%,#1c2b1e_0%,#0e0e0e_62%)]" />
+            )}
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.15),transparent_45%,rgba(10,10,10,0.72))]" />
+            <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/85 opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
+              Watch
+            </span>
+          </>
         )}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.15),transparent_45%,rgba(10,10,10,0.72))]" />
-        {/* Watch hint on hover */}
-        <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/85 opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
-          Watch
-        </span>
       </div>
 
       <div className="flex items-center justify-between gap-4 px-2 pt-3">
@@ -481,7 +490,7 @@ function ProjectCard({
           <Play className="ml-0.5 size-4 fill-current" />
         </span>
       </div>
-    </motion.button>
+    </motion.div>
   );
 }
 
