@@ -182,7 +182,7 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
           type="button"
           size="sm"
           onClick={onReserve}
-          className="h-9 gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/10"
+          className="h-9 gap-2 rounded-full bg-[#71b25c] px-4 text-sm font-semibold text-[#0b141a] shadow-[0_0_16px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_24px_rgba(113,178,92,0.5)]"
         >
           Reserve a Spot
           <ArrowUpRight className="size-3.5" />
@@ -254,7 +254,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           <button
             type="button"
             onClick={onReserve}
-            className="inline-flex h-11 items-center rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 text-sm font-semibold text-[#25d366] backdrop-blur-md transition-all duration-300 hover:border-[#25d366]/70 hover:bg-[#25d366]/25 hover:shadow-[0_0_24px_rgba(37,211,102,0.2)]"
+            className="inline-flex h-11 items-center rounded-full bg-[#71b25c] px-6 text-sm font-semibold text-[#0b141a] shadow-[0_0_24px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_32px_rgba(113,178,92,0.5)]"
           >
             Reserve a Spot
           </button>
@@ -962,12 +962,11 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
     setError(null);
     try {
       const formData = new FormData(event.currentTarget);
-      const budgetTimeline = ((formData.get("budgetTimeline") as string) ?? "").trim();
       const result = await submitInquiry({
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
         projectType: (formData.get("projectType") as string) ?? "",
-        budget: budgetTimeline || "Not specified",
+        budget: "Not specified",
         timeline: "Not specified",
         message: (formData.get("message") as string) ?? "",
         website: (formData.get("website") as string) ?? "",
@@ -1093,15 +1092,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     ))}
                   </select>
                 </Field>
-                <Field label="Project Budget / Timeline (optional)">
-                  <input
-                    name="budgetTimeline"
-                    maxLength={120}
-                    placeholder="e.g. $1k–$3k, 2 weeks"
-                    className={inputClass}
-                  />
-                </Field>
-                <Field label="Message / Project Link" required>
+                <Field label="Message / Project Brief" required>
                   <textarea
                     name="message"
                     required
@@ -1127,21 +1118,21 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     </>
                   ) : (
                     <>
-                      Submit Reservation
+                      Submit Spot Request
                       <ArrowUpRight className="size-4" />
                     </>
                   )}
                 </Button>
 
                 <p className="text-center text-xs text-[#86868b]">
-                  Need a quicker response?{" "}
+                  Prefer direct chat?{" "}
                   <a
                     href={WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-medium text-[#25d366] transition-colors hover:text-[#4be07f]"
                   >
-                    Chat on WhatsApp instead
+                    Reach out on WhatsApp
                   </a>
                 </p>
               </form>
