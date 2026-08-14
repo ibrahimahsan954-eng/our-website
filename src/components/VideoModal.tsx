@@ -32,6 +32,8 @@ export function VideoModal({
               controls
               autoPlay
               playsInline
+              controlsList="nodownload"
+              onContextMenu={(event) => event.preventDefault()}
               className="h-full w-full bg-black object-contain"
             />
           ) : (

@@ -331,6 +331,8 @@ function Showreel() {
             playsInline
             autoPlay
             preload="auto"
+            controlsList="nodownload"
+            onContextMenu={(event) => event.preventDefault()}
             className="absolute inset-0 h-full w-full rounded-2xl bg-black object-cover"
           />
         ) : (
@@ -469,6 +471,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               playsInline
               autoPlay
               preload="auto"
+              controlsList="nodownload"
+              onContextMenu={(event) => event.preventDefault()}
               className="h-full w-full rounded-2xl bg-black object-cover"
             />
           ) : ytId ? (
