@@ -62,7 +62,7 @@ const SOCIALS = {
 const STATS = [
   { value: 10, suffix: "+", label: "Happy clients" },
   { value: 10, suffix: "+", label: "Projects completed" },
-  { value: 10, suffix: "M+", label: "Views" },
+  { value: 100, suffix: "K+", label: "Views" },
 ];
 
 const FAQS = [
