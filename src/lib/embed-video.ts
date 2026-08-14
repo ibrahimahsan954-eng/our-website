@@ -54,12 +54,14 @@ export function getAutoplayEmbedSrc(url: string): string | null {
 
   const yt = getYouTubeId(url);
   if (yt) {
-    return `https://www.youtube.com/embed/${yt}?autoplay=1&mute=1&loop=1&playlist=${yt}&playsinline=1&rel=0&color=white&controls=1`;
+    // Chrome-free embed: no controls, no branding, no suggestions.
+    return `https://www.youtube.com/embed/${yt}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&showinfo=0&playlist=${yt}&playsinline=1`;
   }
 
   const vimeo = getVimeoId(url);
   if (vimeo) {
-    return `https://player.vimeo.com/video/${vimeo}?autoplay=1&muted=1&loop=1`;
+    // Chrome-free embed: no controls, title, byline, or portrait.
+    return `https://player.vimeo.com/video/${vimeo}?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0`;
   }
 
   return null;

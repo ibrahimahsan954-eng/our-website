@@ -55,15 +55,15 @@ describe("getEmbedSrc", () => {
 });
 
 describe("getAutoplayEmbedSrc", () => {
-  test("adds mute, loop and playlist params for YouTube", () => {
+  test("builds a chrome-free YouTube embed (no controls/branding)", () => {
     expect(getAutoplayEmbedSrc("https://youtu.be/T7pNvhwRNBU")).toBe(
-      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&loop=1&playlist=T7pNvhwRNBU&playsinline=1&rel=0&color=white&controls=1",
+      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&showinfo=0&playlist=T7pNvhwRNBU&playsinline=1",
     );
   });
 
-  test("adds muted and loop params for Vimeo", () => {
+  test("builds a chrome-free Vimeo embed (no controls/title/byline/portrait)", () => {
     expect(getAutoplayEmbedSrc("https://vimeo.com/123456789")).toBe(
-      "https://player.vimeo.com/video/123456789?autoplay=1&muted=1&loop=1",
+      "https://player.vimeo.com/video/123456789?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0",
     );
   });
 

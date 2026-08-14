@@ -4,6 +4,13 @@ export type Project = {
   category: string;
   /** Any YouTube, Vimeo, or direct MP4 URL. */
   videoUrl: string;
+  /**
+   * Optional direct MP4/WebM file. When set, the card renders a native
+   * <video> element (muted, loop, autoplay, no controls) instead of the
+   * YouTube/Vimeo facade. Drop your exported file here, e.g.
+   * "https://cdn.example.com/projects/project-1.mp4".
+   */
+  videoFile?: string;
   /** Poster image shown on the card. */
   thumbnailUrl: string;
   /** Lower-res fallback if the primary thumbnail fails to load. */

@@ -39,6 +39,13 @@ const CALENDAR_EMBED_URL = "";
 // Source: https://youtu.be/T7pNvhwRNBU?si=ogXx4LKdKcYi_YLx
 const SHOWREEL_ID = "T7pNvhwRNBU";
 
+// Optional direct MP4 file for the hero showreel — when set, the hero renders
+// a native <video> player (muted, loop, autoplay, no controls) instead of the
+// YouTube facade, e.g. "https://cdn.example.com/showreel.mp4".
+const SHOWREEL_MP4 = "";
+
+const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
+
 // Your portrait (square GIF/photo) — falls back to a monogram tile if it fails.
 const AVATAR_URL =
   "https://framerusercontent.com/images/PJGkejOvzUY4nwrdSlLOKfS2jvE.gif?width=512&height=512";
@@ -283,14 +290,27 @@ function Showreel() {
 
       {/* Autoplay on load: muted + loop + playsinline so browsers allow it */}
       <div className="relative aspect-video w-full">
-        <iframe
-          className="absolute inset-0 h-full w-full"
-          src={`https://www.youtube.com/embed/${SHOWREEL_ID}?autoplay=1&mute=1&loop=1&playlist=${SHOWREEL_ID}&playsinline=1&rel=0&color=white&controls=1`}
-          title="Ebad Ahsan — Showreel"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          referrerPolicy="strict-origin-when-cross-origin"
-        />
+        {SHOWREEL_MP4 ? (
+          <video
+            src={SHOWREEL_MP4}
+            poster={SHOWREEL_THUMBNAIL}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="auto"
+            className="absolute inset-0 h-full w-full bg-black object-cover"
+          />
+        ) : (
+          <iframe
+            className="absolute inset-0 h-full w-full"
+            src={`https://www.youtube.com/embed/${SHOWREEL_ID}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&showinfo=0&playlist=${SHOWREEL_ID}&playsinline=1`}
+            title="Ebad Ahsan — Showreel"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        )}
       </div>
 
     </motion.div>
@@ -345,8 +365,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
     Boolean,
   ) as string[];
-  const isDirect = isDirectVideo(project.videoUrl);
-  const autoplaySrc = getAutoplayEmbedSrc(project.videoUrl);
+  // Native HTML5 video source: an explicit MP4 file if provided, else a direct
+  // video URL. When absent, fall back to the chrome-free YouTube/Vimeo facade.
+  const directSrc =
+    project.videoFile ??
+    (isDirectVideo(project.videoUrl) ? project.videoUrl : null);
+  const facadeSrc = directSrc ? null : getAutoplayEmbedSrc(project.videoUrl);
 
   // Scroll-triggered playback: the card is watched with an Intersection
   // Observer (via useInView, threshold 0.4). While in view the muted player is
@@ -354,7 +378,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   // (YouTube) or is explicitly paused (direct files) to save resources.
   const inView = useInView(cardRef, { amount: 0.4 });
 
-  // Direct-video files: drive .play()/.pause() as the card enters/leaves view.
+  // Native videos: drive .play()/.pause() as the card enters/leaves view.
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -367,7 +391,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     }
   }, [inView]);
 
-  const showPlayer = Boolean(inView || playing) && Boolean(autoplaySrc);
+  const showPlayer = Boolean(inView || playing) && Boolean(directSrc || facadeSrc);
 
   return (
     <motion.div
@@ -391,20 +415,21 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       {/* Media area — fixed 16:9 frame; auto-plays muted while in view. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
         {showPlayer ? (
-          isDirect ? (
+          directSrc ? (
             <video
               ref={videoRef}
-              src={autoplaySrc ?? undefined}
+              src={directSrc}
+              poster={project.thumbnailUrl}
               muted
               loop
               playsInline
               autoPlay
-              controls
-              className="h-full w-full bg-black object-contain"
+              preload="auto"
+              className="h-full w-full bg-black object-cover"
             />
           ) : (
             <iframe
-              src={autoplaySrc ?? undefined}
+              src={facadeSrc ?? undefined}
               title={`${project.title} — video player`}
               className="absolute inset-0 h-full w-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
