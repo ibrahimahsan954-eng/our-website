@@ -435,7 +435,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [playing, setPlaying] = useState(false);
   const [thumbStep, setThumbStep] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const ytHostRef = useRef<HTMLDivElement>(null);
   const media = useQuery(api.videoAssets.listVideoOverrides);
   const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
@@ -451,26 +450,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const facadeSrc = directSrc ? null : getAutoplayEmbedSrc(project.videoUrl);
   const ytId = getYouTubeId(project.videoUrl);
 
-  // Scroll-triggered playback: the card is watched with an Intersection
-  // Observer (via useInView, threshold 0.4). While in view the muted player is
-  // mounted and plays automatically; when it scrolls out, the player unmounts
-  // (YouTube) or is explicitly paused (direct files) to save resources.
-  const inView = useInView(cardRef, { amount: 0.4 });
+  // Video facade / lazy loading: the lightweight thumbnail <img> is fetched
+  // only once the card scrolls within 200px of the viewport (Intersection
+  // Observer). The actual video player is NOT mounted until the user clicks.
+  const nearView = useInView(cardRef, { margin: "200px", once: true });
 
-  // Native videos: drive .play()/.pause() as the card enters/leaves view.
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (inView) {
-      video.play().catch(() => {
-        // Muted + playsInline keeps autoplay allowed; ignore transient blocks.
-      });
-    } else {
-      video.pause();
-    }
-  }, [inView]);
-
-  const showPlayer = Boolean(inView || playing) && Boolean(directSrc || facadeSrc);
+  // Player mounts only on interaction — nothing heavy loads at page load.
+  const showPlayer = playing && Boolean(directSrc || facadeSrc);
 
   // Chrome-free YouTube player for the facade: the captions module is unloaded
   // so subtitles can never appear (viewer preferences don't matter), and
@@ -506,14 +492,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           directSrc ? (
             <video
               key={directSrc}
-              ref={videoRef}
               src={directSrc}
               poster={project.thumbnailUrl}
               muted
               loop
               playsInline
               autoPlay
-              preload="auto"
+              preload="metadata"
               controlsList="nodownload"
               onContextMenu={(event) => event.preventDefault()}
               className="h-full w-full rounded-2xl bg-black object-cover"
@@ -540,10 +525,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           )
         ) : (
           <>
-            {thumbStep < thumbnails.length ? (
+            {nearView && thumbStep < thumbnails.length ? (
               <img
                 key={thumbnails[thumbStep]}
                 src={thumbnails[thumbStep]}
+                loading="lazy"
+                decoding="async"
                 onError={() => setThumbStep((step) => step + 1)}
                 alt={`${project.title} video thumbnail`}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
