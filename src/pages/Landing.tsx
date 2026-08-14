@@ -8,7 +8,6 @@ import { PROJECTS, type Project } from "@/data/projects";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import {
-  ArrowRight,
   ArrowUpRight,
   Check,
   Clapperboard,
@@ -18,7 +17,6 @@ import {
   Loader2,
   MessageCircle,
   Play,
-  Plus,
   Youtube,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -56,9 +54,9 @@ const SOCIALS = {
 
 // Stats shown in the counters section (animated on scroll) — update to your real numbers
 const STATS = [
-  { value: 60, suffix: "+", label: "Projects Completed" },
-  { value: 40, suffix: "+", label: "Satisfied Clients" },
-  { value: 100, suffix: "M+", label: "Views" },
+  { value: 10, suffix: "+", label: "Happy clients" },
+  { value: 10, suffix: "+", label: "Projects completed" },
+  { value: 10, suffix: "M+", label: "Views" },
 ];
 
 const CLIENTS = ["FanBasis", "MakeUGC", "ValeFi", "Memorae", "MalocFr", "Anyformat"];
@@ -101,6 +99,7 @@ export default function Landing() {
         <Stats />
         <Faqs />
         <FinalCta />
+        <DmSection />
       </main>
       <Footer />
     </div>
@@ -180,7 +179,7 @@ function Hero() {
       {/* Giant watermark name behind the hero */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-14 select-none text-center font-display text-[15vw] font-semibold leading-[0.92] tracking-tighter text-white/[0.03] sm:top-10 sm:text-[9rem]"
+        className="pointer-events-none absolute inset-x-0 top-14 select-none text-center font-display text-[15vw] font-semibold uppercase leading-[0.92] tracking-tighter text-white/[0.03] sm:top-10 sm:text-[9rem]"
       >
         Ebad
         <br />
@@ -212,20 +211,12 @@ function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mt-8"
+          className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-1.5 text-[13px] font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
             <span className="size-1.5 animate-pulse rounded-full bg-[#71b25c]" />
             3 spots left in August
           </span>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.4, ease: "easeOut" }}
-          className="mt-6"
-        >
           <a
             href={WHATSAPP_URL}
             target="_blank"
@@ -235,35 +226,6 @@ function Hero() {
             <WhatsAppIcon className="size-4" />
             Reserve a Spot
           </a>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.44, ease: "easeOut" }}
-          className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
-        >
-          <Button
-            asChild
-            size="lg"
-            className="group h-12 w-full gap-2 rounded-full border border-white/10 bg-white/5 px-8 text-white backdrop-blur-md transition-colors hover:bg-white/10 sm:w-auto"
-          >
-            <a href={BOOKING_URL}>
-              Book a Call
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
-          </Button>
-          <Button
-            asChild
-            variant="ghost"
-            size="lg"
-            className="h-12 w-full gap-2 rounded-full border border-white/10 px-6 text-white transition-colors hover:bg-white/10 sm:w-auto"
-          >
-            <a href="#work">
-              <Play className="size-4 fill-current" />
-              See our work
-            </a>
-          </Button>
         </motion.div>
 
         <Showreel />
@@ -437,7 +399,7 @@ function Portfolio() {
           sub="some case studies"
         />
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-5 sm:grid-cols-2">
           {PROJECTS.map((project, index) => (
             <ProjectCard
               key={project.id}
@@ -446,7 +408,6 @@ function Portfolio() {
               onSelect={() => setActiveProject(project)}
             />
           ))}
-          <CtaCard />
         </div>
       </div>
 
@@ -470,7 +431,6 @@ function ProjectCard({
   index: number;
   onSelect: () => void;
 }) {
-  const featured = project.featured;
   const [thumbStep, setThumbStep] = useState(0);
   const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
     Boolean,
@@ -484,10 +444,7 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, delay: (index % 3) * 0.09, ease: "easeOut" }}
-      className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 text-left backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]",
-        featured && "sm:col-span-2",
-      )}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 text-left backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]"
     >
       <div className="relative aspect-video overflow-hidden rounded-xl">
         {thumbStep < thumbnails.length ? (
@@ -505,57 +462,20 @@ function ProjectCard({
         <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white/85 opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
           Watch
         </span>
-        {/* Play button */}
-        <span className="absolute bottom-3 right-3 flex size-10 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e] shadow-[0_4px_18px_rgba(113,178,92,0.45)] transition-transform duration-300 group-hover:scale-110">
+      </div>
+
+      <div className="flex items-center justify-between gap-4 px-2 pt-3">
+        <div className="min-w-0">
+          <h3 className="truncate font-display text-lg font-semibold text-white">
+            {project.title}
+          </h3>
+          <p className="mt-0.5 text-sm leading-relaxed text-[#86868b]">{project.category}</p>
+        </div>
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e] shadow-[0_4px_18px_rgba(113,178,92,0.45)] transition-transform duration-300 group-hover:scale-110">
           <Play className="ml-0.5 size-4 fill-current" />
         </span>
       </div>
-
-      <div className="flex items-start justify-between gap-4 px-2 pt-3">
-        <div>
-          <h3 className="font-display text-lg font-semibold text-white">{project.title}</h3>
-          <p className="mt-0.5 text-sm leading-relaxed text-[#86868b]">{project.category}</p>
-        </div>
-        <ArrowUpRight className="size-5 shrink-0 text-white/35 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#71b25c]" />
-      </div>
     </motion.button>
-  );
-}
-
-function CtaCard() {
-  return (
-    <motion.a
-      href={BOOKING_URL}
-      initial={{ opacity: 0, y: 26 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay: 0.18, ease: "easeOut" }}
-      className="group relative flex flex-col items-center justify-center gap-5 overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-10 text-center backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)] sm:col-span-2"
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(80% 90% at 50% 100%, rgb(113 178 92 / 0.12), transparent 70%)",
-        }}
-      />
-      <span className="flex size-14 items-center justify-center rounded-full border border-white/20 transition-colors duration-300 group-hover:border-[#71b25c]/70">
-        <Plus className="size-6" />
-      </span>
-      <div className="relative">
-        <h3 className="font-display text-2xl font-semibold text-white">
-          Your project could be next
-        </h3>
-        <p className="mt-2 text-sm text-[#86868b]">
-          One powerful minute for your product. Let&apos;s make it.
-        </p>
-      </div>
-      <span className="relative inline-flex items-center gap-1.5 text-sm font-medium text-[#71b25c]">
-        Request a project
-        <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-      </span>
-    </motion.a>
   );
 }
 
@@ -646,17 +566,17 @@ function Faqs() {
           </Button>
         </div>
 
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full space-y-4">
           {FAQS.map((faq, index) => (
             <AccordionItem
               key={faq.q}
               value={`item-${index}`}
-              className="border-white/10"
+              className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-sm transition-colors data-[state=open]:border-[#71b25c]/50"
             >
-              <AccordionTrigger className="py-6 text-left font-display text-lg font-medium text-white hover:no-underline [&[data-state=open]]:text-[#71b25c]">
+              <AccordionTrigger className="px-6 py-5 text-left font-display text-lg font-medium text-white hover:no-underline [&[data-state=open]]:text-[#71b25c]">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="pb-6 text-[15px] leading-relaxed text-[#86868b]">
+              <AccordionContent className="px-6 pb-6 text-[15px] leading-relaxed text-[#86868b]">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
@@ -682,36 +602,27 @@ function FinalCta() {
           <div className="flex flex-col items-start">
             <SectionHeading
               align="left"
-              eyebrow="Request a project"
+              eyebrow="Booking"
               title={
                 <>
-                  Let&apos;s talk scope, timeline &amp; budget —{" "}
-                  <span className="font-medium text-[#71b25c]">no fluff, just clarity</span>
+                  Reserve a spot —{" "}
+                  <span className="font-medium text-[#71b25c]">
+                    let&apos;s discuss your video project
+                  </span>
                 </>
               }
               sub="Tell me about your product and I'll get back to you within 24h with next steps. Prefer to chat? Message me on WhatsApp."
             />
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-5 py-2.5 text-sm font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
-              >
-                <WhatsAppIcon className="size-4" />
-                WhatsApp
-              </a>
-              {SOCIALS.x && (
-                <SocialChip href={SOCIALS.x} icon={<MessageCircle className="size-4" />} label="X" />
-              )}
-              {SOCIALS.instagram && (
-                <SocialChip href={SOCIALS.instagram} icon={<Instagram className="size-4" />} label="Instagram" />
-              )}
-              {SOCIALS.discord && (
-                <SocialChip href={SOCIALS.discord} icon={<DiscordIcon className="size-4" />} label="Discord" />
-              )}
-            </div>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-5 py-2.5 text-sm font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
+            >
+              <WhatsAppIcon className="size-4" />
+              WhatsApp
+            </a>
           </div>
 
           <RequestForm />
@@ -913,24 +824,90 @@ function Field({
   );
 }
 
-function SocialChip({
+/* ---------------- Social / DM ---------------- */
+
+function DmSection() {
+  return (
+    <section id="dm" className="scroll-mt-24 px-4 pb-24 pt-4 sm:px-6">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="Direct"
+          title="Shoot me a DM, let's discuss your next project"
+          sub="Fastest reply on WhatsApp — or catch me on your favorite platform."
+        />
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <DmCard
+            href={WHATSAPP_URL}
+            icon={<WhatsAppIcon className="size-5" />}
+            label="WhatsApp"
+            note="Fastest reply"
+          />
+          <DmCard
+            href={SOCIALS.x}
+            icon={<MessageCircle className="size-5" />}
+            label="X / Twitter"
+            note={SOCIALS.x ? "DM me" : "Link coming soon"}
+          />
+          <DmCard
+            href={SOCIALS.instagram}
+            icon={<Instagram className="size-5" />}
+            label="Instagram"
+            note={SOCIALS.instagram ? "DM me" : "Link coming soon"}
+          />
+          <DmCard
+            href={SOCIALS.linkedin}
+            icon={<Linkedin className="size-5" />}
+            label="LinkedIn"
+            note={SOCIALS.linkedin ? "Connect" : "Link coming soon"}
+          />
+        </div>
+
+        <div className="mt-12 flex justify-center">
+          <Button
+            asChild
+            size="lg"
+            className="h-12 gap-2 rounded-full bg-[#2b7ced] px-8 text-white hover:bg-[#3d87f0]"
+          >
+            <a href={BOOKING_URL}>
+              Schedule a Call
+              <ArrowUpRight className="size-4" />
+            </a>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DmCard({
   href,
   icon,
   label,
+  note,
 }: {
   href: string;
   icon: ReactNode;
   label: string;
+  note: string;
 }) {
+  const card = (
+    <>
+      <span className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors duration-300 group-hover:border-[#71b25c]/60 group-hover:text-[#71b25c]">
+        {icon}
+      </span>
+      <span className="font-display text-base font-semibold text-white">{label}</span>
+      <span className="text-xs text-[#86868b]">{note}</span>
+    </>
+  );
+  const classes =
+    "group flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-neutral-900/60 px-6 py-7 text-center backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]";
+  if (!href) {
+    return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
+  }
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-[#71b25c]/60 hover:bg-white/10 hover:text-[#71b25c]"
-    >
-      {icon}
-      {label}
+    <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+      {card}
     </a>
   );
 }
