@@ -55,9 +55,9 @@ describe("getEmbedSrc", () => {
 });
 
 describe("getAutoplayEmbedSrc", () => {
-  test("builds a chrome-free YouTube embed (no controls/branding)", () => {
+  test("builds a chrome-free YouTube embed (no controls/branding/captions)", () => {
     expect(getAutoplayEmbedSrc("https://youtu.be/T7pNvhwRNBU")).toBe(
-      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&showinfo=0&playlist=T7pNvhwRNBU&playsinline=1",
+      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&cc_load_policy=0&cc_lang_pref=off&loop=1&playlist=T7pNvhwRNBU&playsinline=1",
     );
   });
 

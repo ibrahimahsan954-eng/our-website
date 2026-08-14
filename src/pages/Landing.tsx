@@ -302,14 +302,19 @@ function Showreel() {
             className="absolute inset-0 h-full w-full bg-black object-cover"
           />
         ) : (
-          <iframe
-            className="absolute inset-0 h-full w-full"
-            src={`https://www.youtube.com/embed/${SHOWREEL_ID}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&showinfo=0&playlist=${SHOWREEL_ID}&playsinline=1`}
-            title="Ebad Ahsan — Showreel"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
+          <>
+            <iframe
+              className="absolute inset-0 h-full w-full"
+              src={`https://www.youtube.com/embed/${SHOWREEL_ID}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&cc_load_policy=0&cc_lang_pref=off&loop=1&playlist=${SHOWREEL_ID}&playsinline=1`}
+              title="Ebad Ahsan — Showreel"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+            {/* Invisible overlay — blocks hover/click events from reaching
+                YouTube so its title bar, share buttons, and overlays never appear. */}
+            <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
+          </>
         )}
       </div>
 
@@ -428,13 +433,17 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               className="h-full w-full bg-black object-cover"
             />
           ) : (
-            <iframe
-              src={facadeSrc ?? undefined}
-              title={`${project.title} — video player`}
-              className="absolute inset-0 h-full w-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+            <>
+              <iframe
+                src={facadeSrc ?? undefined}
+                title={`${project.title} — video player`}
+                className="absolute inset-0 h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+              {/* Invisible overlay — blocks YouTube hover/click UI (title bar, share, overlays). */}
+              <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
+            </>
           )
         ) : (
           <>
