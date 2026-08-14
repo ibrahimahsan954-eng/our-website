@@ -69,9 +69,9 @@ const SCHEDULE_CALL_MESSAGE =
 // Copy-to-clipboard fallback for visitors whose network blocks WhatsApp.
 const WHATSAPP_NUMBER_DISPLAY = "+92 313 6494619";
 
-// Bulletproof href selection: wa.me (universal — app on mobile, web on
-// desktop) on desktop; on mobile, deep-link straight into the native app via
-// the whatsapp:// scheme so no redirect to api.whatsapp.com is ever needed.
+// Bulletproof href selection: direct web link (web.whatsapp.com/send — no
+// redirect through the blocked API host) on desktop; on mobile, deep-link
+// straight into the native app via the whatsapp:// scheme.
 function getWhatsAppHref(message: string): string {
   const encoded = encodeURIComponent(message);
   const isMobile =
@@ -79,7 +79,7 @@ function getWhatsAppHref(message: string): string {
     /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   return isMobile
     ? `whatsapp://send?phone=${WHATSAPP_PHONE}&text=${encoded}`
-    : `https://wa.me/${WHATSAPP_PHONE}?text=${encoded}`;
+    : `https://web.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encoded}`;
 }
 
 // Social profiles — paste your real profile URLs here. Any entry left as ""
