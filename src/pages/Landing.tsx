@@ -186,7 +186,7 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
           type="button"
           size="sm"
           onClick={onReserve}
-          className="h-9 gap-2 rounded-full bg-[#71b25c] px-4 text-sm font-semibold text-[#0b141a] shadow-[0_0_16px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_24px_rgba(113,178,92,0.5)]"
+          className="h-10 gap-2 rounded-full bg-[#71b25c] px-5 text-base font-semibold text-[#0b141a] shadow-[0_0_16px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_24px_rgba(113,178,92,0.5)]"
         >
           Reserve a Spot
           <ArrowUpRight className="size-3.5" />
@@ -231,7 +231,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.08, ease: "easeOut" }}
-          className="mx-auto mt-10 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-[-0.02em] text-white sm:mt-12 sm:text-5xl"
+          className="mx-auto mt-10 max-w-3xl font-display text-5xl font-medium leading-[1.05] tracking-[-0.02em] text-white sm:mt-12 sm:text-6xl"
         >
           Motion That Makes Brands Unforgettable
         </motion.h1>
@@ -240,7 +240,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.2, ease: "easeOut" }}
-          className="mx-auto mt-5 max-w-xl text-base font-light leading-relaxed text-[#cccccc] sm:text-lg"
+          className="mx-auto mt-5 max-w-xl text-lg font-light leading-relaxed text-[#cccccc] sm:text-xl"
         >
           Your product&apos;s story — told in <strong className="font-medium text-white">one powerful minute</strong>
         </motion.p>
@@ -251,14 +251,14 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-2 text-[13px] font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
+          <span className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
             <span className="size-1.5 animate-pulse rounded-full bg-[#71b25c]" />
             3 spots left in August
           </span>
           <button
             type="button"
             onClick={onReserve}
-            className="inline-flex h-11 items-center rounded-full bg-[#71b25c] px-6 text-sm font-semibold text-[#0b141a] shadow-[0_0_24px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_32px_rgba(113,178,92,0.5)]"
+            className="inline-flex h-12 items-center rounded-full bg-[#71b25c] px-7 text-base font-semibold text-[#0b141a] shadow-[0_0_24px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_32px_rgba(113,178,92,0.5)]"
           >
             Reserve a Spot
           </button>
@@ -523,10 +523,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       <div className="flex items-end justify-between gap-4 px-2 pt-3">
         <div className="min-w-0">
-          <h3 className="truncate font-display text-lg font-semibold text-white">
+          <h3 className="truncate font-display text-xl font-semibold text-white">
             {project.title}
           </h3>
-          <p className="mt-0.5 text-sm leading-relaxed text-[#86868b]">{project.category}</p>
+          <p className="mt-0.5 text-base leading-relaxed text-[#86868b]">{project.category}</p>
         </div>
         <ArrowUpRight className="size-5 shrink-0 text-white/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#71b25c]" />
       </div>
@@ -559,7 +559,7 @@ function Stats() {
               <p className="font-display text-6xl font-medium tracking-tight text-white sm:text-7xl">
                 <Counter value={stat.value} suffix={stat.suffix} />
               </p>
-              <p className="mt-2 text-sm font-medium text-[#f2f4f6]/80">{stat.label}</p>
+              <p className="mt-2 text-base font-medium tracking-[-0.01em] text-[#f2f4f6]/80">{stat.label}</p>
             </motion.div>
           </Fragment>
         ))}
@@ -601,7 +601,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 function Faqs() {
   return (
     <section id="faqs" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
-      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.35fr]">
+      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.1fr_1.3fr]">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeading
             align="left"
@@ -628,10 +628,10 @@ function Faqs() {
               value={`item-${index}`}
               className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-sm transition-colors data-[state=open]:border-[#71b25c]/50"
             >
-              <AccordionTrigger className="px-6 py-5 text-left font-display text-lg font-medium text-white hover:no-underline [&[data-state=open]]:text-[#71b25c] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(113,178,92,0.5)]">
+              <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-white hover:no-underline [&[data-state=open]]:text-[#71b25c] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(113,178,92,0.5)]">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6 text-[15px] leading-relaxed text-[#86868b]">
+              <AccordionContent className="px-6 pb-6 text-base leading-relaxed text-[#86868b]">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
@@ -653,7 +653,7 @@ function FinalCta() {
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
         </div>
 
-        <div className="relative grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+        <div className="relative grid gap-12 lg:grid-cols-[1.1fr_1.1fr] lg:gap-16">
           <div className="flex flex-col items-start">
             <SectionHeading
               align="left"
@@ -673,7 +673,7 @@ function FinalCta() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-glow-green mt-8 inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-5 py-2.5 text-sm font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
+              className="text-glow-green mt-8 inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 py-3 text-base font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
             >
               <WhatsAppIcon className="size-4" />
               Chat on WhatsApp
@@ -762,8 +762,8 @@ function RequestForm() {
         <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
           <Check className="size-7" />
         </span>
-        <h3 className="font-display text-2xl font-semibold text-white">Request received</h3>
-        <p className="max-w-sm text-sm leading-relaxed text-[#86868b]">
+        <h3 className="font-display text-3xl font-semibold text-white">Request received</h3>
+        <p className="max-w-sm text-base leading-relaxed text-[#86868b]">
           Thanks for reaching out — I&apos;ll get back to you within 24 hours to talk scope,
           timeline, and budget.
         </p>
@@ -872,7 +872,7 @@ function RequestForm() {
         </Field>
       </div>
 
-      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-3 text-base text-red-400">{error}</p>}
 
       <Button
         type="submit"
@@ -897,7 +897,7 @@ function RequestForm() {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-white/15 bg-[#0d0d0d] px-4 py-2.5 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20 [&>option]:bg-[#1a1a1a]";
+  "w-full rounded-xl border border-white/15 bg-[#0d0d0d] px-4 py-3 text-base text-white placeholder:text-white/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20 [&>option]:bg-[#1a1a1a]";
 
 function Field({
   label,
@@ -910,7 +910,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-xs font-medium text-[#a1a1a6]">
+      <span className="text-sm font-medium text-[#a1a1a6]">
         {label}
         {required && <span className="text-[#71b25c]"> *</span>}
       </span>
@@ -1016,10 +1016,10 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
           >
             <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
               <div>
-                <h3 className="font-display text-xl font-semibold tracking-tight text-white">
+                <h3 className="font-display text-2xl font-semibold tracking-tight text-white">
                   Reserve Your Video Editing Spot
                 </h3>
-                <p className="mt-1 text-sm leading-relaxed text-[#86868b]">
+                <p className="mt-1 text-base leading-relaxed text-[#86868b]">
                   Fill in your project details and I&apos;ll get back to you
                   within 24 hours.
                 </p>
@@ -1039,10 +1039,10 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                 <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
                   <Check className="size-7" />
                 </span>
-                <h4 className="font-display text-xl font-semibold text-white">
+                <h4 className="font-display text-2xl font-semibold text-white">
                   Spot reserved
                 </h4>
-                <p className="max-w-sm text-sm leading-relaxed text-[#86868b]">
+                <p className="max-w-sm text-base leading-relaxed text-[#86868b]">
                   Thanks for reaching out — I&apos;ll get back to you within 24
                   hours to talk scope, timeline, and budget.
                 </p>
@@ -1107,7 +1107,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                   />
                 </Field>
 
-                {error && <p className="text-sm text-red-400">{error}</p>}
+                {error && <p className="text-base text-red-400">{error}</p>}
 
                 <Button
                   type="submit"
@@ -1128,7 +1128,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                   )}
                 </Button>
 
-                <p className="text-center text-xs text-[#86868b]">
+                <p className="text-center text-sm text-[#86868b]">
                   Prefer direct chat?{" "}
                   <a
                     href={WHATSAPP_URL}
@@ -1218,8 +1218,8 @@ function DmCard({
       <span className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors duration-300 group-hover:border-[#71b25c]/60 group-hover:text-[#71b25c]">
         {icon}
       </span>
-      <span className="font-display text-base font-semibold text-white">{label}</span>
-      <span className="text-xs text-[#86868b]">{note}</span>
+      <span className="font-display text-lg font-semibold text-white">{label}</span>
+      <span className="text-sm text-[#86868b]">{note}</span>
     </>
   );
   const classes =
@@ -1248,11 +1248,11 @@ function Footer() {
                 <path d="M9.8 8.7 L9.8 15.3 L14.5 12 Z" fill="#71b25c" />
               </svg>
             </span>
-            <span className="font-display font-semibold tracking-tight text-white">
+            <span className="font-display text-lg font-semibold tracking-tight text-white">
               Ebad <span className="text-[#71b25c] text-glow-green">Ahsan</span>
             </span>
           </div>
-          <p className="text-sm text-[#86868b]">
+          <p className="text-base leading-relaxed text-[#86868b]">
             Premium motion content for brands that move fast.
           </p>
           {Object.values(SOCIALS).some(Boolean) && (
@@ -1285,7 +1285,7 @@ function Footer() {
             </div>
           )}
         </div>
-        <p className="mt-10 text-center text-xs text-[#86868b]/60">
+        <p className="mt-10 text-center text-sm text-[#86868b]/60">
           © {new Date().getFullYear()} Ebad Ahsan. All rights reserved.
         </p>
       </div>
@@ -1337,13 +1337,13 @@ function SectionHeading({
       transition={{ duration: 0.55, ease: "easeOut" }}
       className={cn("flex flex-col gap-4", align === "center" && "items-center text-center")}
     >
-      <span className="text-glow-green text-[11px] font-medium uppercase tracking-[0.28em] text-[#71b25c]">
+      <span className="text-glow-green text-xs font-medium uppercase tracking-[0.28em] text-[#71b25c]">
         {eyebrow}
       </span>
-      <h2 className="max-w-2xl font-display text-4xl font-medium tracking-tight text-white sm:text-5xl">
+      <h2 className="max-w-3xl font-display text-4xl font-medium tracking-tight text-white sm:text-5xl lg:text-6xl">
         {title}
       </h2>
-      {sub && <p className="max-w-xl leading-relaxed text-[#86868b]">{sub}</p>}
+      {sub && <p className="max-w-xl text-base leading-relaxed text-[#86868b]">{sub}</p>}
     </motion.div>
   );
 }

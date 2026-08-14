@@ -130,7 +130,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       onClick={() => navigate("/")}
                     />
                   </div>
-                <CardTitle className="text-xl">Get Started</CardTitle>
+                <CardTitle className="text-2xl">Get Started</CardTitle>
                 <CardDescription>
                   Enter your email to log in or sign up
                 </CardDescription>
@@ -172,7 +172,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       <div className="absolute inset-0 flex items-center">
                         <span className="w-full border-t" />
                       </div>
-                      <div className="relative flex justify-center text-xs uppercase">
+                      <div className="relative flex justify-center text-sm uppercase">
                         <span className="bg-background px-2 text-muted-foreground">
                           Or
                         </span>
@@ -234,7 +234,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       {error}
                     </p>
                   )}
-                  <p className="text-sm text-muted-foreground text-center mt-4">
+                  <p className="text-base text-muted-foreground text-center mt-4">
                     Didn't receive a code?{" "}
                     <Button
                       variant="link"
@@ -277,7 +277,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </>
           )}
 
-          <div className="border-t border-white/10 px-6 py-4 text-center text-xs text-[#86868b]">
+          <div className="border-t border-white/10 px-6 py-4 text-center text-sm text-[#86868b]">
             Private · Sign in to access the studio inbox
           </div>
         </Card>

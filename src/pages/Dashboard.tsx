@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 
 function DeliveryRow({ ok, label }: { ok?: boolean; label: string }) {
   return (
-    <li className="flex items-center gap-2.5 text-sm text-[#d4d4d8]">
+    <li className="flex items-center gap-2.5 text-base text-[#d4d4d8]">
       {ok === undefined ? (
         <Loader2 className="size-3.5 shrink-0 animate-spin text-[#86868b]" />
       ) : ok ? (
@@ -31,7 +31,7 @@ function DeliveryRow({ ok, label }: { ok?: boolean; label: string }) {
       )}
       {label}
       {ok === false && (
-        <span className="text-xs text-[#86868b]">— not configured</span>
+        <span className="text-sm text-[#86868b]">— not configured</span>
       )}
     </li>
   );
@@ -141,19 +141,19 @@ export default function Dashboard() {
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-[#86868b]">Ebad Ahsan studio workspace</p>
+            <p className="text-base font-medium text-[#86868b]">Ebad Ahsan studio workspace</p>
             <div className="mt-1 flex items-center gap-3">
-              <h1 className="font-display text-3xl font-semibold tracking-tight text-white">
+              <h1 className="font-display text-4xl font-semibold tracking-tight text-white">
                 Project inbox{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
               </h1>
               {unreadCount > 0 && (
-                <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-xs font-semibold text-[#71b25c]">
+                <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-sm font-semibold text-[#71b25c]">
                   <span className="size-1.5 rounded-full bg-[#71b25c]" />
                   {unreadCount} new
                 </span>
               )}
             </div>
-            <p className="mt-1 text-sm text-[#86868b]">
+            <p className="mt-1 text-base leading-relaxed text-[#86868b]">
               Requests submitted from your site&apos;s booking form land here.
             </p>
           </div>
@@ -183,11 +183,11 @@ export default function Dashboard() {
         {/* ---------------- Email delivery status ---------------- */}
         <section className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 p-5 backdrop-blur-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="flex items-center gap-2 font-display text-base font-semibold text-white">
+            <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-white">
               <Mail className="text-glow-green size-4 text-[#71b25c]" />
               Email delivery
             </h2>
-            <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-medium text-[#a1a1a6]">
+            <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#a1a1a6]">
               Inbox: {emailStatus?.ownerEmail ?? "…"}
             </span>
           </div>
@@ -204,7 +204,7 @@ export default function Dashboard() {
           {emailStatus &&
             !emailStatus.vlyConfigured &&
             !emailStatus.web3formsConfigured && (
-              <p className="rounded-lg border border-red-400/25 bg-red-400/10 px-3 py-2 text-xs leading-relaxed text-red-300">
+              <p className="rounded-lg border border-red-400/25 bg-red-400/10 px-3 py-2 text-sm leading-relaxed text-red-300">
                 No email provider is configured yet. Add{" "}
                 <code className="rounded bg-white/10 px-1 py-0.5 font-mono">VLY_INTEGRATION_KEY</code>{" "}
                 (or{" "}
@@ -218,11 +218,11 @@ export default function Dashboard() {
         {/* ---------------- Video library ---------------- */}
         <section className="flex flex-col gap-4">
           <div>
-            <h2 className="flex items-center gap-2 font-display text-xl font-semibold text-white">
+            <h2 className="flex items-center gap-2 font-display text-2xl font-semibold text-white">
               <Clapperboard className="text-glow-green size-5 text-[#71b25c]" />
               Video library
             </h2>
-            <p className="mt-1 text-sm leading-relaxed text-[#86868b]">
+            <p className="mt-1 text-base leading-relaxed text-[#86868b]">
               Upload MP4s straight to your S3/R2 bucket. The hero showreel and
               project cards switch to native HTML5 playback instantly — the
               YouTube facade (and any subtitles) disappears for any slot you
@@ -242,10 +242,10 @@ export default function Dashboard() {
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
-                      <p className="truncate font-display text-sm font-semibold text-white">
+                      <p className="truncate font-display text-base font-semibold text-white">
                         {label}
                       </p>
-                      <p className="mt-0.5 text-xs text-[#86868b]">
+                      <p className="mt-0.5 text-sm text-[#86868b]">
                         {override ? (
                           <>
                             <span className="text-[#71b25c] text-glow-green">MP4 uploaded</span>
@@ -275,7 +275,7 @@ export default function Dashboard() {
                       />
                       <label
                         htmlFor={`file-${slot}`}
-                        className="max-w-[220px] cursor-pointer truncate rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-[#d4d4d8] transition-colors hover:bg-white/10"
+                        className="max-w-[240px] cursor-pointer truncate rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-sm font-medium text-[#d4d4d8] transition-colors hover:bg-white/10"
                         title={fileMap[slot]?.name}
                       >
                         {fileMap[slot] ? fileMap[slot].name : "Choose file"}
@@ -312,7 +312,7 @@ export default function Dashboard() {
                   {slotStatus && (
                     <p
                       className={cn(
-                        "mt-2 text-xs",
+                        "mt-2 text-sm",
                         slotStatus.kind === "ok"
                           ? "text-[#71b25c] text-glow-green"
                           : "text-red-400",
@@ -327,7 +327,7 @@ export default function Dashboard() {
           </div>
 
           {overrides === undefined && (
-            <p className="text-xs text-[#86868b]">Loading video library…</p>
+            <p className="text-sm text-[#86868b]">Loading video library…</p>
           )}
         </section>
 
@@ -337,8 +337,8 @@ export default function Dashboard() {
               <Inbox className="size-6" />
             </span>
             <div>
-              <h2 className="font-display text-xl font-semibold text-white">Inbox restricted</h2>
-              <p className="mx-auto mt-1 max-w-md text-sm leading-relaxed text-[#86868b]">
+              <h2 className="font-display text-2xl font-semibold text-white">Inbox restricted</h2>
+              <p className="mx-auto mt-1 max-w-md text-base leading-relaxed text-[#86868b]">
                 This inbox is owner-only. Sign in with the email set as{" "}
                 <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs text-white/80">
                   OWNER_NOTIFICATION_EMAIL
@@ -353,10 +353,10 @@ export default function Dashboard() {
               <Inbox className="size-6" />
             </span>
             <div>
-              <h2 className="font-display text-xl font-semibold text-white">
+              <h2 className="font-display text-2xl font-semibold text-white">
                 {inquiries === undefined ? "Loading…" : "No inquiries yet"}
               </h2>
-              <p className="mx-auto mt-1 max-w-md text-sm leading-relaxed text-[#86868b]">
+              <p className="mx-auto mt-1 max-w-md text-base leading-relaxed text-[#86868b]">
                 When visitors submit the &quot;Request a Project&quot; form on your landing
                 page, their requests will show up here instantly.
               </p>
@@ -379,25 +379,25 @@ export default function Dashboard() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="font-display text-base font-semibold text-white">
+                      <h2 className="font-display text-lg font-semibold text-white">
                         {inquiry.name}
                       </h2>
                       {unread && (
-                        <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-[#71b25c]">
+                        <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-[#71b25c]">
                           <span className="size-1.5 rounded-full bg-[#71b25c]" />
                           New
                         </span>
                       )}
                       {inquiry.company && (
-                        <span className="text-sm text-[#86868b]">· {inquiry.company}</span>
+                        <span className="text-base text-[#86868b]">· {inquiry.company}</span>
                       )}
-                      <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-medium text-[#a1a1a6]">
+                      <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#a1a1a6]">
                         {inquiry.projectType}
                       </span>
                     </div>
                     <a
                       href={`mailto:${inquiry.email}`}
-                      className="mt-0.5 inline-flex items-center gap-1.5 text-sm text-[#a1a1a6] transition-colors hover:text-[#71b25c]"
+                      className="mt-0.5 inline-flex items-center gap-1.5 text-base text-[#a1a1a6] transition-colors hover:text-[#71b25c]"
                     >
                       <Mail className="size-3.5" />
                       {inquiry.email}
@@ -445,23 +445,23 @@ export default function Dashboard() {
                 {(inquiry.budget || inquiry.timeline) && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {inquiry.budget && (
-                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-xs text-[#a1a1a6]">
+                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-sm text-[#a1a1a6]">
                         Budget: <span className="text-white">{inquiry.budget}</span>
                       </span>
                     )}
                     {inquiry.timeline && (
-                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-xs text-[#a1a1a6]">
+                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-sm text-[#a1a1a6]">
                         Timeline: <span className="text-white">{inquiry.timeline}</span>
                       </span>
                     )}
                   </div>
                 )}
 
-                <p className={cn("mt-3 text-sm leading-relaxed text-[#d4d4d8]")}>
+                <p className={cn("mt-3 text-base leading-relaxed text-[#d4d4d8]")}>
                   {inquiry.message}
                 </p>
 
-                <p className="mt-3 text-xs text-[#86868b]/70">{formatDate(inquiry.createdAt)}</p>
+                <p className="mt-3 text-sm text-[#86868b]/70">{formatDate(inquiry.createdAt)}</p>
               </li>
               );
             })}
