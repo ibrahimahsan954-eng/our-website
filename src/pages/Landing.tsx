@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -82,6 +82,17 @@ function getWhatsAppHref(message: string): string {
     : `https://web.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encoded}`;
 }
 
+// Force top-level opening: preventDefault + window.open with noopener so the
+// link always opens outside the preview iframe (sandboxed panes can block
+// plain _blank navigation). The <a href> stays in place as a backup.
+function handleWhatsAppClick(message: string) {
+  return (e: ReactMouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(getWhatsAppHref(message), "_blank", "noopener,noreferrer");
+  };
+}
+
 // Social profiles — paste your real profile URLs here. Any entry left as ""
 // is treated as unset and hidden automatically from the contact chips and footer.
 const SOCIALS = {
@@ -148,6 +159,7 @@ export default function Landing() {
         href={getWhatsAppHref(WHATSAPP_MESSAGE)}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
         aria-label="Chat on WhatsApp"
         title="Chat on WhatsApp"
         initial={{ opacity: 0, scale: 0.7 }}
@@ -690,6 +702,7 @@ function FinalCta() {
                 href={getWhatsAppHref(WHATSAPP_MESSAGE)}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
                 className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 py-3 text-base font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
               >
                 <WhatsAppIcon className="size-4" />
@@ -1153,6 +1166,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     href={getWhatsAppHref(WHATSAPP_MESSAGE)}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
                     className="text-glow-green font-medium text-[#25d366] transition-colors hover:text-[#4be07f]"
                   >
                     Reach out on WhatsApp
@@ -1188,6 +1202,7 @@ function DmSection() {
             icon={<WhatsAppIcon className="size-5" />}
             label="WhatsApp"
             note="Fastest reply"
+            onClick={handleWhatsAppClick(WHATSAPP_MESSAGE)}
           />
           <DmCard
             href={SOCIALS.instagram}
@@ -1214,6 +1229,7 @@ function DmSection() {
               href={getWhatsAppHref(SCHEDULE_CALL_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick(SCHEDULE_CALL_MESSAGE)}
             >
               Schedule a Call
               <ArrowUpRight className="size-4" />
@@ -1230,11 +1246,13 @@ function DmCard({
   icon,
   label,
   note,
+  onClick,
 }: {
   href: string;
   icon: ReactNode;
   label: string;
   note: string;
+  onClick?: (e: ReactMouseEvent<HTMLAnchorElement>) => void;
 }) {
   const card = (
     <>
@@ -1251,7 +1269,13 @@ function DmCard({
     return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
   }
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={onClick}
+      className={classes}
+    >
       {card}
     </a>
   );
