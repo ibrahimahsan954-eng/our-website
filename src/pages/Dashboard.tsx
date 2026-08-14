@@ -19,6 +19,24 @@ import {
 import { useNavigate } from "react-router";
 import { cn } from "@/lib/utils";
 
+function DeliveryRow({ ok, label }: { ok?: boolean; label: string }) {
+  return (
+    <li className="flex items-center gap-2.5 text-sm text-[#d4d4d8]">
+      {ok === undefined ? (
+        <Loader2 className="size-3.5 shrink-0 animate-spin text-[#86868b]" />
+      ) : ok ? (
+        <span className="size-2 shrink-0 rounded-full bg-[#71b25c]" />
+      ) : (
+        <span className="size-2 shrink-0 rounded-full border border-white/30" />
+      )}
+      {label}
+      {ok === false && (
+        <span className="text-xs text-[#86868b]">— not configured</span>
+      )}
+    </li>
+  );
+}
+
 function formatDate(timestamp: number) {
   return new Intl.DateTimeFormat(undefined, {
     month: "short",
@@ -35,6 +53,7 @@ export default function Dashboard() {
   const inquiries = useQuery(api.inquiries.listInquiries);
   const archiveInquiry = useMutation(api.inquiries.archiveInquiry);
   const markInquiryRead = useMutation(api.inquiries.markInquiryRead);
+  const emailStatus = useQuery(api.emailStatus.getEmailStatus);
   const overrides = useQuery(api.videoAssets.listVideoOverrides);
   const getUploadUrl = useAction(api.media.getUploadUrl);
   const registerVideo = useMutation(api.videoAssets.registerVideo);
@@ -160,6 +179,41 @@ export default function Dashboard() {
             </Button>
           </div>
         </header>
+
+        {/* ---------------- Email delivery status ---------------- */}
+        <section className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 p-5 backdrop-blur-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 font-display text-base font-semibold text-white">
+              <Mail className="size-4 text-[#71b25c]" />
+              Email delivery
+            </h2>
+            <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] font-medium text-[#a1a1a6]">
+              Inbox: {emailStatus?.ownerEmail ?? "…"}
+            </span>
+          </div>
+          <ul className="flex flex-col gap-2">
+            <DeliveryRow
+              ok={emailStatus?.vlyConfigured}
+              label="VLY email (Resend) — primary channel"
+            />
+            <DeliveryRow
+              ok={emailStatus?.web3formsConfigured}
+              label="Web3Forms — fallback channel"
+            />
+          </ul>
+          {emailStatus &&
+            !emailStatus.vlyConfigured &&
+            !emailStatus.web3formsConfigured && (
+              <p className="rounded-lg border border-red-400/25 bg-red-400/10 px-3 py-2 text-xs leading-relaxed text-red-300">
+                No email provider is configured yet. Add{" "}
+                <code className="rounded bg-white/10 px-1 py-0.5 font-mono">VLY_INTEGRATION_KEY</code>{" "}
+                (or{" "}
+                <code className="rounded bg-white/10 px-1 py-0.5 font-mono">WEB3FORMS_ACCESS_KEY</code>{" "}
+                as fallback) in the project&apos;s Keys/API keys tab so inquiries
+                reach your inbox.
+              </p>
+            )}
+        </section>
 
         {/* ---------------- Video library ---------------- */}
         <section className="flex flex-col gap-4">

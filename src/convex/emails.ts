@@ -5,13 +5,83 @@ import { action } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
+ * Delivers one email.
+ *
+ * Primary channel — the VLY integration (Resend-backed, billed through the
+ * platform's VLY_INTEGRATION_KEY, no separate Resend account needed).
+ *
+ * Fallback channel — Web3Forms (WEB3FORMS_ACCESS_KEY): if the VLY key is
+ * missing or the send fails, the same message is POSTed to Web3Forms, which
+ * forwards it to the inbox registered with that access key. This guarantees
+ * owner notifications still arrive even if the primary provider is down or
+ * unconfigured.
+ *
+ * Throws a descriptive error only when neither channel can deliver, so
+ * failures surface in the Convex logs instead of silently vanishing.
+ */
+async function deliverEmail(opts: {
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+  replyTo?: string;
+}): Promise<{ channel: "vly" | "web3forms" }> {
+  const { to, subject, text, html, replyTo } = opts;
+  const sender = process.env.VLY_EMAIL_FROM;
+
+  if (process.env.VLY_INTEGRATION_KEY) {
+    try {
+      await vly.email.send({
+        ...(sender ? { from: sender } : {}),
+        to,
+        subject,
+        text,
+        html,
+        ...(replyTo ? { replyTo } : {}),
+      });
+      return { channel: "vly" };
+    } catch (error) {
+      console.error("[emails] VLY delivery failed, trying Web3Forms:", error);
+    }
+  }
+
+  const web3Key = process.env.WEB3FORMS_ACCESS_KEY;
+  if (!web3Key) {
+    throw new Error(
+      "No email provider is configured: set VLY_INTEGRATION_KEY (or WEB3FORMS_ACCESS_KEY) in the project's Keys/API keys tab.",
+    );
+  }
+
+  const form = new FormData();
+  form.append("access_key", web3Key);
+  form.append("subject", subject);
+  form.append("from_name", "Ebad Ahsan portfolio");
+  form.append("_replyto", replyTo ?? to);
+  form.append("email", to);
+  form.append("message", text);
+  const res = await fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    body: form,
+  });
+  const body = (await res.json().catch(() => null)) as {
+    success?: boolean;
+  } | null;
+  if (!res.ok || body?.success === false) {
+    throw new Error(`Web3Forms delivery failed (HTTP ${res.status}).`);
+  }
+  return { channel: "web3forms" };
+}
+
+/**
  * Emails triggered by a new project inquiry.
  *
- * 1. A confirmation to the visitor (uses the VLY email integration — no extra
- *    API key needed, it bills through the platform integration key).
+ * 1. A confirmation to the visitor (via the primary VLY channel — Web3Forms
+ *    can only deliver to the inbox registered with its key, not to arbitrary
+ *    recipients).
  * 2. An instant notification to the site owner with all inquiry details,
  *    sent by default to onepunchman5005@gmail.com (override with the
  *    OWNER_NOTIFICATION_EMAIL env var in the project's Keys/API keys tab).
+ *    This one falls back to Web3Forms so it always arrives.
  */
 export const sendInquiryEmails = action({
   args: {
@@ -24,18 +94,17 @@ export const sendInquiryEmails = action({
     message: v.string(),
   },
   handler: async (_ctx, args) => {
-    const sender = process.env.VLY_EMAIL_FROM;
     const ownerEmail =
       process.env.OWNER_NOTIFICATION_EMAIL ?? "onepunchman5005@gmail.com";
 
     const results: Record<string, unknown> = {};
 
     // 1. Confirmation to the visitor.
-    const confirm = await vly.email.send({
-      ...(sender ? { from: sender } : {}),
-      to: args.email,
-      subject: "We received your project request — Ebad Ahsan",
-      text: `Hi ${args.name},
+    try {
+      results.confirmation = await deliverEmail({
+        to: args.email,
+        subject: "We received your project request — Ebad Ahsan",
+        text: `Hi ${args.name},
 
 Thanks for reaching out about your ${args.projectType || "project"}. I've received your request and will get back to you within 24 hours to talk scope, timeline, and budget.
 
@@ -43,7 +112,7 @@ In the meantime, feel free to message me on WhatsApp with any questions.
 
 — Ebad Ahsan
 Ebad Ahsan`,
-      html: `<div style="background:#0d0d0d;padding:32px;font-family:Arial,sans-serif;color:#f2f4f6">
+        html: `<div style="background:#0d0d0d;padding:32px;font-family:Arial,sans-serif;color:#f2f4f6">
   <div style="max-width:480px;margin:0 auto">
     <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.02em">Ebad<span style="color:#71b25c">Ahsan</span></div>
     <h1 style="font-size:22px;color:#ffffff;margin:24px 0 8px">We received your project request</h1>
@@ -51,12 +120,17 @@ Ebad Ahsan`,
     <p style="font-size:13px;line-height:1.6;color:#86868b;margin:0">Prefer to chat right away? Message me on <strong style="color:#a1a1a6">WhatsApp</strong> with any questions.</p>
   </div>
 </div>`,
-    });
-    results.confirmation = confirm;
+      });
+    } catch (error) {
+      // The inquiry is already saved; the owner notification below is the
+      // critical one, so a confirmation failure must not block it.
+      console.error("[emails] Visitor confirmation failed:", error);
+      results.confirmation = { error: "delivery failed" };
+    }
 
-    // 2. Owner notification — sent instantly with every submission.
-    const owner = await vly.email.send({
-      ...(sender ? { from: sender } : {}),
+    // 2. Owner notification — VLY primary, Web3Forms fallback. If both fail
+    //    this throws, so the failure is visible in the Convex logs.
+    results.owner = await deliverEmail({
       to: ownerEmail,
       replyTo: args.email,
       subject: `New inquiry: ${args.name} — ${args.projectType}`,
@@ -91,7 +165,6 @@ Reply to ${args.email} to follow up.`,
   </div>
 </div>`,
     });
-    results.owner = owner;
 
     return results;
   },
