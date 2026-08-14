@@ -16,6 +16,7 @@ import {
   ArrowUpRight,
   Check,
   Clapperboard,
+  Copy,
   Home,
   Instagram,
   Linkedin,
@@ -65,6 +66,9 @@ const WHATSAPP_URL =
 // Dedicated link for the "Schedule a Call" button — pre-fills a call-specific message.
 const SCHEDULE_CALL_URL =
   "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20schedule%20a%20call%20to%20discuss%20a%20video%20editing%20project!";
+
+// Copy-to-clipboard fallback for visitors whose network blocks WhatsApp.
+const WHATSAPP_NUMBER_DISPLAY = "+92 313 6494619";
 
 // Social profiles — paste your real profile URLs here. Any entry left as ""
 // is treated as unset and hidden automatically from the contact chips and footer.
@@ -669,15 +673,18 @@ function FinalCta() {
               sub="Tell me about your product and I'll get back to you within 24h with next steps. Prefer to chat? Message me on WhatsApp."
             />
 
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-glow-green mt-8 inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 py-3 text-base font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
-            >
-              <WhatsAppIcon className="size-4" />
-              Chat on WhatsApp
-            </a>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 py-3 text-base font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
+              >
+                <WhatsAppIcon className="size-4" />
+                Chat on WhatsApp
+              </a>
+              <CopyNumberButton />
+            </div>
           </div>
 
           {CALENDAR_EMBED_URL ? (
@@ -1139,6 +1146,9 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     Reach out on WhatsApp
                   </a>
                 </p>
+                <div className="flex justify-center">
+                  <CopyNumberButton compact />
+                </div>
               </form>
             )}
           </motion.div>
@@ -1181,7 +1191,8 @@ function DmSection() {
           />
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+          <CopyNumberButton />
           <Button
             asChild
             size="lg"
@@ -1345,5 +1356,66 @@ function SectionHeading({
       </h2>
       {sub && <p className="max-w-xl text-base leading-relaxed text-[#86868b]">{sub}</p>}
     </motion.div>
+  );
+}
+
+/* ---------------- Copy WhatsApp number fallback ---------------- */
+
+function CopyNumberButton({ compact }: { compact?: boolean }) {
+  const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const handleCopy = async () => {
+    try {
+      // Preferred API — fails silently in non-secure contexts.
+      await navigator.clipboard.writeText(WHATSAPP_NUMBER_DISPLAY);
+    } catch {
+      // Fallback: hidden textarea + execCommand for older browsers / http.
+      const textarea = document.createElement("textarea");
+      textarea.value = WHATSAPP_NUMBER_DISPLAY;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+    setCopied(true);
+    if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    timeoutRef.current = window.setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      aria-live="polite"
+      title={copied ? "Number copied" : "Copy WhatsApp number"}
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border font-medium transition-all duration-300",
+        compact ? "px-4 py-2 text-sm" : "px-5 py-3 text-base",
+        copied
+          ? "text-glow-green border-[#71b25c]/60 bg-[#71b25c]/15 text-[#71b25c]"
+          : "border-white/10 bg-white/5 text-[#a1a1a6] hover:border-[#71b25c]/40 hover:bg-white/10 hover:text-white",
+      )}
+    >
+      {copied ? (
+        <>
+          <Check className="size-4" />
+          Copied!
+        </>
+      ) : (
+        <>
+          <Copy className="size-4" />
+          Copy number
+        </>
+      )}
+    </button>
   );
 }
