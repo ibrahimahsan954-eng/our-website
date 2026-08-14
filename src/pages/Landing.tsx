@@ -274,7 +274,91 @@ function Avatar() {
   );
 }
 
+/* Minimal typings for the YouTube IFrame API (used to strip the captions module). */
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (
+        element: HTMLElement,
+        options: {
+          videoId?: string;
+          width?: string;
+          height?: string;
+          playerVars?: Record<string, string | number>;
+          events?: {
+            onReady?: (event: {
+              target: {
+                playVideo: () => void;
+                unloadModule?: (moduleName: string) => void;
+              };
+            }) => void;
+          };
+        },
+      ) => { destroy: () => void };
+    };
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
 function Showreel() {
+  const playerHostRef = useRef<HTMLDivElement>(null);
+
+  // YouTube facade: create the player through the IFrame API so the captions
+  // module can be unloaded — subtitles can NEVER appear, even if the viewer's
+  // YouTube account has captions enabled globally (cc_load_policy=0 alone does
+  // not override that saved preference). The native <video> path is used
+  // instead when SHOWREEL_MP4 is set (no captions at all).
+  useEffect(() => {
+    if (SHOWREEL_MP4) return;
+    let player: { destroy: () => void } | null = null;
+    let cancelled = false;
+
+    const createPlayer = () => {
+      if (cancelled || !window.YT || !playerHostRef.current) return;
+      player = new window.YT.Player(playerHostRef.current, {
+        videoId: SHOWREEL_ID,
+        width: "100%",
+        height: "100%",
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          controls: 0,
+          modestbranding: 1,
+          rel: 0,
+          iv_load_policy: 3,
+          showinfo: 0,
+          disablekb: 1,
+          cc_load_policy: 0,
+          hl: "en",
+          loop: 1,
+          playlist: SHOWREEL_ID,
+          playsinline: 1,
+        },
+        events: {
+          onReady: (event) => {
+            // Physically remove the captions module so no subtitles can load.
+            event.target.unloadModule?.("captions");
+            event.target.playVideo();
+          },
+        },
+      });
+    };
+
+    if (window.YT) {
+      createPlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = createPlayer;
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    }
+
+    return () => {
+      cancelled = true;
+      player?.destroy();
+    };
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 26 }}
@@ -303,21 +387,13 @@ function Showreel() {
           />
         ) : (
           <>
-            <iframe
-              className="absolute inset-0 h-full w-full"
-              src={`https://www.youtube.com/embed/${SHOWREEL_ID}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=off&hl=en&loop=1&playlist=${SHOWREEL_ID}&playsinline=1`}
-              title="Ebad Ahsan — Showreel"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
+            <div ref={playerHostRef} className="absolute inset-0 h-full w-full" />
             {/* Invisible overlay — blocks hover/click events from reaching
                 YouTube so its title bar, share buttons, and overlays never appear. */}
             <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
           </>
         )}
       </div>
-
     </motion.div>
   );
 }
