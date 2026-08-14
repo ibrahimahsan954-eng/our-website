@@ -26,8 +26,14 @@ import { cn } from "@/lib/utils";
    ============================================================ */
 
 // Where "Book a Call" pills scroll to — keep as the on-page CTA section,
-// or point at your real Cal.com link (e.g. "https://cal.com/zakariahq").
+// or point at your real Cal.com link (e.g. "https://cal.com/ebadahsan").
 const BOOKING_URL = "#request-cal";
+
+// Embedded calendar widget — paste your public Cal.com / Calendly booking URL
+// here (e.g. "https://cal.com/ebadahsan/15min" or
+// "https://calendly.com/ebadahsan/video-call") and the booking section will
+// render the real dark-mode calendar instead of the request form.
+const CALENDAR_EMBED_URL = "";
 
 // Primary showreel — YouTube.
 // Source: https://youtu.be/T7pNvhwRNBU?si=ogXx4LKdKcYi_YLx
@@ -625,7 +631,19 @@ function FinalCta() {
             </a>
           </div>
 
-          <RequestForm />
+          {CALENDAR_EMBED_URL ? (
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-sm">
+              <iframe
+                src={CALENDAR_EMBED_URL}
+                title="Schedule a call"
+                className="h-[660px] w-full"
+                loading="lazy"
+                style={{ border: 0 }}
+              />
+            </div>
+          ) : (
+            <RequestForm />
+          )}
         </div>
       </div>
     </section>
