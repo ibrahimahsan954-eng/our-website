@@ -712,7 +712,7 @@ function FinalCta() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={openWhatsApp(WHATSAPP_MESSAGE)}
-                className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 py-3 text-base font-medium text-[#25d366] backdrop-blur-md transition-colors hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 text-base font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
               >
                 <WhatsAppIcon className="size-4" />
                 Chat on WhatsApp
@@ -1232,7 +1232,7 @@ function DmSection() {
           <Button
             asChild
             size="lg"
-            className="h-12 gap-2 rounded-full bg-[#2b7ced] px-8 text-white hover:bg-[#3d87f0]"
+            className="h-11 gap-2 rounded-full bg-[#2b7ced] px-8 font-semibold text-white shadow-[0_4px_18px_rgba(43,124,237,0.28)] transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/25"
           >
             <a
               href={getWhatsAppHref(SCHEDULE_CALL_MESSAGE)}
@@ -1457,11 +1457,11 @@ function CopyNumberButton({
       aria-label={copied ? "Number copied" : "Copy WhatsApp number"}
       title={copied ? "Number copied" : "Copy WhatsApp number"}
       className={cn(
-        "inline-flex items-center justify-center rounded-full border font-medium transition-all duration-300",
-        iconOnly ? "size-11" : compact ? "px-4 py-2 text-sm" : "px-5 py-3 text-base",
+        "inline-flex items-center justify-center gap-2 rounded-full border font-semibold transition-all duration-300",
+        iconOnly ? "size-11" : compact ? "h-11 px-5 text-sm" : "h-11 px-6 text-base",
         copied
           ? "text-glow-green border-[#71b25c]/60 bg-[#71b25c]/15 text-[#71b25c]"
-          : "border-white/10 bg-white/5 text-[#a1a1a6] hover:border-[#71b25c]/40 hover:bg-white/10 hover:text-white",
+          : "border-zinc-700/60 bg-white/5 text-zinc-100 hover:bg-zinc-800 hover:text-white",
       )}
     >
       {iconOnly ? (
