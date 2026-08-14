@@ -9,8 +9,9 @@ import { v } from "convex/values";
  *
  * 1. A confirmation to the visitor (uses the VLY email integration — no extra
  *    API key needed, it bills through the platform integration key).
- * 2. A notification to the site owner, only when the OWNER_NOTIFICATION_EMAIL
- *    environment variable is set in the project's Keys/API keys tab.
+ * 2. An instant notification to the site owner with all inquiry details,
+ *    sent by default to onepunchman5005@gmail.com (override with the
+ *    OWNER_NOTIFICATION_EMAIL env var in the project's Keys/API keys tab).
  */
 export const sendInquiryEmails = action({
   args: {
@@ -18,13 +19,14 @@ export const sendInquiryEmails = action({
     email: v.string(),
     company: v.optional(v.string()),
     projectType: v.string(),
-    budget: v.optional(v.string()),
-    timeline: v.optional(v.string()),
+    budget: v.string(),
+    timeline: v.string(),
     message: v.string(),
   },
   handler: async (_ctx, args) => {
     const sender = process.env.VLY_EMAIL_FROM;
-    const ownerEmail = process.env.OWNER_NOTIFICATION_EMAIL;
+    const ownerEmail =
+      process.env.OWNER_NOTIFICATION_EMAIL ?? "onepunchman5005@gmail.com";
 
     const results: Record<string, unknown> = {};
 
@@ -52,27 +54,26 @@ Ebad Ahsan`,
     });
     results.confirmation = confirm;
 
-    // 2. Owner notification (only if an owner email is configured).
-    if (ownerEmail) {
-      const owner = await vly.email.send({
-        ...(sender ? { from: sender } : {}),
-        to: ownerEmail,
-        replyTo: args.email,
-        subject: `New inquiry: ${args.name} — ${args.projectType}`,
-        text: `New project inquiry received
+    // 2. Owner notification — sent instantly with every submission.
+    const owner = await vly.email.send({
+      ...(sender ? { from: sender } : {}),
+      to: ownerEmail,
+      replyTo: args.email,
+      subject: `New inquiry: ${args.name} — ${args.projectType}`,
+      text: `New project inquiry received
 
 Name: ${args.name}
 Email: ${args.email}
 Company: ${args.company || "—"}
 Project type: ${args.projectType}
-Budget: ${args.budget || "—"}
-Timeline: ${args.timeline || "—"}
+Budget: ${args.budget}
+Timeline: ${args.timeline}
 
-Message:
+Project details / links:
 ${args.message}
 
 Reply to ${args.email} to follow up.`,
-        html: `<div style="background:#0d0d0d;padding:32px;font-family:Arial,sans-serif;color:#f2f4f6">
+      html: `<div style="background:#0d0d0d;padding:32px;font-family:Arial,sans-serif;color:#f2f4f6">
   <div style="max-width:480px;margin:0 auto">
     <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.02em">Ebad<span style="color:#71b25c">Ahsan</span></div>
     <h1 style="font-size:20px;color:#ffffff;margin:24px 0 12px">New project inquiry</h1>
@@ -81,16 +82,16 @@ Reply to ${args.email} to follow up.`,
       <tr><td style="padding:6px 0;color:#86868b">Email</td><td style="padding:6px 0;color:#ffffff">${args.email}</td></tr>
       <tr><td style="padding:6px 0;color:#86868b">Company</td><td style="padding:6px 0;color:#ffffff">${args.company || "—"}</td></tr>
       <tr><td style="padding:6px 0;color:#86868b">Project type</td><td style="padding:6px 0;color:#ffffff">${args.projectType}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Budget</td><td style="padding:6px 0;color:#ffffff">${args.budget || "—"}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Timeline</td><td style="padding:6px 0;color:#ffffff">${args.timeline || "—"}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Budget</td><td style="padding:6px 0;color:#ffffff">${args.budget}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Timeline</td><td style="padding:6px 0;color:#ffffff">${args.timeline}</td></tr>
     </table>
-    <p style="font-size:14px;line-height:1.6;color:#ffffff;margin:16px 0 0;padding-top:16px;border-top:1px solid #2a2a2a;white-space:pre-wrap">${args.message}</p>
+    <p style="font-size:12px;color:#86868b;margin:16px 0 4px">Project details / links</p>
+    <p style="font-size:14px;line-height:1.6;color:#ffffff;margin:0;padding-top:12px;border-top:1px solid #2a2a2a;white-space:pre-wrap">${args.message}</p>
     <p style="font-size:12px;color:#86868b;margin:20px 0 0">Reply to <a href="mailto:${args.email}" style="color:#71b25c">${args.email}</a> to follow up.</p>
   </div>
 </div>`,
-      });
-      results.owner = owner;
-    }
+    });
+    results.owner = owner;
 
     return results;
   },

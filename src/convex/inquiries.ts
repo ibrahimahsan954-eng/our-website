@@ -36,8 +36,8 @@ export const submitInquiry = mutation({
     email: v.string(),
     company: v.optional(v.string()),
     projectType: v.string(),
-    budget: v.optional(v.string()),
-    timeline: v.optional(v.string()),
+    budget: v.string(),
+    timeline: v.string(),
     message: v.string(),
     // Honeypot — bots fill this hidden field; real visitors never see it.
     website: v.optional(v.string()),
@@ -65,6 +65,12 @@ export const submitInquiry = mutation({
         message: "Please describe your project (max 4000 characters).",
       };
     }
+    if (args.budget.trim().length === 0) {
+      return { success: false, message: "Please select a budget range." };
+    }
+    if (args.timeline.trim().length === 0) {
+      return { success: false, message: "Please select your timeline." };
+    }
 
     // Rate limit: at most one submission per email every 60 seconds, so bots
     // can't flood the inbox or burn email credits. Returned as a clean
@@ -86,8 +92,8 @@ export const submitInquiry = mutation({
       email,
       company: args.company?.trim() || undefined,
       projectType: args.projectType,
-      budget: args.budget || undefined,
-      timeline: args.timeline || undefined,
+      budget: args.budget,
+      timeline: args.timeline,
       message,
       status: "new",
       createdAt: Date.now(),
@@ -101,8 +107,8 @@ export const submitInquiry = mutation({
         email,
         company: args.company?.trim() || undefined,
         projectType: args.projectType,
-        budget: args.budget || undefined,
-        timeline: args.timeline || undefined,
+        budget: args.budget,
+        timeline: args.timeline,
         message,
       });
     } catch (error) {
