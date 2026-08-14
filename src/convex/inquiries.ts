@@ -43,9 +43,10 @@ export const submitInquiry = mutation({
     website: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    // Silently discard bot submissions that filled the honeypot field.
+    // Silently discard bot submissions that filled the honeypot field — and
+    // pretend success so bots can't tell they were filtered.
     if (args.website && args.website.trim().length > 0) {
-      return;
+      return { success: true };
     }
 
     const name = args.name.trim();
@@ -53,24 +54,31 @@ export const submitInquiry = mutation({
     const message = args.message.trim();
 
     if (name.length === 0 || name.length > 120) {
-      throw new Error("Please provide your name.");
+      return { success: false, message: "Please provide your name." };
     }
     if (email.length === 0 || email.length > 254 || !email.includes("@")) {
-      throw new Error("Please provide a valid email address.");
+      return { success: false, message: "Please provide a valid email address." };
     }
     if (message.length === 0 || message.length > 4000) {
-      throw new Error("Please describe your project (max 4000 characters).");
+      return {
+        success: false,
+        message: "Please describe your project (max 4000 characters).",
+      };
     }
 
     // Rate limit: at most one submission per email every 60 seconds, so bots
-    // can't flood the inbox or burn email credits.
+    // can't flood the inbox or burn email credits. Returned as a clean
+    // response instead of an exception so the client shows a friendly message.
     const latest = await ctx.db
       .query("projectInquiries")
       .withIndex("by_email", (q) => q.eq("email", email))
       .order("desc")
       .first();
     if (latest && Date.now() - latest.createdAt < 60_000) {
-      throw new Error("Thanks — please wait a moment before sending another request.");
+      return {
+        success: false,
+        message: "Thanks — please wait a moment before sending another request.",
+      };
     }
 
     await ctx.db.insert("projectInquiries", {
@@ -100,6 +108,8 @@ export const submitInquiry = mutation({
     } catch (error) {
       console.error("Failed to schedule inquiry emails:", error);
     }
+
+    return { success: true };
   },
 });
 

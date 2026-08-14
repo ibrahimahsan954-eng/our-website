@@ -686,7 +686,7 @@ function RequestForm() {
     setError(null);
     try {
       const formData = new FormData(event.currentTarget);
-      await submitInquiry({
+      const result = await submitInquiry({
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
         company: ((formData.get("company") as string) ?? "").trim() || undefined,
@@ -696,12 +696,17 @@ function RequestForm() {
         message: (formData.get("message") as string) ?? "",
         website: (formData.get("website") as string) ?? "",
       });
-      setStatus("success");
+      if (result.success) {
+        setStatus("success");
+      } else {
+        // Clean, user-facing message — never a raw Convex/server error string.
+        setError(result.message ?? "Please try again in a moment.");
+        setStatus("error");
+      }
     } catch (err) {
       console.error("Inquiry submit error:", err);
-      setError(
-        err instanceof Error ? err.message : "Something went wrong. Please try again.",
-      );
+      // Keep raw Convex error strings (e.g. "[CONVEX M...]") out of the UI.
+      setError("Something went wrong. Please try again.");
       setStatus("error");
     }
   };
@@ -810,6 +815,7 @@ function RequestForm() {
       <Button
         type="submit"
         disabled={status === "loading"}
+        aria-busy={status === "loading"}
         className="mt-5 h-12 w-full gap-2 rounded-full bg-[#2b7ced] text-white hover:bg-[#3d87f0]"
       >
         {status === "loading" ? (
