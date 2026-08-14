@@ -942,7 +942,7 @@ function Footer() {
     <footer className="border-t border-white/10 px-4 py-12 sm:px-6">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <span className="flex size-8 items-center justify-center rounded-lg bg-[#212121]">
               <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
                 <circle cx="12" cy="12" r="6.5" fill="none" stroke="#71b25c" strokeWidth="1.6" />
@@ -950,7 +950,7 @@ function Footer() {
               </svg>
             </span>
             <span className="font-display font-semibold tracking-tight text-white">
-              Ebad<span className="text-[#71b25c]">Ahsan</span>
+              Ebad <span className="text-[#71b25c]">Ahsan</span>
             </span>
           </div>
           <p className="text-sm text-[#86868b]">
