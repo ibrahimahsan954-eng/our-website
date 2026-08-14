@@ -60,16 +60,16 @@ const AVATAR_URL =
 // WhatsApp — this one is wired up and always shown. Pre-fills a message so
 // clients land straight in the conversation.
 const WHATSAPP_URL =
-  "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20video%20editing%20project!";
+  "https://wa.me/923136494619?text=Hi%20Ebad,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project!";
 
 // Social profiles — paste your real profile URLs here. Any entry left as ""
 // is treated as unset and hidden automatically from the contact chips and footer.
 const SOCIALS = {
   discord: "",
   x: "",
-  instagram: "",
+  instagram: "https://www.instagram.com/editsbyebad/",
   youtube: "",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/ebadullah-ahsan-738492247/",
 };
 
 // Stats shown in the counters section (animated on scroll) — update to your real numbers
@@ -1156,7 +1156,7 @@ function DmSection() {
           sub="Fastest reply on WhatsApp — or catch me on your favorite platform."
         />
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto mt-10 grid w-full max-w-4xl gap-4 sm:grid-cols-3">
           <DmCard
             href={WHATSAPP_URL}
             icon={<WhatsAppIcon className="size-5" />}
@@ -1164,22 +1164,16 @@ function DmSection() {
             note="Fastest reply"
           />
           <DmCard
-            href={SOCIALS.x}
-            icon={<MessageCircle className="size-5" />}
-            label="X / Twitter"
-            note={SOCIALS.x ? "DM me" : "Link coming soon"}
-          />
-          <DmCard
             href={SOCIALS.instagram}
             icon={<Instagram className="size-5" />}
             label="Instagram"
-            note={SOCIALS.instagram ? "DM me" : "Link coming soon"}
+            note="DM me"
           />
           <DmCard
             href={SOCIALS.linkedin}
             icon={<Linkedin className="size-5" />}
             label="LinkedIn"
-            note={SOCIALS.linkedin ? "Connect" : "Link coming soon"}
+            note="Connect"
           />
         </div>
 
@@ -1189,7 +1183,7 @@ function DmSection() {
             size="lg"
             className="h-12 gap-2 rounded-full bg-[#2b7ced] px-8 text-white hover:bg-[#3d87f0]"
           >
-            <a href={BOOKING_URL}>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               Schedule a Call
               <ArrowUpRight className="size-4" />
             </a>
