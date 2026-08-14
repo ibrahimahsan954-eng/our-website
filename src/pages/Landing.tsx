@@ -287,8 +287,11 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="text-glow-green inline-flex items-center gap-2 rounded-full border border-[#71b25c]/30 bg-[#71b25c]/15 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#71b25c] backdrop-blur-md">
-            <span className="size-1.5 animate-pulse rounded-full bg-[#71b25c]" />
+          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#71b25c] shadow-[0_0_18px_rgba(113,178,92,0.18)] backdrop-blur-md">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+              <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+            </span>
             3 spots left in August
           </span>
           <button
