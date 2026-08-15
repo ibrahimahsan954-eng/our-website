@@ -260,7 +260,7 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
           type="button"
           size="sm"
           onClick={onReserve}
-          className="h-10 gap-2 rounded-full bg-[#71b25c] px-5 text-base font-semibold text-[#0b141a] shadow-[0_0_16px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_24px_rgba(113,178,92,0.5)]"
+          className="h-10 gap-2 rounded-full bg-[#71b25c] px-5 text-base font-semibold text-[#0b141a] shadow-[0_0_14px_rgba(113,178,92,0.55),0_0_30px_rgba(113,178,92,0.3)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_22px_rgba(113,178,92,0.75),0_0_46px_rgba(113,178,92,0.4)]"
         >
           Reserve a Spot
           <ArrowUpRight className="size-3.5" />
@@ -348,7 +348,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           <button
             type="button"
             onClick={onReserve}
-            className="inline-flex h-12 items-center rounded-full bg-[#71b25c] px-7 text-base font-semibold text-[#0b141a] shadow-[0_0_24px_rgba(113,178,92,0.35)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_32px_rgba(113,178,92,0.5)]"
+            className="inline-flex h-12 items-center rounded-full bg-[#71b25c] px-7 text-base font-semibold text-[#0b141a] shadow-[0_0_20px_rgba(113,178,92,0.55),0_0_42px_rgba(113,178,92,0.3)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_28px_rgba(113,178,92,0.75),0_0_60px_rgba(113,178,92,0.4)]"
           >
             Reserve a Spot
           </button>
