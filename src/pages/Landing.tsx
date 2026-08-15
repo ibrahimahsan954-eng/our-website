@@ -350,7 +350,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
         >
           <strong className="inline-flex items-center gap-1.5 font-semibold text-white">
             Grow on
-            <Youtube aria-hidden className="size-[1.1em] text-[#71b25c]" />
+            <YouTubeLogo className="size-[1.1em]" />
             YouTube
           </strong>
           <span aria-hidden className="mx-2 text-[#71b25c]">—</span>
@@ -382,6 +382,20 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
         <Showreel />
       </div>
     </section>
+  );
+}
+
+/** Official YouTube logo — filled red (#FF0000) rounded square + white play
+ *  triangle, sized inline with surrounding text. */
+function YouTubeLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <path
+        d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19 31.64 31.64 0 0 0 0 12a31.64 31.64 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14A31.64 31.64 0 0 0 24 12a31.64 31.64 0 0 0-.5-5.81Z"
+        fill="#FF0000"
+      />
+      <path d="m9.55 15.57 6-3.57-6-3.57v7.14Z" fill="#FFFFFF" />
+    </svg>
   );
 }
 
