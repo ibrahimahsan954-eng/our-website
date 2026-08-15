@@ -59,6 +59,15 @@ const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.
 // cropped to the pill). Falls back to a lime monogram tile until it exists.
 const PORTRAIT_URL = "/portrait.jpg";
 
+// Social proof avatar stack — small overlapping client photos under the hero
+// portrait. Each falls back to a gradient monogram tile if the image can't load.
+const CLIENT_AVATARS = [
+  { src: "https://i.pravatar.cc/96?img=12", label: "M" },
+  { src: "https://i.pravatar.cc/96?img=32", label: "S" },
+  { src: "https://i.pravatar.cc/96?img=47", label: "A" },
+  { src: "https://i.pravatar.cc/96?img=68", label: "K" },
+];
+
 // WhatsApp — wired up everywhere. Every trigger is a plain native <a> link
 // (target="_blank" rel="noopener noreferrer") — no JS navigation handlers.
 const WHATSAPP_PHONE = "923136494619";
@@ -309,6 +318,23 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           <HeroPortrait />
         </motion.div>
 
+        {/* Social proof — client avatar stack under the portrait */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.26, ease: "easeOut" }}
+          className="mt-9 flex items-center justify-center gap-3"
+        >
+          <div className="flex -space-x-2.5">
+            {CLIENT_AVATARS.map((a) => (
+              <ClientAvatar key={a.src} src={a.src} label={a.label} />
+            ))}
+          </div>
+          <p className="text-sm font-medium tracking-[-0.01em] text-[#e6e6e9] sm:text-base">
+            Trusted by <strong className="font-semibold text-white">50+</strong> Clients
+          </p>
+        </motion.div>
+
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -345,6 +371,29 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
         <Showreel />
       </div>
     </section>
+  );
+}
+
+function ClientAvatar({ src, label }: { src: string; label: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <span className="flex size-9 items-center justify-center rounded-full border border-white/25 bg-gradient-to-br from-[#2c2f26] via-[#1b1c14] to-[#10110b] text-xs font-semibold text-[#71b25c] shadow-[0_0_12px_rgba(0,0,0,0.4)]">
+        {label}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
+      className="size-9 rounded-full border border-white/25 object-cover shadow-[0_0_12px_rgba(0,0,0,0.4)]"
+    />
   );
 }
 
