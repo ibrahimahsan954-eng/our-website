@@ -23,7 +23,6 @@ import {
   Loader2,
   MessageCircle,
   Play,
-  Sparkle,
   X,
   Youtube,
 } from "lucide-react";
@@ -308,19 +307,6 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
 
           {/* Vertical pill window — portrait overlaps the middle of the letters */}
           <HeroPortrait />
-        </motion.div>
-
-        {/* Lime sparkle icon centered below the name */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.22, ease: "easeOut" }}
-        >
-          <Sparkle
-            aria-hidden
-            strokeWidth={1.5}
-            className="mx-auto mt-10 size-7 text-[#71b25c] drop-shadow-[0_0_14px_rgba(113,178,92,0.5)] sm:size-9"
-          />
         </motion.div>
 
         <motion.p
