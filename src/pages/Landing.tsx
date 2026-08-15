@@ -29,7 +29,9 @@ import {
   Linkedin,
   Loader2,
   MessageCircle,
+  Moon,
   Play,
+  Sun,
   X,
   Youtube,
 } from "lucide-react";
@@ -249,18 +251,18 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="fixed inset-x-0 top-5 z-50 flex justify-center px-4 sm:top-6"
     >
-      <motion.nav className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 p-2 backdrop-blur-md">
+      <motion.nav className="flex items-center gap-1.5 rounded-full border border-black/10 bg-white/80 p-2 backdrop-blur-md dark:border-white/10 dark:bg-white/5">
         <a
           href="#top"
           onClick={scrollToTop}
           aria-label="Back to top"
           title="Back to top"
-          className="flex size-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
+          className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 backdrop-blur-md transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
         >
           <Home className="size-[18px]" />
         </a>
 
-        <span aria-hidden className="mx-1 h-4 w-px bg-white/15" />
+        <span aria-hidden className="mx-1 h-4 w-px bg-black/15 dark:bg-white/15" />
 
         <NavIcon href="#work" label="Portfolio">
           <Clapperboard className="size-[18px]" />
@@ -269,7 +271,7 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
           <MessageCircle className="size-[18px]" />
         </NavIcon>
 
-        <span aria-hidden className="mx-1 h-4 w-px bg-white/15" />
+        <span aria-hidden className="mx-1 h-4 w-px bg-black/15 dark:bg-white/15" />
 
         <Button
           type="button"
@@ -280,8 +282,47 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
           Reserve a Spot
           <ArrowUpRight className="size-3.5" />
         </Button>
+
+        <ThemeToggle />
       </motion.nav>
     </motion.header>
+  );
+}
+
+/** Dark/Light mode toggle — defaults to dark; persists the choice locally. */
+function ThemeToggle() {
+  // Lazy init from the persisted preference (default dark). The <html> class
+  // is already applied pre-paint by the inline script in index.html, so the
+  // button only mirrors the current state.
+  const [dark, setDark] = useState(() => {
+    try {
+      return (localStorage.getItem("theme") ?? "dark") === "dark";
+    } catch {
+      return true;
+    }
+  });
+
+  const toggle = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    try {
+      localStorage.setItem("theme", next ? "dark" : "light");
+    } catch {
+      /* storage unavailable — in-memory theme still works */
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+      title={dark ? "Switch to light mode" : "Switch to dark mode"}
+      className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
+    >
+      {dark ? <Moon className="size-[18px]" /> : <Sun className="size-[18px]" />}
+    </button>
   );
 }
 
@@ -291,7 +332,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
       href={href}
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+      className="flex size-9 items-center justify-center rounded-full text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
     >
       {children}
     </a>
@@ -302,7 +343,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
 
 function Hero({ onReserve }: { onReserve?: () => void }) {
   return (
-    <section id="top" className="relative overflow-hidden bg-[#161616] px-4 pb-16 pt-28 sm:pt-32 md:px-6">
+    <section id="top" className="relative overflow-hidden bg-[#e9e9e5] px-4 pb-16 pt-28 sm:pt-32 md:px-6 dark:bg-[#161616]">
       <div className="relative mx-auto w-full text-center">
         {/* Massive name composition — lime-green condensed type with the
             vertical pill portrait window cutting through the middle letters */}
@@ -337,8 +378,8 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
               <ClientAvatar key={a.src} src={a.src} label={a.label} />
             ))}
           </div>
-          <p className="text-sm font-medium tracking-[-0.01em] text-[#e6e6e9] sm:text-base">
-            Trusted by <strong className="font-semibold text-white">80+</strong> Happy Clients
+          <p className="text-sm font-medium tracking-[-0.01em] text-[#1b1b1e] sm:text-base dark:text-[#e6e6e9]">
+            Trusted by <strong className="font-semibold text-[#101010] dark:text-white">80+</strong> Happy Clients
           </p>
         </motion.div>
 
@@ -346,15 +387,15 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-relaxed tracking-[-0.01em] text-[#8b8b91] sm:text-xl"
+          className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#8b8b91]"
         >
-          <strong className="inline-flex items-center gap-1.5 font-semibold text-white">
+          <strong className="inline-flex items-center gap-1.5 font-semibold text-[#101010] dark:text-white">
             Grow on
             <YouTubeLogo className="size-[1.1em]" />
             YouTube
           </strong>
           <span aria-hidden className="mx-2 text-[#71b25c]">—</span>
-          Become the <strong className="font-semibold text-white">best brand</strong> in your niche
+          Become the <strong className="font-semibold text-[#101010] dark:text-white">best brand</strong> in your niche
         </motion.p>
 
         <motion.div
@@ -363,7 +404,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.42, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#71b25c] shadow-[0_0_18px_rgba(113,178,92,0.18)] backdrop-blur-md">
+          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-emerald-500/40 bg-emerald-100/90 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#71b25c] shadow-[0_0_18px_rgba(113,178,92,0.18)] backdrop-blur-md dark:border-emerald-500/30 dark:bg-emerald-950/40">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-70" />
               <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
@@ -404,7 +445,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 
   if (failed) {
     return (
-      <span className="flex size-9 items-center justify-center rounded-full border-2 border-[#161616] bg-gradient-to-br from-[#2c2f26] via-[#1b1c14] to-[#10110b] text-xs font-semibold text-[#71b25c] shadow-[0_0_12px_rgba(0,0,0,0.4)]">
+      <span className="flex size-9 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#e8e8e2] via-[#d9d9d2] to-[#c9c9c0] text-xs font-semibold text-[#71b25c] shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:from-[#2c2f26] dark:via-[#1b1c14] dark:to-[#10110b] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]">
         {label}
       </span>
     );
@@ -417,7 +458,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
       loading="lazy"
       decoding="async"
       onError={() => setFailed(true)}
-      className="size-9 rounded-full border-2 border-[#161616] object-cover shadow-[0_0_12px_rgba(0,0,0,0.4)]"
+      className="size-9 rounded-full border-2 border-white object-cover shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]"
     />
   );
 }
@@ -425,7 +466,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 function HeroPortrait() {
   const [failed, setFailed] = useState(false);
   return (
-    <div className="absolute left-1/2 top-1/2 z-20 h-[clamp(8.5rem,36vw,36rem)] w-[clamp(2.75rem,11.5vw,11.5rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[999px] border border-white/15 bg-[#0e0e0e] shadow-[0_0_60px_rgba(0,0,0,0.6)]">
+    <div className="absolute left-1/2 top-1/2 z-20 h-[clamp(8.5rem,36vw,36rem)] w-[clamp(2.75rem,11.5vw,11.5rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[999px] border border-black/10 bg-[#f7f7f4] shadow-[0_0_60px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#0e0e0e] dark:shadow-[0_0_60px_rgba(0,0,0,0.6)]">
       {!failed ? (
         <img
           src={PORTRAIT_URL}
@@ -457,12 +498,12 @@ function Showreel() {
       initial={{ opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65, delay: 0.56, ease: "easeOut" }}
-      className="relative mx-auto mt-8 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#141414] sm:mt-10"
+      className="relative mx-auto mt-8 w-full overflow-hidden rounded-2xl border border-black/10 bg-[#e6e6e2] sm:mt-10 dark:border-white/10 dark:bg-[#141414]"
     >
       {/* Fallback gradient behind the video */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(120%_120%_at_20%_0%,#1c2b1e_0%,#0e0e0e_62%)]"
+        className="absolute inset-0 bg-[#deded8] dark:bg-[radial-gradient(120%_120%_at_20%_0%,#1c2b1e_0%,#0e0e0e_62%)]"
       />
 
       {/* Autoplay on load: muted + loop + playsinline so browsers allow it */}
@@ -587,7 +628,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           setPlaying(true);
         }
       }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 p-2 pb-3 text-left backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]"
     >
       {/* Media area — fixed 16:9 frame; auto-plays muted while in view. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
@@ -639,7 +680,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
               />
             ) : (
-              <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_18%_0%,#1c2b1e_0%,#0e0e0e_62%)]" />
+              <div className="absolute inset-0 bg-[#deded8] dark:bg-[radial-gradient(120%_120%_at_18%_0%,#1c2b1e_0%,#0e0e0e_62%)]" />
             )}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.2),transparent_50%,rgba(10,10,10,0.4))]" />
             {/* Centered minimal play button — clicking anywhere on the card starts playback */}
@@ -652,12 +693,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       <div className="flex items-end justify-between gap-4 px-2 pt-3">
         <div className="min-w-0">
-          <h3 className="truncate font-display text-xl font-semibold text-white">
+          <h3 className="truncate font-display text-xl font-semibold text-[#101010] dark:text-white">
             {project.title}
           </h3>
-          <p className="mt-0.5 text-base leading-relaxed text-[#86868b]">{project.category}</p>
+          <p className="mt-0.5 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">{project.category}</p>
         </div>
-        <ArrowUpRight className="size-5 shrink-0 text-white/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#71b25c]" />
+        <ArrowUpRight className="size-5 shrink-0 text-black/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#71b25c] dark:text-white/40" />
       </div>
     </motion.div>
   );
@@ -674,7 +715,7 @@ function Stats() {
             {index > 0 && (
               <span
                 aria-hidden
-                className="hidden w-px self-center bg-white/20 sm:block"
+                className="hidden w-px self-center bg-black/10 sm:block dark:bg-white/20"
                 style={{ height: 58 }}
               />
             )}
@@ -688,7 +729,7 @@ function Stats() {
               <p className="font-display text-6xl font-medium tracking-tight text-glow-metric sm:text-7xl">
                 <Counter value={stat.value} suffix={stat.suffix} />
               </p>
-              <p className="mt-2 text-base font-medium tracking-[-0.01em] text-[#f2f4f6]/80">{stat.label}</p>
+              <p className="mt-2 text-base font-medium tracking-[-0.01em] text-[#3a3a3e]/85 dark:text-[#f2f4f6]/80">{stat.label}</p>
             </motion.div>
           </Fragment>
         ))}
@@ -741,7 +782,7 @@ function Faqs() {
           <Button
             asChild
             variant="outline"
-            className="mt-9 rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
+            className="mt-9 rounded-full border border-black/10 bg-black/5 text-black/80 backdrop-blur-md transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
           >
             <a href={BOOKING_URL} className="gap-2">
               Request a Project
@@ -755,12 +796,12 @@ function Faqs() {
             <AccordionItem
               key={faq.q}
               value={`item-${index}`}
-              className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-sm transition-colors data-[state=open]:border-[#71b25c]/50"
+              className="overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors data-[state=open]:border-[#71b25c]/60 dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:data-[state=open]:border-[#71b25c]/50"
             >
-              <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-white hover:no-underline [&[data-state=open]]:text-[#71b25c] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(113,178,92,0.5)]">
+              <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-[#101010] hover:no-underline [&[data-state=open]]:text-[#71b25c] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(113,178,92,0.5)] dark:text-white">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6 text-base leading-relaxed text-[#86868b]">
+              <AccordionContent className="px-6 pb-6 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
@@ -776,7 +817,7 @@ function Faqs() {
 function FinalCta() {
   return (
     <section id="request-cal" className="scroll-mt-24 px-4 pb-24 pt-8 sm:px-6">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/40 px-6 py-14 backdrop-blur-sm sm:px-10 sm:py-20">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-neutral-900/40 dark:backdrop-blur-sm">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/3 h-72 w-[560px] rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
@@ -814,7 +855,7 @@ function FinalCta() {
           </div>
 
           {CALENDAR_EMBED_URL ? (
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/60 backdrop-blur-sm">
+            <div className="overflow-hidden rounded-2xl border border-black/10 bg-white dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm">
               <iframe
                 src={CALENDAR_EMBED_URL}
                 title="Schedule a call"
@@ -892,13 +933,13 @@ function RequestForm() {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#71b25c]/40 bg-[#101810] p-10 text-center"
+        className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#71b25c]/50 bg-[#e9f1e4] p-10 text-center dark:border-[#71b25c]/40 dark:bg-[#101810]"
       >
         <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
           <Check className="size-7" />
         </span>
-        <h3 className="font-display text-3xl font-semibold text-white">Message sent successfully!</h3>
-        <p className="max-w-sm text-base leading-relaxed text-[#86868b]">
+        <h3 className="font-display text-3xl font-semibold text-[#101010] dark:text-white">Message sent successfully!</h3>
+        <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
           I will get back to you soon.
         </p>
         <Button
@@ -916,7 +957,7 @@ function RequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-white/10 bg-neutral-900/60 p-6 backdrop-blur-sm sm:p-7"
+      className="rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm"
     >
       {/* Honeypot — hidden from humans, irresistible to bots. */}
       <input
@@ -1012,7 +1053,7 @@ function RequestForm() {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-white/15 bg-[#0d0d0d] px-4 py-3 text-base text-white placeholder:text-white/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20";
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-[#101010] placeholder:text-black/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/35";
 
 function Field({
   label,
@@ -1025,7 +1066,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-[#a1a1a6]">
+      <span className="text-sm font-medium text-[#5b5b62] dark:text-[#a1a1a6]">
         {label}
         {required && <span className="text-[#71b25c]"> *</span>}
       </span>
@@ -1062,9 +1103,9 @@ function SelectField({
         <SelectTrigger
           className={cn(
             "h-auto w-full rounded-xl border px-4 py-3 text-base transition-colors",
-            "border-white/15 bg-[#0d0d0d] text-white outline-none dark:bg-[#0d0d0d]",
+            "border-black/10 bg-white text-[#101010] outline-none dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white",
             "focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20",
-            "data-[placeholder]:text-white/35",
+            "data-[placeholder]:text-black/35 dark:data-[placeholder]:text-white/35",
             invalid && "border-red-500/60",
           )}
         >
@@ -1073,13 +1114,13 @@ function SelectField({
         <SelectContent
           position="popper"
           align="start"
-          className="z-[100] w-full rounded-lg border border-white/10 bg-[#151515] p-1.5 text-white shadow-[0_18px_44px_rgba(0,0,0,0.65)]"
+          className="z-[100] w-full rounded-lg border border-black/10 bg-white p-1.5 text-[#101010] shadow-[0_18px_44px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-[#151515] dark:text-white dark:shadow-[0_18px_44px_rgba(0,0,0,0.65)]"
         >
           {options.map((option) => (
             <SelectItem
               key={option}
               value={option}
-              className="cursor-pointer rounded-md py-2.5 pl-3 pr-8 text-base text-white/90 transition-colors focus:bg-[#71b25c]/15 focus:text-white data-[highlighted]:bg-[#71b25c]/15 data-[highlighted]:text-white"
+              className="cursor-pointer rounded-md py-2.5 pl-3 pr-8 text-base text-black/85 transition-colors focus:bg-[#71b25c]/15 focus:text-black data-[highlighted]:bg-[#71b25c]/15 data-[highlighted]:text-black dark:text-white/90 dark:focus:text-white dark:data-[highlighted]:text-white"
             >
               {option}
             </SelectItem>
@@ -1190,14 +1231,14 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
             transition={{ duration: 0.32, ease: "easeOut" }}
             onClick={(event) => event.stopPropagation()}
-            className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e0e] shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
+            className="relative w-full max-w-md overflow-hidden rounded-2xl border border-black/10 bg-[#fbfbf9] shadow-[0_24px_80px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-[#0e0e0e] dark:shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
           >
-            <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
+            <div className="flex items-start justify-between gap-4 border-b border-black/10 px-6 py-5 dark:border-white/10">
               <div>
                 <h3 className="font-display text-2xl font-semibold tracking-tight text-gradient-silver">
                   Reserve Your Video Editing Spot
                 </h3>
-                <p className="mt-1 text-base leading-relaxed text-[#86868b]">
+                <p className="mt-1 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
                   Fill in your project details and I&apos;ll get back to you
                   within 24 hours.
                 </p>
@@ -1206,21 +1247,21 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                className="flex size-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             {status === "success" ? (
-              <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#71b25c]/40 bg-[#101810] px-6 py-12 text-center">
+              <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#71b25c]/50 bg-[#e9f1e4] px-6 py-12 text-center dark:border-[#71b25c]/40 dark:bg-[#101810]">
                 <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
                   <Check className="size-7" />
                 </span>
-                <h4 className="font-display text-2xl font-semibold text-white">
+                <h4 className="font-display text-2xl font-semibold text-[#101010] dark:text-white">
                   Message sent successfully!
                 </h4>
-                <p className="max-w-sm text-base leading-relaxed text-[#86868b]">
+                <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
                   I will get back to you soon.
                 </p>
                 <Button
@@ -1302,7 +1343,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                   )}
                 </Button>
 
-                <p className="text-center text-sm text-[#86868b]">
+                <p className="text-center text-sm text-[#55555c] dark:text-[#86868b]">
                   Prefer direct chat?{" "}
                   <a
                     href={getWhatsAppHref(WHATSAPP_MESSAGE)}
@@ -1398,15 +1439,15 @@ function DmCard({
 }) {
   const card = (
     <>
-      <span className="flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors duration-300 group-hover:border-[#71b25c]/60 group-hover:text-[#71b25c]">
+      <span className="flex size-12 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/80 transition-colors duration-300 group-hover:border-[#71b25c]/60 group-hover:text-[#71b25c] dark:border-white/10 dark:bg-white/5 dark:text-white">
         {icon}
       </span>
-      <span className="font-display text-lg font-semibold text-white">{label}</span>
-      <span className="text-sm text-[#86868b]">{note}</span>
+      <span className="font-display text-lg font-semibold text-[#101010] dark:text-white">{label}</span>
+      <span className="text-sm text-[#55555c] dark:text-[#86868b]">{note}</span>
     </>
   );
   const classes =
-    "group flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-neutral-900/60 px-6 py-7 text-center backdrop-blur-sm transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]";
+    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]";
   if (!href) {
     return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
   }
@@ -1427,21 +1468,21 @@ function DmCard({
 
 function Footer() {
   return (
-    <footer className="border-t border-white/10 px-4 py-12 sm:px-6">
+    <footer className="border-t border-black/10 px-4 py-12 sm:px-6 dark:border-white/10">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
           <div className="flex items-center gap-3">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-[#212121]">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-[#e4e4e0] dark:bg-[#212121]">
               <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
                 <circle cx="12" cy="12" r="6.5" fill="none" stroke="#71b25c" strokeWidth="1.6" />
                 <path d="M9.8 8.7 L9.8 15.3 L14.5 12 Z" fill="#71b25c" />
               </svg>
             </span>
-            <span className="font-display text-lg font-semibold tracking-tight text-white">
+            <span className="font-display text-lg font-semibold tracking-tight text-[#101010] dark:text-white">
               Ebad <span className="text-[#71b25c] text-glow-green">Ahsan</span>
             </span>
           </div>
-          <p className="text-base leading-relaxed text-[#86868b]">
+          <p className="text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
             Premium motion content for brands that move fast.
           </p>
           {Object.values(SOCIALS).some(Boolean) && (
@@ -1474,7 +1515,7 @@ function Footer() {
             </div>
           )}
         </div>
-        <p className="mt-10 text-center text-sm text-[#86868b]/60">
+        <p className="mt-10 text-center text-sm text-[#55555c]/60 dark:text-[#86868b]/60">
           © {new Date().getFullYear()} Ebad Ahsan. All rights reserved.
         </p>
       </div>
@@ -1498,7 +1539,7 @@ function FooterIcon({
       rel="noopener noreferrer"
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-full border border-white/10 text-[#86868b] transition-colors hover:border-[#71b25c]/70 hover:text-[#71b25c]"
+      className="flex size-9 items-center justify-center rounded-full border border-black/10 text-[#55555c] transition-colors hover:border-[#71b25c]/70 hover:text-[#71b25c] dark:border-white/10 dark:text-[#86868b]"
     >
       {children}
     </a>
@@ -1539,7 +1580,7 @@ function SectionHeading({
           {title}
         </h2>
       </div>
-      {sub && <p className="max-w-xl text-base leading-relaxed text-[#86868b]">{sub}</p>}
+      {sub && <p className="max-w-xl text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">{sub}</p>}
     </motion.div>
   );
 }
@@ -1594,7 +1635,7 @@ function CopyNumberButton({
         iconOnly ? "size-11" : compact ? "h-11 px-5 text-sm" : "h-11 px-6 text-base",
         copied
           ? "text-glow-green border-[#71b25c]/60 bg-[#71b25c]/15 text-[#71b25c]"
-          : "border-zinc-700/60 bg-white/5 text-zinc-100 hover:bg-zinc-800 hover:text-white",
+          : "border-zinc-400/70 bg-black/5 text-zinc-800 hover:bg-black/10 hover:text-black dark:border-zinc-700/60 dark:bg-white/5 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-white",
       )}
     >
       {iconOnly ? (
