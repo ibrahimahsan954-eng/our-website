@@ -832,7 +832,7 @@ function FinalCta() {
                 <>
                   Reserve a spot —{" "}
                   <span className="font-medium text-[#71b25c] text-glow-green">
-                    let&apos;s discuss your video project
+                    let&apos;s discuss your project
                   </span>
                 </>
               }
