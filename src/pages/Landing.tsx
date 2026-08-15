@@ -313,9 +313,11 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-xl text-lg font-light leading-relaxed text-[#cccccc] sm:text-xl"
+          className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-relaxed tracking-[-0.01em] text-[#8b8b91] sm:text-xl"
         >
-          Your product&apos;s story — told in <strong className="font-medium text-white">one powerful minute</strong>
+          <strong className="font-semibold text-white">Grow on YouTube</strong>
+          <span aria-hidden className="mx-2 text-[#71b25c]">—</span>
+          Become the <strong className="font-semibold text-white">best brand</strong> in your niche
         </motion.p>
 
         <motion.div
