@@ -909,8 +909,8 @@ function RequestForm() {
         <Field label="Email" required>
           <input name="email" type="email" required placeholder="jane@company.com" className={inputClass} />
         </Field>
-        <Field label="Company (optional)">
-          <input name="company" maxLength={120} placeholder="Acme Inc." className={inputClass} />
+        <Field label="Company / Channel (optional)">
+          <input name="company" maxLength={120} placeholder="Acme Inc. or @channelname" className={inputClass} />
         </Field>
         <Field label="Project type" required>
           <select name="projectType" required defaultValue="" className={inputClass}>
