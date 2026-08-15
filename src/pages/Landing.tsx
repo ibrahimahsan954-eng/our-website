@@ -854,6 +854,7 @@ function RequestForm() {
         project_type: niche,
         budget,
         timeline,
+        reference: ((formData.get("reference") as string) ?? "").trim(),
         message: (formData.get("message") as string) ?? "",
       });
       if (result.success) {
@@ -951,7 +952,15 @@ function RequestForm() {
         />
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col gap-4">
+        <Field label="Reference / Inspiration (optional)">
+          <input
+            name="reference"
+            maxLength={500}
+            placeholder="e.g., Links to videos, channels, or editing styles you like"
+            className={inputClass}
+          />
+        </Field>
         <Field label="Tell me about your project" required>
           <textarea
             name="message"
