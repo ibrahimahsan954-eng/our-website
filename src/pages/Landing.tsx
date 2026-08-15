@@ -23,6 +23,7 @@ import {
   Loader2,
   MessageCircle,
   Play,
+  Sparkle,
   X,
   Youtube,
 } from "lucide-react";
@@ -54,9 +55,10 @@ const SHOWREEL_MP4 = "/showreel.mp4";
 
 const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
 
-// Your portrait (square GIF/photo) — falls back to a monogram tile if it fails.
-const AVATAR_URL =
-  "https://framerusercontent.com/images/PJGkejOvzUY4nwrdSlLOKfS2jvE.gif?width=512&height=512";
+// Hero portrait — fills the vertical pill window cutout through the name.
+// Drop your photo at public/portrait.jpg (a square headshot works best; it is
+// cropped to the pill). Falls back to a lime monogram tile until it exists.
+const PORTRAIT_URL = "/portrait.jpg";
 
 // WhatsApp — wired up everywhere. Every trigger is a plain native <a> link
 // (target="_blank" rel="noopener noreferrer") — no JS navigation handlers.
@@ -285,45 +287,47 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
 
 function Hero({ onReserve }: { onReserve?: () => void }) {
   return (
-    <section id="top" className="relative overflow-hidden px-2 pb-16 pt-32 sm:pt-36 md:px-6">
-      {/* Giant watermark name behind the hero */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-14 select-none text-center font-display text-[15vw] font-semibold uppercase leading-[0.92] tracking-tighter text-white/[0.03] sm:top-10 sm:text-[9rem]"
-      >
-        Ebad
-        <br />
-        Ahsan
-      </div>
-
+    <section id="top" className="relative overflow-hidden bg-[#161616] px-4 pb-16 pt-28 sm:pt-32 md:px-6">
       <div className="relative mx-auto w-full text-center">
-        <Avatar />
+        {/* Massive name composition — lime-green condensed type with the
+            vertical pill portrait window cutting through the middle letters */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="relative mx-auto w-fit select-none"
+        >
+          <h1 className="font-condensed text-[#B8DE29] drop-shadow-[0_0_30px_rgba(184,222,41,0.14)]">
+            <span className="block text-[clamp(3.5rem,20vw,20rem)] leading-[0.85] tracking-[0.07em]">
+              EBAD
+            </span>
+            <span className="block text-[clamp(3.5rem,20vw,20rem)] leading-[0.85] tracking-[-0.01em]">
+              AHSAN
+            </span>
+          </h1>
 
-        <div className="relative mx-auto mt-10 max-w-3xl sm:mt-12">
-          {/* Ambient light behind the headline — soft 3D illumination */}
-          <div
+          {/* Vertical pill window — portrait overlaps the middle of the letters */}
+          <HeroPortrait />
+        </motion.div>
+
+        {/* Lime sparkle icon centered below the name */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.22, ease: "easeOut" }}
+        >
+          <Sparkle
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 size-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-3xl"
+            strokeWidth={1.5}
+            className="mx-auto mt-10 size-7 text-[#B8DE29] drop-shadow-[0_0_14px_rgba(184,222,41,0.5)] sm:size-9"
           />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-3xl"
-          />
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.08, ease: "easeOut" }}
-            className="relative mx-auto max-w-3xl font-display text-5xl font-medium leading-[1.05] tracking-[-0.02em] text-gradient-silver sm:text-6xl"
-          >
-            Motion That Makes Brands Unforgettable
-          </motion.h1>
-        </div>
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.2, ease: "easeOut" }}
-          className="mx-auto mt-5 max-w-xl text-lg font-light leading-relaxed text-[#cccccc] sm:text-xl"
+          transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
+          className="mx-auto mt-6 max-w-xl text-lg font-light leading-relaxed text-[#cccccc] sm:text-xl"
         >
           Your product&apos;s story — told in <strong className="font-medium text-white">one powerful minute</strong>
         </motion.p>
@@ -331,7 +335,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
+          transition={{ duration: 0.55, delay: 0.42, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
           <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#71b25c] shadow-[0_0_18px_rgba(113,178,92,0.18)] backdrop-blur-md">
@@ -356,35 +360,25 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
   );
 }
 
-function Avatar() {
+function HeroPortrait() {
   const [failed, setFailed] = useState(false);
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.92 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative mx-auto w-fit"
-      style={{ perspective: 800 }}
-    >
-      <motion.div
-        whileHover={{ rotateX: 8, rotateY: -8, scale: 1.03 }}
-        transition={{ type: "spring", stiffness: 240, damping: 18 }}
-        className="relative size-40 overflow-hidden rounded-[50px] border border-white/10 sm:size-48"
-      >
-        {/* Fallback monogram tile */}
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#3a3a3a] via-[#212121] to-[#101010]">
-          <span className="font-display text-6xl font-bold text-white/85">E</span>
+    <div className="absolute left-1/2 top-1/2 z-20 h-[clamp(8.5rem,36vw,36rem)] w-[clamp(2.75rem,11.5vw,11.5rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[999px] border border-white/15 bg-[#0e0e0e] shadow-[0_0_60px_rgba(0,0,0,0.6)]">
+      {!failed ? (
+        <img
+          src={PORTRAIT_URL}
+          alt="Ebad Ahsan"
+          onError={() => setFailed(true)}
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
+          <span className="font-condensed text-[clamp(2.5rem,8vw,8rem)] leading-none text-[#B8DE29]/85">
+            E
+          </span>
         </div>
-        {!failed && (
-          <img
-            src={AVATAR_URL}
-            alt="Ebad Ahsan"
-            onError={() => setFailed(true)}
-            className="relative h-full w-full object-cover"
-          />
-        )}
-      </motion.div>
-    </motion.div>
+      )}
+    </div>
   );
 }
 
