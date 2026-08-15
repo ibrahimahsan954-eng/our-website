@@ -3,6 +3,13 @@ import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PROJECTS, type Project } from "@/data/projects";
 import {
   getAutoplayEmbedSrc,
@@ -830,20 +837,35 @@ const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flex
 function RequestForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [invalid, setInvalid] = useState<{
+    projectType?: boolean;
+    budget?: boolean;
+    timeline?: boolean;
+  }>({});
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus("loading");
     setError(null);
+    const formData = new FormData(event.currentTarget);
+    const projectType = (formData.get("projectType") as string) ?? "";
+    const budget = (formData.get("budget") as string) ?? "";
+    const timeline = (formData.get("timeline") as string) ?? "";
+    const nextInvalid: typeof invalid = {};
+    if (!projectType) nextInvalid.projectType = true;
+    if (!budget) nextInvalid.budget = true;
+    if (!timeline) nextInvalid.timeline = true;
+    setInvalid(nextInvalid);
+    if (Object.keys(nextInvalid).length > 0) return;
+
+    setStatus("loading");
     try {
-      const formData = new FormData(event.currentTarget);
       const result = await submitToWeb3Forms({
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
         company: ((formData.get("company") as string) ?? "").trim(),
-        project_type: (formData.get("projectType") as string) ?? "",
-        budget: (formData.get("budget") as string) ?? "",
-        timeline: (formData.get("timeline") as string) ?? "",
+        project_type: projectType,
+        budget,
+        timeline,
         message: (formData.get("message") as string) ?? "",
       });
       if (result.success) {
@@ -912,60 +934,33 @@ function RequestForm() {
         <Field label="Company / Channel (optional)">
           <input name="company" maxLength={120} placeholder="Acme Inc. or @channelname" className={inputClass} />
         </Field>
-        <Field label="Project type" required>
-          <select name="projectType" required defaultValue="" className={inputClass}>
-            <option value="" disabled>
-              Select a type
-            </option>
-            {PROJECT_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Budget" required>
-          <select
-            name="budget"
-            required
-            defaultValue=""
-            onInvalid={(e) =>
-              e.currentTarget.setCustomValidity("Please select a budget range.")
-            }
-            onInput={(e) => e.currentTarget.setCustomValidity("")}
-            className={inputClass}
-          >
-            <option value="" disabled>
-              Select a range
-            </option>
-            {BUDGET_RANGES.map((range) => (
-              <option key={range} value={range}>
-                {range}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Timeline" required>
-          <select
-            name="timeline"
-            required
-            defaultValue=""
-            onInvalid={(e) =>
-              e.currentTarget.setCustomValidity("Please select your timeline.")
-            }
-            onInput={(e) => e.currentTarget.setCustomValidity("")}
-            className={inputClass}
-          >
-            <option value="" disabled>
-              When do you need it?
-            </option>
-            {TIMELINES.map((timeline) => (
-              <option key={timeline} value={timeline}>
-                {timeline}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <SelectField
+          label="Project type"
+          name="projectType"
+          required
+          placeholder="Select a type"
+          options={PROJECT_TYPES}
+          invalid={invalid.projectType}
+          errorMessage="Please select a project type."
+        />
+        <SelectField
+          label="Budget"
+          name="budget"
+          required
+          placeholder="Select a range"
+          options={BUDGET_RANGES}
+          invalid={invalid.budget}
+          errorMessage="Please select a budget range."
+        />
+        <SelectField
+          label="Timeline"
+          name="timeline"
+          required
+          placeholder="When do you need it?"
+          options={TIMELINES}
+          invalid={invalid.timeline}
+          errorMessage="Please select your timeline."
+        />
       </div>
 
       <div className="mt-4">
@@ -1006,7 +1001,7 @@ function RequestForm() {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-white/15 bg-[#0d0d0d] px-4 py-3 text-base text-white placeholder:text-white/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20 [&>option]:bg-[#1a1a1a]";
+  "w-full rounded-xl border border-white/15 bg-[#0d0d0d] px-4 py-3 text-base text-white placeholder:text-white/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20";
 
 function Field({
   label,
@@ -1028,6 +1023,65 @@ function Field({
   );
 }
 
+/** Custom dark dropdown — Radix/shadcn Select popover. A hidden input carries
+ *  the value into FormData so the existing submit flow keeps working. */
+function SelectField({
+  label,
+  name,
+  required,
+  placeholder,
+  options,
+  invalid,
+  errorMessage,
+}: {
+  label: string;
+  name: string;
+  required?: boolean;
+  placeholder: string;
+  options: string[];
+  invalid?: boolean;
+  errorMessage?: string;
+}) {
+  const [value, setValue] = useState("");
+
+  return (
+    <Field label={label} required={required}>
+      <input type="hidden" name={name} value={value} />
+      <Select value={value || undefined} onValueChange={setValue}>
+        <SelectTrigger
+          className={cn(
+            "h-auto w-full rounded-xl border px-4 py-3 text-base transition-colors",
+            "border-white/15 bg-[#0d0d0d] text-white outline-none dark:bg-[#0d0d0d]",
+            "focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20",
+            "data-[placeholder]:text-white/35",
+            invalid && "border-red-500/60",
+          )}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent
+          position="popper"
+          align="start"
+          className="z-[100] w-full rounded-lg border border-white/10 bg-[#151515] p-1.5 text-white shadow-[0_18px_44px_rgba(0,0,0,0.65)]"
+        >
+          {options.map((option) => (
+            <SelectItem
+              key={option}
+              value={option}
+              className="cursor-pointer rounded-md py-2.5 pl-3 pr-8 text-base text-white/90 transition-colors focus:bg-[#71b25c]/15 focus:text-white data-[highlighted]:bg-[#71b25c]/15 data-[highlighted]:text-white"
+            >
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {invalid && errorMessage && (
+        <p className="mt-1.5 text-sm text-red-400">{errorMessage}</p>
+      )}
+    </Field>
+  );
+}
+
 /* ---------------- Reserve modal ---------------- */
 
 const RESERVE_PROJECT_TYPES = [
@@ -1042,6 +1096,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
     "idle",
   );
   const [error, setError] = useState<string | null>(null);
+  const [invalidProjectType, setInvalidProjectType] = useState(false);
   // Reset the form each time the modal opens — "adjust state when a value
   // changes" render-phase pattern (React bails out when nothing changed).
   const [prevOpen, setPrevOpen] = useState(open);
@@ -1050,6 +1105,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
     if (open) {
       setStatus("idle");
       setError(null);
+      setInvalidProjectType(false);
     }
   }
 
@@ -1070,14 +1126,20 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus("loading");
     setError(null);
+    const formData = new FormData(event.currentTarget);
+    const projectType = (formData.get("projectType") as string) ?? "";
+    if (!projectType) {
+      setInvalidProjectType(true);
+      return;
+    }
+    setInvalidProjectType(false);
+    setStatus("loading");
     try {
-      const formData = new FormData(event.currentTarget);
       const result = await submitToWeb3Forms({
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
-        project_type: (formData.get("projectType") as string) ?? "",
+        project_type: projectType,
         message: (formData.get("message") as string) ?? "",
       });
       if (result.success) {
@@ -1188,18 +1250,15 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     className={inputClass}
                   />
                 </Field>
-                <Field label="Project Type" required>
-                  <select name="projectType" required defaultValue="" className={inputClass}>
-                    <option value="" disabled>
-                      Select a type
-                    </option>
-                    {RESERVE_PROJECT_TYPES.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
+                <SelectField
+                  label="Project Type"
+                  name="projectType"
+                  required
+                  placeholder="Select a type"
+                  options={RESERVE_PROJECT_TYPES}
+                  invalid={invalidProjectType}
+                  errorMessage="Please select a project type."
+                />
                 <Field label="Message / Project Brief" required>
                   <textarea
                     name="message"
