@@ -820,16 +820,6 @@ function FinalCta() {
 
 /* ---------------- Request form ---------------- */
 
-const PROJECT_TYPES = [
-  "Product launch video",
-  "Explainer video",
-  "Product demo",
-  "Short-form reel / UGC",
-  "VSL (video sales letter)",
-  "Keynote / presentation visuals",
-  "Something else",
-];
-
 const BUDGET_RANGES = ["$1k – $3k", "$3k – $7k", "$7k – $15k", "$15k+", "Not sure yet"];
 
 const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flexible"];
@@ -838,7 +828,6 @@ function RequestForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [invalid, setInvalid] = useState<{
-    projectType?: boolean;
     budget?: boolean;
     timeline?: boolean;
   }>({});
@@ -847,11 +836,10 @@ function RequestForm() {
     event.preventDefault();
     setError(null);
     const formData = new FormData(event.currentTarget);
-    const projectType = (formData.get("projectType") as string) ?? "";
+    const niche = ((formData.get("niche") as string) ?? "").trim();
     const budget = (formData.get("budget") as string) ?? "";
     const timeline = (formData.get("timeline") as string) ?? "";
     const nextInvalid: typeof invalid = {};
-    if (!projectType) nextInvalid.projectType = true;
     if (!budget) nextInvalid.budget = true;
     if (!timeline) nextInvalid.timeline = true;
     setInvalid(nextInvalid);
@@ -863,7 +851,7 @@ function RequestForm() {
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
         company: ((formData.get("company") as string) ?? "").trim(),
-        project_type: projectType,
+        project_type: niche,
         budget,
         timeline,
         message: (formData.get("message") as string) ?? "",
@@ -934,15 +922,15 @@ function RequestForm() {
         <Field label="Company / Channel (optional)">
           <input name="company" maxLength={120} placeholder="Acme Inc. or @channelname" className={inputClass} />
         </Field>
-        <SelectField
-          label="Project type"
-          name="projectType"
-          required
-          placeholder="Select a type"
-          options={PROJECT_TYPES}
-          invalid={invalid.projectType}
-          errorMessage="Please select a project type."
-        />
+        <Field label="Your niche" required>
+          <input
+            name="niche"
+            required
+            maxLength={120}
+            placeholder="e.g., Tech, Finance, Gaming, Fitness"
+            className={inputClass}
+          />
+        </Field>
         <SelectField
           label="Budget"
           name="budget"
