@@ -297,7 +297,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="relative mx-auto w-fit select-none"
         >
-          <h1 className="font-condensed text-[#B8DE29] drop-shadow-[0_0_30px_rgba(184,222,41,0.14)]">
+          <h1 className="font-condensed text-[#71b25c] drop-shadow-[0_0_30px_rgba(113,178,92,0.35)]">
             <span className="block text-[clamp(3.5rem,20vw,20rem)] leading-[0.85] tracking-[0.07em]">
               EBAD
             </span>
@@ -319,7 +319,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           <Sparkle
             aria-hidden
             strokeWidth={1.5}
-            className="mx-auto mt-10 size-7 text-[#B8DE29] drop-shadow-[0_0_14px_rgba(184,222,41,0.5)] sm:size-9"
+            className="mx-auto mt-10 size-7 text-[#71b25c] drop-shadow-[0_0_14px_rgba(113,178,92,0.5)] sm:size-9"
           />
         </motion.div>
 
@@ -373,7 +373,7 @@ function HeroPortrait() {
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-          <span className="font-condensed text-[clamp(2.5rem,8vw,8rem)] leading-none text-[#B8DE29]/85">
+          <span className="font-condensed text-[clamp(2.5rem,8vw,8rem)] leading-none text-[#71b25c]/85">
             E
           </span>
         </div>
