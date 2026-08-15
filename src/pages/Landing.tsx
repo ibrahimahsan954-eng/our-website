@@ -82,8 +82,6 @@ const CLIENT_AVATARS = [
 const WHATSAPP_PHONE = "923136494619";
 const WHATSAPP_MESSAGE =
   "Hi Ebad, I saw your portfolio and would like to discuss a project!";
-const SCHEDULE_CALL_MESSAGE =
-  "Hi Ebad, I saw your portfolio and would like to schedule a call to discuss a video editing project!";
 
 // Copy-to-clipboard fallback for visitors whose network blocks WhatsApp.
 const WHATSAPP_NUMBER_DISPLAY = "+92 313 6494619";
@@ -1404,19 +1402,16 @@ function DmSection() {
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
           <CopyNumberButton />
           <Button
-            asChild
             size="lg"
+            onClick={() =>
+              document
+                .getElementById("request-cal")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
             className="h-11 gap-2 rounded-full bg-[#2b7ced] px-8 font-semibold text-white shadow-[0_4px_18px_rgba(43,124,237,0.28)] transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/25"
           >
-            <a
-              href={getWhatsAppHref(SCHEDULE_CALL_MESSAGE)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={openWhatsApp(SCHEDULE_CALL_MESSAGE)}
-            >
-              Schedule a Call
-              <ArrowUpRight className="size-4" />
-            </a>
+            Start Your Project
+            <ArrowUpRight className="size-4" />
           </Button>
         </div>
       </div>
