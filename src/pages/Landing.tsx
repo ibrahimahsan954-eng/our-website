@@ -62,10 +62,10 @@ const PORTRAIT_URL = "/portrait.jpg";
 // Social proof avatar stack — small overlapping client photos under the hero
 // portrait. Each falls back to a gradient monogram tile if the image can't load.
 const CLIENT_AVATARS = [
-  { src: "https://i.pravatar.cc/96?img=12", label: "M" },
-  { src: "https://i.pravatar.cc/96?img=32", label: "S" },
-  { src: "https://i.pravatar.cc/96?img=47", label: "A" },
-  { src: "https://i.pravatar.cc/96?img=68", label: "K" },
+  { src: "/assets/channels4_profile.jpg", label: "M" },
+  { src: "/assets/channels4_profile__1_.jpg", label: "S" },
+  { src: "/assets/channels4_profile__2_.jpg", label: "A" },
+  { src: "/assets/channels4_profile__3_.jpg", label: "K" },
 ];
 
 // WhatsApp — wired up everywhere. Every trigger is a plain native <a> link
@@ -331,7 +331,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
             ))}
           </div>
           <p className="text-sm font-medium tracking-[-0.01em] text-[#e6e6e9] sm:text-base">
-            Trusted by <strong className="font-semibold text-white">50+</strong> Clients
+            Trusted by <strong className="font-semibold text-white">80+</strong> Happy Clients
           </p>
         </motion.div>
 
@@ -383,7 +383,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 
   if (failed) {
     return (
-      <span className="flex size-9 items-center justify-center rounded-full border border-white/25 bg-gradient-to-br from-[#2c2f26] via-[#1b1c14] to-[#10110b] text-xs font-semibold text-[#71b25c] shadow-[0_0_12px_rgba(0,0,0,0.4)]">
+      <span className="flex size-9 items-center justify-center rounded-full border-2 border-[#161616] bg-gradient-to-br from-[#2c2f26] via-[#1b1c14] to-[#10110b] text-xs font-semibold text-[#71b25c] shadow-[0_0_12px_rgba(0,0,0,0.4)]">
         {label}
       </span>
     );
@@ -396,7 +396,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
       loading="lazy"
       decoding="async"
       onError={() => setFailed(true)}
-      className="size-9 rounded-full border border-white/25 object-cover shadow-[0_0_12px_rgba(0,0,0,0.4)]"
+      className="size-9 rounded-full border-2 border-[#161616] object-cover shadow-[0_0_12px_rgba(0,0,0,0.4)]"
     />
   );
 }
