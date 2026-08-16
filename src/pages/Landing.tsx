@@ -701,8 +701,8 @@ function Stats() {
             {index > 0 && (
               <span
                 aria-hidden
-                className="hidden w-px self-center bg-black/10 sm:block dark:bg-white/20"
-                style={{ height: 58 }}
+                className="hidden w-[1.5px] self-center bg-black/15 sm:block dark:bg-white/90"
+                style={{ height: 56 }}
               />
             )}
             <motion.div
