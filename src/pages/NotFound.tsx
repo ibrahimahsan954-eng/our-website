@@ -17,7 +17,7 @@ export default function NotFound() {
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
           className="flex size-16 items-center justify-center rounded-[22px] border border-white/10 bg-[#212121]"
         >
-          <Clapperboard className="size-7 text-white/70" />
+          <Clapperboard className="size-7 text-white" />
         </motion.div>
 
         <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-[#25D366]">
@@ -26,7 +26,7 @@ export default function NotFound() {
         <h1 className="mt-3 font-display text-5xl font-medium tracking-tight text-white sm:text-6xl">
           Scene not found
         </h1>
-        <p className="mt-4 max-w-md text-base leading-relaxed text-[#86868b]">
+        <p className="mt-4 max-w-md text-base leading-relaxed text-[#E5E7EB]">
           This frame didn&apos;t make the cut. Let&apos;s get you back to the showreel.
         </p>
 

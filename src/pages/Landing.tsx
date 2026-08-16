@@ -236,7 +236,7 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
           onClick={scrollToTop}
           aria-label="Back to top"
           title="Back to top"
-          className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 backdrop-blur-md transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
+          className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 backdrop-blur-md transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
         >
           <Home className="size-[18px]" />
         </a>
@@ -298,7 +298,7 @@ function ThemeToggle() {
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       title={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
+      className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
     >
       {dark ? <Moon className="size-[18px]" /> : <Sun className="size-[18px]" />}
     </button>
@@ -311,7 +311,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
       href={href}
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-full text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
+      className="flex size-9 items-center justify-center rounded-full text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
     >
       {children}
     </a>
@@ -366,7 +366,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#a3a3ab]"
+          className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#F3F4F6]"
         >
           <strong className="inline-flex items-center gap-1.5 font-semibold text-[#101010] dark:text-white">
             Grow on
@@ -675,9 +675,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <h3 className="truncate font-display text-xl font-semibold text-[#101010] dark:text-white">
             {project.title}
           </h3>
-          <p className="mt-0.5 text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">{project.category}</p>
+          <p className="mt-0.5 text-base leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">{project.category}</p>
         </div>
-        <ArrowUpRight className="size-5 shrink-0 text-black/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#25D366] dark:text-white/40" />
+        <ArrowUpRight className="size-5 shrink-0 text-black/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#25D366] dark:text-white/80" />
       </div>
     </motion.div>
   );
@@ -800,7 +800,7 @@ function ProcessSection() {
                     "font-display font-semibold tracking-tight transition-all duration-300",
                     isActive
                       ? "text-6xl text-[#25D366] drop-shadow-[0_0_14px_rgba(37,211,102,0.45)] sm:text-7xl"
-                      : "text-xl text-white/35 group-hover:text-[#25D366] sm:text-3xl",
+                      : "text-xl text-white/70 group-hover:text-[#25D366] sm:text-3xl",
                   )}
                 >
                   {step.num}
@@ -957,7 +957,7 @@ function RequestForm() {
           <Check className="size-7" />
         </span>
         <h3 className="font-display text-3xl font-semibold text-[#101010] dark:text-white">Message sent successfully!</h3>
-        <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">
+        <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">
           I will get back to you soon.
         </p>
         <Button
@@ -1071,7 +1071,7 @@ function RequestForm() {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-[#101010] placeholder:text-black/35 outline-none transition-colors focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/35";
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-[#101010] placeholder:text-black/35 outline-none transition-colors focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/70";
 
 function Field({
   label,
@@ -1084,7 +1084,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-[#5b5b62] dark:text-[#a1a1a6]">
+      <span className="text-sm font-medium text-[#5b5b62] dark:text-[#E5E7EB]">
         {label}
         {required && <span className="text-[#25D366]"> *</span>}
       </span>
@@ -1123,7 +1123,7 @@ function SelectField({
             "h-auto w-full rounded-xl border px-4 py-3 text-base transition-colors",
             "border-black/10 bg-white text-[#101010] outline-none dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white",
             "focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20",
-            "data-[placeholder]:text-black/35 dark:data-[placeholder]:text-white/35",
+            "data-[placeholder]:text-black/35 dark:data-[placeholder]:text-white/70",
             invalid && "border-red-500/60",
           )}
         >
@@ -1225,7 +1225,7 @@ function DmCard({
         {icon}
       </span>
       <span className="font-display text-lg font-semibold text-[#101010] dark:text-white">{label}</span>
-      <span className="text-sm text-[#55555c] dark:text-[#a1a1a6]">{note}</span>
+      <span className="text-base text-[#55555c] dark:text-[#E5E7EB]">{note}</span>
     </>
   );
   const classes =
@@ -1264,7 +1264,7 @@ function Footer() {
               Ebad <span className="text-[#25D366] text-glow-green">Ahsan</span>
             </span>
           </div>
-          <p className="text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">
+          <p className="text-base leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">
             Premium motion content for brands that move fast.
           </p>
           {Object.values(SOCIALS).some(Boolean) && (
@@ -1292,7 +1292,7 @@ function Footer() {
             </div>
           )}
         </div>
-        <p className="mt-10 text-center text-sm text-[#55555c]/60 dark:text-[#a1a1a6]/60">
+        <p className="mt-10 text-center text-base text-[#55555c]/80 dark:text-[#E5E7EB]">
           © {new Date().getFullYear()} Ebad Ahsan. All rights reserved.
         </p>
       </div>
@@ -1316,7 +1316,7 @@ function FooterIcon({
       rel="noopener noreferrer"
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-full border border-black/10 text-[#55555c] transition-colors hover:border-[#25D366]/70 hover:text-[#25D366] dark:border-white/10 dark:text-[#a1a1a6]"
+      className="flex size-9 items-center justify-center rounded-full border border-black/10 text-[#55555c] transition-colors hover:border-[#25D366]/70 hover:text-[#25D366] dark:border-white/10 dark:text-[#E5E7EB]"
     >
       {children}
     </a>
@@ -1357,7 +1357,7 @@ function SectionHeading({
           {title}
         </h2>
       </div>
-      {sub && <p className="max-w-xl text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">{sub}</p>}
+      {sub && <p className="max-w-xl text-base leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">{sub}</p>}
     </motion.div>
   );
 }
@@ -1442,7 +1442,7 @@ function CopyNumberButton({
           "pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-all duration-200",
           copied
             ? "text-glow-green border-[#25D366]/60 bg-[#25D366]/15 text-[#25D366] opacity-100"
-            : "border-white/10 bg-black/80 text-[#a1a1a6] opacity-0 group-hover:opacity-100",
+            : "border-white/10 bg-black/80 text-[#E5E7EB] opacity-0 group-hover:opacity-100",
         )}
       >
         {copied ? "Copied!" : "Copy number"}

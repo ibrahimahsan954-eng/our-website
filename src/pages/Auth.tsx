@@ -277,7 +277,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </>
           )}
 
-          <div className="border-t border-white/10 px-6 py-4 text-center text-sm text-[#86868b]">
+          <div className="border-t border-white/10 px-6 py-4 text-center text-sm text-[#E5E7EB]">
             Private · Sign in to access the studio inbox
           </div>
         </Card>

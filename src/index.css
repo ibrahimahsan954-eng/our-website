@@ -112,7 +112,7 @@
   --secondary: #0d0d0d;
   --secondary-foreground: #ffffff;
   --muted: #0d0d0d;
-  --muted-foreground: #a1a1a6;
+  --muted-foreground: #e5e7eb;
   --accent: #101010;
   --accent-foreground: #ffffff;
   --destructive: oklch(0.65 0.2 25);
@@ -146,6 +146,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-weight: 500;
+    letter-spacing: 0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;

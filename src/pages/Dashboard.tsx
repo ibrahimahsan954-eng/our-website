@@ -23,7 +23,7 @@ function DeliveryRow({ ok, label }: { ok?: boolean; label: string }) {
   return (
     <li className="flex items-center gap-2.5 text-base text-[#d4d4d8]">
       {ok === undefined ? (
-        <Loader2 className="size-3.5 shrink-0 animate-spin text-[#86868b]" />
+        <Loader2 className="size-3.5 shrink-0 animate-spin text-[#E5E7EB]" />
       ) : ok ? (
         <span className="size-2 shrink-0 rounded-full bg-[#25D366]" />
       ) : (
@@ -31,7 +31,7 @@ function DeliveryRow({ ok, label }: { ok?: boolean; label: string }) {
       )}
       {label}
       {ok === false && (
-        <span className="text-sm text-[#86868b]">— not configured</span>
+        <span className="text-sm text-[#E5E7EB]">— not configured</span>
       )}
     </li>
   );
@@ -141,7 +141,7 @@ export default function Dashboard() {
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-base font-medium text-[#86868b]">Ebad Ahsan studio workspace</p>
+            <p className="text-base font-medium text-[#E5E7EB]">Ebad Ahsan studio workspace</p>
             <div className="mt-1 flex items-center gap-3">
               <h1 className="font-display text-4xl font-semibold tracking-tight text-white">
                 Project inbox{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
@@ -153,7 +153,7 @@ export default function Dashboard() {
                 </span>
               )}
             </div>
-            <p className="mt-1 text-base leading-relaxed text-[#86868b]">
+            <p className="mt-1 text-base leading-relaxed text-[#E5E7EB]">
               Requests submitted from your site&apos;s booking form land here.
             </p>
           </div>
@@ -187,7 +187,7 @@ export default function Dashboard() {
               <Mail className="text-glow-green size-4 text-[#25D366]" />
               Email delivery
             </h2>
-            <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#a1a1a6]">
+            <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#E5E7EB]">
               Inbox: {emailStatus?.ownerEmail ?? "…"}
             </span>
           </div>
@@ -222,7 +222,7 @@ export default function Dashboard() {
               <Clapperboard className="text-glow-green size-5 text-[#25D366]" />
               Video library
             </h2>
-            <p className="mt-1 text-base leading-relaxed text-[#86868b]">
+            <p className="mt-1 text-base leading-relaxed text-[#E5E7EB]">
               Upload MP4s straight to your S3/R2 bucket. The hero showreel and
               project cards switch to native HTML5 playback instantly — the
               YouTube facade (and any subtitles) disappears for any slot you
@@ -245,7 +245,7 @@ export default function Dashboard() {
                       <p className="truncate font-display text-base font-semibold text-white">
                         {label}
                       </p>
-                      <p className="mt-0.5 text-sm text-[#86868b]">
+                      <p className="mt-0.5 text-sm text-[#E5E7EB]">
                         {override ? (
                           <>
                             <span className="text-[#25D366] text-glow-green">MP4 uploaded</span>
@@ -300,7 +300,7 @@ export default function Dashboard() {
                           size="sm"
                           variant="ghost"
                           disabled={busy}
-                          className="gap-1.5 rounded-full text-[#86868b] hover:bg-white/5 hover:text-white"
+                          className="gap-1.5 rounded-full text-[#E5E7EB] hover:bg-white/5 hover:text-white"
                           onClick={() => handleRemove(slot, label)}
                         >
                           <RotateCcw className="size-3.5" />
@@ -327,20 +327,20 @@ export default function Dashboard() {
           </div>
 
           {overrides === undefined && (
-            <p className="text-sm text-[#86868b]">Loading video library…</p>
+            <p className="text-sm text-[#E5E7EB]">Loading video library…</p>
           )}
         </section>
 
         {inquiries === null ? (
           <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-[#080808] px-6 py-16 text-center backdrop-blur-sm">
-            <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#86868b]">
+            <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#E5E7EB]">
               <Inbox className="size-6" />
             </span>
             <div>
               <h2 className="font-display text-2xl font-semibold text-white">Inbox restricted</h2>
-              <p className="mx-auto mt-1 max-w-md text-base leading-relaxed text-[#86868b]">
+              <p className="mx-auto mt-1 max-w-md text-base leading-relaxed text-[#E5E7EB]">
                 This inbox is owner-only. Sign in with the email set as{" "}
-                <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs text-white/80">
+                <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs text-white">
                   OWNER_NOTIFICATION_EMAIL
                 </code>{" "}
                 in the project&apos;s Keys/API keys tab to view requests.
@@ -349,14 +349,14 @@ export default function Dashboard() {
           </div>
         ) : list.length === 0 ? (
           <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-[#080808] px-6 py-16 text-center backdrop-blur-sm">
-            <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#86868b]">
+            <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#E5E7EB]">
               <Inbox className="size-6" />
             </span>
             <div>
               <h2 className="font-display text-2xl font-semibold text-white">
                 {inquiries === undefined ? "Loading…" : "No inquiries yet"}
               </h2>
-              <p className="mx-auto mt-1 max-w-md text-base leading-relaxed text-[#86868b]">
+              <p className="mx-auto mt-1 max-w-md text-base leading-relaxed text-[#E5E7EB]">
                 When visitors submit the &quot;Request a Project&quot; form on your landing
                 page, their requests will show up here instantly.
               </p>
@@ -389,15 +389,15 @@ export default function Dashboard() {
                         </span>
                       )}
                       {inquiry.company && (
-                        <span className="text-base text-[#86868b]">· {inquiry.company}</span>
+                        <span className="text-base text-[#E5E7EB]">· {inquiry.company}</span>
                       )}
-                      <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#a1a1a6]">
+                      <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#E5E7EB]">
                         {inquiry.projectType}
                       </span>
                     </div>
                     <a
                       href={`mailto:${inquiry.email}`}
-                      className="mt-0.5 inline-flex items-center gap-1.5 text-base text-[#a1a1a6] transition-colors hover:text-[#25D366]"
+                      className="mt-0.5 inline-flex items-center gap-1.5 text-base text-[#E5E7EB] transition-colors hover:text-[#25D366]"
                     >
                       <Mail className="size-3.5" />
                       {inquiry.email}
@@ -421,7 +421,7 @@ export default function Dashboard() {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="gap-1.5 rounded-full text-[#86868b] hover:bg-white/5 hover:text-white"
+                        className="gap-1.5 rounded-full text-[#E5E7EB] hover:bg-white/5 hover:text-white"
                         onClick={() => markInquiryRead({ id: inquiry._id, read: false })}
                         title="Mark as unread"
                       >
@@ -432,7 +432,7 @@ export default function Dashboard() {
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="shrink-0 gap-1.5 rounded-full text-[#86868b] hover:bg-white/5 hover:text-white"
+                      className="shrink-0 gap-1.5 rounded-full text-[#E5E7EB] hover:bg-white/5 hover:text-white"
                       onClick={() => archiveInquiry({ id: inquiry._id })}
                       title="Archive"
                     >
@@ -445,12 +445,12 @@ export default function Dashboard() {
                 {(inquiry.budget || inquiry.timeline) && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {inquiry.budget && (
-                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-sm text-[#a1a1a6]">
+                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-sm text-[#E5E7EB]">
                         Budget: <span className="text-white">{inquiry.budget}</span>
                       </span>
                     )}
                     {inquiry.timeline && (
-                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-sm text-[#a1a1a6]">
+                      <span className="rounded-lg border border-white/10 bg-[#0d0d0d] px-2.5 py-1 text-sm text-[#E5E7EB]">
                         Timeline: <span className="text-white">{inquiry.timeline}</span>
                       </span>
                     )}
@@ -461,7 +461,7 @@ export default function Dashboard() {
                   {inquiry.message}
                 </p>
 
-                <p className="mt-3 text-sm text-[#86868b]/70">{formatDate(inquiry.createdAt)}</p>
+                <p className="mt-3 text-sm text-[#E5E7EB]/80">{formatDate(inquiry.createdAt)}</p>
               </li>
               );
             })}
