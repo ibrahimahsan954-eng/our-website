@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +32,6 @@ import {
   Moon,
   Play,
   Sun,
-  X,
   Youtube,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -193,16 +192,20 @@ const FAQS = [
    ============================================================ */
 
 export default function Landing() {
-  const [reserveOpen, setReserveOpen] = useState(false);
+  const scrollToBooking = () => {
+    document.getElementById("request-cal")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 z-[70] bg-noise opacity-[0.03] mix-blend-overlay"
       />
-      <Nav onReserve={() => setReserveOpen(true)} />
+      <Nav onReserve={scrollToBooking} />
       <main>
-        <Hero onReserve={() => setReserveOpen(true)} />
+        <Hero onReserve={scrollToBooking} />
         <Portfolio />
         <Stats />
         <Faqs />
@@ -211,7 +214,6 @@ export default function Landing() {
       </main>
       <Footer />
 
-      <ReserveModal open={reserveOpen} onClose={() => setReserveOpen(false)} />
 
       {/* Floating contact cluster — WhatsApp + 1-tap copy-number fallback */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col items-center gap-3">
@@ -1136,239 +1138,6 @@ function SelectField({
         <p className="mt-1.5 text-sm text-red-400">{errorMessage}</p>
       )}
     </Field>
-  );
-}
-
-/* ---------------- Reserve modal ---------------- */
-
-const RESERVE_PROJECT_TYPES = [
-  "Short-Form Content",
-  "Long-Form / YouTube",
-  "Commercial / Showreel",
-  "Other",
-];
-
-function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
-    "idle",
-  );
-  const [error, setError] = useState<string | null>(null);
-  const [invalidProjectType, setInvalidProjectType] = useState(false);
-  // Reset the form each time the modal opens — "adjust state when a value
-  // changes" render-phase pattern (React bails out when nothing changed).
-  const [prevOpen, setPrevOpen] = useState(open);
-  if (open !== prevOpen) {
-    setPrevOpen(open);
-    if (open) {
-      setStatus("idle");
-      setError(null);
-      setInvalidProjectType(false);
-    }
-  }
-
-  // Esc closes the modal; body scroll is locked while it's open.
-  useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open, onClose]);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError(null);
-    const formData = new FormData(event.currentTarget);
-    const projectType = (formData.get("projectType") as string) ?? "";
-    if (!projectType) {
-      setInvalidProjectType(true);
-      return;
-    }
-    setInvalidProjectType(false);
-    setStatus("loading");
-    try {
-      const result = await submitToWeb3Forms({
-        name: (formData.get("name") as string) ?? "",
-        email: (formData.get("email") as string) ?? "",
-        project_type: projectType,
-        message: (formData.get("message") as string) ?? "",
-      });
-      if (result.success) {
-        setStatus("success");
-      } else {
-        // Clean, user-facing message — never a raw Convex/server error string.
-        setError(result.message ?? "Please try again in a moment.");
-        setStatus("error");
-      }
-    } catch (err) {
-      console.error("Reservation submit error:", err);
-      setError("Something went wrong. Please try again.");
-      setStatus("error");
-    }
-  };
-
-  return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          onClick={onClose}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Reserve your video editing spot"
-          className="fixed inset-0 z-[90] flex items-end justify-center p-4 sm:items-center"
-        >
-          {/* Backdrop — click outside the panel to close */}
-          <div aria-hidden className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-
-          <motion.div
-            initial={{ opacity: 0, y: 32, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ duration: 0.32, ease: "easeOut" }}
-            onClick={(event) => event.stopPropagation()}
-            className="relative w-full max-w-md overflow-hidden rounded-2xl border border-black/10 bg-[#fbfbf9] shadow-[0_24px_80px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-[#0e0e0e] dark:shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
-          >
-            <div className="flex items-start justify-between gap-4 border-b border-black/10 px-6 py-5 dark:border-white/10">
-              <div>
-                <h3 className="font-display text-2xl font-semibold tracking-tight text-gradient-silver">
-                  Reserve Your Video Editing Spot
-                </h3>
-                <p className="mt-1 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
-                  Fill in your project details and I&apos;ll get back to you
-                  within 24 hours.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Close"
-                className="flex size-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-
-            {status === "success" ? (
-              <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#25D366]/50 bg-[#25D366]/15 px-6 py-12 text-center dark:border-[#25D366]/40 dark:bg-[#25D366]/10">
-                <span className="flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0e0e0e]">
-                  <Check className="size-7" />
-                </span>
-                <h4 className="font-display text-2xl font-semibold text-[#101010] dark:text-white">
-                  Message sent successfully!
-                </h4>
-                <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
-                  I will get back to you soon.
-                </p>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="text-glow-green mt-2 rounded-full text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
-                  onClick={onClose}
-                >
-                  Close
-                </Button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-6 py-5">
-                {/* Honeypot — hidden from humans, irresistible to bots. */}
-                <input
-                  type="text"
-                  name="website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  aria-hidden="true"
-                  className="absolute -left-[9999px] h-px w-px overflow-hidden"
-                />
-                <Field label="Full Name" required>
-                  <input
-                    name="name"
-                    required
-                    maxLength={120}
-                    placeholder="Jane Doe"
-                    className={inputClass}
-                  />
-                </Field>
-                <Field label="Email Address" required>
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="jane@company.com"
-                    className={inputClass}
-                  />
-                </Field>
-                <SelectField
-                  label="Project Type"
-                  name="projectType"
-                  required
-                  placeholder="Select a type"
-                  options={RESERVE_PROJECT_TYPES}
-                  invalid={invalidProjectType}
-                  errorMessage="Please select a project type."
-                />
-                <Field label="Message / Project Brief" required>
-                  <textarea
-                    name="message"
-                    required
-                    rows={4}
-                    maxLength={4000}
-                    placeholder="Tell me about your video, or paste a link to anything relevant…"
-                    className={cn(inputClass, "min-h-24 resize-y")}
-                  />
-                </Field>
-
-                {error && <p className="text-base text-red-400">{error}</p>}
-
-                <Button
-                  type="submit"
-                  disabled={status === "loading"}
-                  aria-busy={status === "loading"}
-                  className="mt-1 h-12 w-full gap-2 rounded-full bg-[#2b7ced] text-white hover:bg-[#3d87f0]"
-                >
-                  {status === "loading" ? (
-                    <>
-                      <Loader2 className="size-4 animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      Submit Spot Request
-                      <ArrowUpRight className="size-4" />
-                    </>
-                  )}
-                </Button>
-
-                <p className="text-center text-sm text-[#55555c] dark:text-[#86868b]">
-                  Prefer direct chat?{" "}
-                  <a
-                    href={getWhatsAppHref(WHATSAPP_MESSAGE)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={openWhatsApp(WHATSAPP_MESSAGE)}
-                    className="text-glow-green font-medium text-[#25D366] transition-colors hover:text-[#25D366] hover:brightness-110"
-                  >
-                    Reach out on WhatsApp
-                  </a>
-                </p>
-                <div className="flex justify-center">
-                  <CopyNumberButton compact />
-                </div>
-              </form>
-            )}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 }
 
