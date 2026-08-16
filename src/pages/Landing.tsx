@@ -769,7 +769,7 @@ function ProcessSection() {
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow={<PillBadge icon={<HelpCircle className="size-4" />} label="Process" />}
-          title="Our Process"
+          title="My Process"
           sub="You bring the expertise. I will do the rest with two focused phases."
         />
 
