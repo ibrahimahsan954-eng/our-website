@@ -368,15 +368,15 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#F3F4F6]"
+          className="mx-auto mt-6 max-w-2xl text-lg font-medium capitalize leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#F3F4F6]"
         >
           <strong className="inline-flex items-center gap-1.5 font-semibold text-[#101010] dark:text-white">
-            Grow on
+            Grow On
             <YouTubeLogo className="size-[1.1em]" />
             YouTube
           </strong>
           <span aria-hidden className="mx-2 text-[#25D366]">—</span>
-          Become the <strong className="font-semibold text-[#101010] dark:text-white">best brand</strong> in your niche
+          Become The <strong className="font-semibold text-[#101010] dark:text-white">Best Brand</strong> In Your Niche
         </motion.p>
 
         <motion.div
