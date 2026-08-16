@@ -1,7 +1,12 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -21,6 +26,7 @@ import { useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Check,
+  ChevronDown,
   Clapperboard,
   Copy,
   HelpCircle,
@@ -32,6 +38,7 @@ import {
   MessageCircle,
   Moon,
   Play,
+  Search,
   Send,
   Sun,
   Youtube,
@@ -919,6 +926,7 @@ function RequestForm() {
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
         company: ((formData.get("company") as string) ?? "").trim(),
+        phone: ((formData.get("phone") as string) ?? "").trim(),
         project_type: niche,
         budget,
         timeline,
@@ -991,6 +999,7 @@ function RequestForm() {
         <Field label="Company / Channel (optional)">
           <input name="company" maxLength={120} placeholder="Acme Inc. or @channelname" className={inputClass} />
         </Field>
+        <PhoneNumberField />
         <Field label="Your niche" required>
           <input
             name="niche"
@@ -1143,6 +1152,183 @@ function SelectField({
       {invalid && errorMessage && (
         <p className="mt-1.5 text-sm text-red-400">{errorMessage}</p>
       )}
+    </Field>
+  );
+}
+
+/* ---------------- Phone input with searchable country picker ---------------- */
+
+const COUNTRIES = [
+  { name: "Pakistan", flag: "🇵🇰", code: "+92" },
+  { name: "United States", flag: "🇺🇸", code: "+1" },
+  { name: "United Kingdom", flag: "🇬🇧", code: "+44" },
+  { name: "Afghanistan", flag: "🇦🇫", code: "+93" },
+  { name: "Albania", flag: "🇦🇱", code: "+355" },
+  { name: "Algeria", flag: "🇩🇿", code: "+213" },
+  { name: "Argentina", flag: "🇦🇷", code: "+54" },
+  { name: "Australia", flag: "🇦🇺", code: "+61" },
+  { name: "Austria", flag: "🇦🇹", code: "+43" },
+  { name: "Bangladesh", flag: "🇧🇩", code: "+880" },
+  { name: "Belgium", flag: "🇧🇪", code: "+32" },
+  { name: "Brazil", flag: "🇧🇷", code: "+55" },
+  { name: "Canada", flag: "🇨🇦", code: "+1" },
+  { name: "China", flag: "🇨🇳", code: "+86" },
+  { name: "Czechia", flag: "🇨🇿", code: "+420" },
+  { name: "Denmark", flag: "🇩🇰", code: "+45" },
+  { name: "Egypt", flag: "🇪🇬", code: "+20" },
+  { name: "Finland", flag: "🇫🇮", code: "+358" },
+  { name: "France", flag: "🇫🇷", code: "+33" },
+  { name: "Germany", flag: "🇩🇪", code: "+49" },
+  { name: "Greece", flag: "🇬🇷", code: "+30" },
+  { name: "Hong Kong", flag: "🇭🇰", code: "+852" },
+  { name: "India", flag: "🇮🇳", code: "+91" },
+  { name: "Indonesia", flag: "🇮🇩", code: "+62" },
+  { name: "Ireland", flag: "🇮🇪", code: "+353" },
+  { name: "Italy", flag: "🇮🇹", code: "+39" },
+  { name: "Japan", flag: "🇯🇵", code: "+81" },
+  { name: "Malaysia", flag: "🇲🇾", code: "+60" },
+  { name: "Mexico", flag: "🇲🇽", code: "+52" },
+  { name: "Morocco", flag: "🇲🇦", code: "+212" },
+  { name: "Netherlands", flag: "🇳🇱", code: "+31" },
+  { name: "New Zealand", flag: "🇳🇿", code: "+64" },
+  { name: "Nigeria", flag: "🇳🇬", code: "+234" },
+  { name: "Norway", flag: "🇳🇴", code: "+47" },
+  { name: "Philippines", flag: "🇵🇭", code: "+63" },
+  { name: "Poland", flag: "🇵🇱", code: "+48" },
+  { name: "Portugal", flag: "🇵🇹", code: "+351" },
+  { name: "Qatar", flag: "🇶🇦", code: "+974" },
+  { name: "Romania", flag: "🇷🇴", code: "+40" },
+  { name: "Russia", flag: "🇷🇺", code: "+7" },
+  { name: "Saudi Arabia", flag: "🇸🇦", code: "+966" },
+  { name: "Singapore", flag: "🇸🇬", code: "+65" },
+  { name: "South Africa", flag: "🇿🇦", code: "+27" },
+  { name: "South Korea", flag: "🇰🇷", code: "+82" },
+  { name: "Spain", flag: "🇪🇸", code: "+34" },
+  { name: "Sweden", flag: "🇸🇪", code: "+46" },
+  { name: "Switzerland", flag: "🇨🇭", code: "+41" },
+  { name: "Turkey", flag: "🇹🇷", code: "+90" },
+  { name: "UAE", flag: "🇦🇪", code: "+971" },
+  { name: "Ukraine", flag: "🇺🇦", code: "+380" },
+  { name: "Vietnam", flag: "🇻🇳", code: "+84" },
+];
+
+function PhoneNumberField() {
+  const [country, setCountry] = useState(COUNTRIES[0]);
+  const [local, setLocal] = useState("");
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = useMemo(
+    () =>
+      COUNTRIES.filter(
+        (c) =>
+          c.name.toLowerCase().includes(query.trim().toLowerCase()) ||
+          c.code.includes(query.trim()),
+      ),
+    [query],
+  );
+
+  const fullValue = `${country.code}${local ? " " : ""}${local}`;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    // Never lose the dial code — if the user cleared it, re-anchor it.
+    if (!value.startsWith(country.code)) {
+      value = `${country.code} ${value.replace(/^[^0-9]*/, "")}`;
+    }
+    const localPart = value
+      .slice(country.code.length)
+      .replace(/[^0-9\s-]/g, "")
+      .trim();
+    setLocal(localPart);
+  };
+
+  const handleSelect = (c: (typeof COUNTRIES)[number]) => {
+    setCountry(c);
+    setOpen(false);
+    setQuery("");
+    inputRef.current?.focus();
+  };
+
+  return (
+    <Field label="Phone Number (optional)">
+      {/* Hidden input carries the full dial code + number into FormData */}
+      <input type="hidden" name="phone" value={fullValue.replace(/\s/g, "")} />
+      <div className="flex w-full gap-2">
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              aria-label={`Country code: ${country.name} ${country.code}`}
+              className="flex shrink-0 items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-3 text-base text-[#101010] outline-none transition-colors hover:border-[#25D366]/50 focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white"
+            >
+              <span className="text-lg leading-none">{country.flag}</span>
+              <span className="font-medium tabular-nums">{country.code}</span>
+              <ChevronDown
+                className={cn(
+                  "size-4 text-black/40 transition-transform duration-200 dark:text-white/50",
+                  open && "rotate-180",
+                )}
+              />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            align="start"
+            sideOffset={8}
+            className="z-[100] w-72 rounded-xl border border-black/10 bg-white p-2 text-[#101010] shadow-[0_18px_44px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-[#080808] dark:text-white dark:shadow-[0_18px_44px_rgba(0,0,0,0.65)]"
+          >
+            <div className="relative mb-2">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-black/35 dark:text-white/50" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search country..."
+                autoFocus
+                className="w-full rounded-lg border border-black/10 bg-black/5 py-2 pl-9 pr-3 text-sm text-[#101010] placeholder:text-black/35 outline-none focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/50"
+              />
+            </div>
+            <ul className="max-h-64 overflow-y-auto">
+              {filtered.length === 0 && (
+                <li className="px-3 py-2.5 text-sm text-black/50 dark:text-white/50">
+                  No countries found
+                </li>
+              )}
+              {filtered.map((c) => (
+                <li key={`${c.code}-${c.name}`}>
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(c)}
+                    className={cn(
+                      "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm transition-colors hover:bg-[#25D366]/10",
+                      c === country && "bg-[#25D366]/10 font-semibold",
+                    )}
+                  >
+                    <span className="text-base leading-none">{c.flag}</span>
+                    <span className="flex-1 truncate">{c.name}</span>
+                    <span className="tabular-nums text-black/45 dark:text-white/45">
+                      {c.code}
+                    </span>
+                    {c === country && <Check className="size-4 shrink-0 text-[#25D366]" />}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </PopoverContent>
+        </Popover>
+
+        <input
+          ref={inputRef}
+          type="tel"
+          value={fullValue}
+          onChange={handleChange}
+          placeholder="+92 3xx xxxxxxx"
+          inputMode="tel"
+          autoComplete="tel"
+          aria-label="Phone number"
+          className={cn(inputClass, "min-w-0 flex-1")}
+        />
+      </div>
     </Field>
   );
 }
