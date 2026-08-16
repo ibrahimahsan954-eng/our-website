@@ -182,7 +182,7 @@ const FAQS = [
   },
   {
     q: "How do payments work?",
-    a: "To keep things simple, I send a quick invoice to get started. Once that's paid, I begin working right away and keep you updated through the entire process. I do accept crypto, PayPal, Stripe invoices, and Bank Transfer.",
+    a: "To keep things simple, I send a quick invoice to get started. Once that's paid, I begin working right away and keep you updated through the entire process. I accept PayPal and Payoneer invoices.",
   },
 ];
 
@@ -798,7 +798,13 @@ function Faqs() {
               <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-[#101010] hover:no-underline [&[data-state=open]]:text-[#71b25c] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(113,178,92,0.5)] dark:text-white">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
+              <AccordionContent
+                className={cn(
+                  "px-6 pb-6 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]",
+                  faq.q === "How do payments work?" &&
+                    "text-gray-800 dark:text-white",
+                )}
+              >
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
