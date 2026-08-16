@@ -54,6 +54,26 @@ describe("getEmbedSrc", () => {
   });
 });
 
+describe("Cloudinary player embeds", () => {
+  const cloudinaryUrl =
+    "https://player.cloudinary.com/embed/?cloud_name=zcwzulv5&public_id=samples%2Fcld-sample-video";
+
+  test("getEmbedSrc passes the embed URL through unchanged", () => {
+    expect(getEmbedSrc(cloudinaryUrl)).toBe(cloudinaryUrl);
+  });
+
+  test("getAutoplayEmbedSrc appends chrome-free autoplay params", () => {
+    const src = getAutoplayEmbedSrc(cloudinaryUrl)!;
+    expect(src).toContain("cloud_name=zcwzulv5");
+    expect(src).toContain("public_id=samples%2Fcld-sample-video");
+    expect(src).toContain("autoplay=true&muted=true&loop=true&controls=false");
+  });
+
+  test("isDirectVideo rejects Cloudinary player URLs", () => {
+    expect(isDirectVideo(cloudinaryUrl)).toBe(false);
+  });
+});
+
 describe("getAutoplayEmbedSrc", () => {
   test("builds a chrome-free YouTube embed (no controls/branding/captions)", () => {
     expect(getAutoplayEmbedSrc("https://youtu.be/T7pNvhwRNBU")).toBe(
@@ -70,6 +90,16 @@ describe("getAutoplayEmbedSrc", () => {
   test("returns direct video files unchanged", () => {
     expect(getAutoplayEmbedSrc("https://cdn.example.com/reel.mp4")).toBe(
       "https://cdn.example.com/reel.mp4",
+    );
+  });
+
+  test("appends chrome-free autoplay params to Cloudinary player embeds", () => {
+    expect(
+      getAutoplayEmbedSrc(
+        "https://player.cloudinary.com/embed/?cloud_name=zcwzulv5&public_id=samples%2Fcld-sample-video",
+      ),
+    ).toBe(
+      "https://player.cloudinary.com/embed/?cloud_name=zcwzulv5&public_id=samples%2Fcld-sample-video&autoplay=true&muted=true&loop=true&controls=false&playsinline=true&fluid=true",
     );
   });
 

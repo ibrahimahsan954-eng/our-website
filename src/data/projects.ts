@@ -2,7 +2,7 @@ export type Project = {
   id: string;
   title: string;
   category: string;
-  /** Any YouTube, Vimeo, or direct MP4 URL. */
+  /** Any YouTube, Vimeo, Cloudinary player embed, or direct MP4 URL. */
   videoUrl: string;
   /**
    * Optional direct MP4/WebM file. When set, the card renders a native
@@ -23,6 +23,23 @@ const yt = (id: string) => `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
 const ytFallback = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 
 export const PROJECTS: Project[] = [
+  {
+    id: "project-5",
+    title: "Freebuff Integration Setup",
+    category: "Screen Demo",
+    videoUrl:
+      "https://player.cloudinary.com/embed/?cloud_name=zcwzulv5&public_id=samples%2Fcld-sample-video",
+    thumbnailUrl:
+      "https://res.cloudinary.com/zcwzulv5/video/upload/samples/cld-sample-video.jpg",
+  },
+  {
+    id: "project-6",
+    title: "Best AI Auto Scheduling App? (FlowSavvy Review)",
+    category: "Talking Head · Review",
+    videoUrl: "https://www.youtube.com/watch?v=I4JhvvJ3XXk&t",
+    thumbnailUrl: yt("I4JhvvJ3XXk"),
+    thumbnailFallbackUrl: ytFallback("I4JhvvJ3XXk"),
+  },
   {
     id: "project-1",
     title: "Dubai Real Estate Talking Head Video",
