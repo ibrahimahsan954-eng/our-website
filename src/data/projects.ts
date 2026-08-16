@@ -27,10 +27,8 @@ export const PROJECTS: Project[] = [
     id: "project-5",
     title: "Freebuff Integration Setup",
     category: "Screen Demo",
-    videoUrl:
-      "https://player.cloudinary.com/embed/?cloud_name=zcwzulv5&public_id=samples%2Fcld-sample-video",
-    thumbnailUrl:
-      "https://res.cloudinary.com/zcwzulv5/video/upload/samples/cld-sample-video.jpg",
+    videoUrl: "https://player.vimeo.com/video/1218698436",
+    thumbnailUrl: "https://vumbnail.com/1218698436.jpg",
   },
   {
     id: "project-6",
