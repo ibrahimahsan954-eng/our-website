@@ -170,9 +170,9 @@ const SOCIALS = {
 
 // Stats shown in the counters section (animated on scroll) — update to your real numbers
 const STATS = [
-  { value: 60, suffix: "+", label: "Happy Clients" },
-  { value: 90, suffix: "+", label: "Projects Completed" },
-  { value: 100, suffix: "K+", label: "Views" },
+  { value: 30, suffix: "+", label: "Happy Clients" },
+  { value: 60, suffix: "+", label: "Projects Delivered" },
+  { value: 100, suffix: "K+", label: "Views Generated" },
 ];
 
 /* ============================================================
@@ -240,36 +240,35 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="gpu-crisp fixed inset-x-0 top-5 z-50 flex justify-center px-4 sm:top-6"
     >
-      <motion.nav className="flex items-center gap-1.5 rounded-full border border-black/10 bg-white/80 p-2 dark:border-white/10 dark:bg-white/5">
+      <motion.nav className="flex items-center gap-4 rounded-full border border-black/10 bg-white/80 px-6 py-3 dark:border-white/10 dark:bg-white/5">
         <a
           href="#top"
           onClick={scrollToTop}
           aria-label="Back to top"
           title="Back to top"
-          className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+          className="flex size-10 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
         >
-          <Home className="size-[18px]" />
+          <Home className="size-6" />
         </a>
 
-        <span aria-hidden className="mx-1 h-4 w-px bg-black/15 dark:bg-white/15" />
+        <span aria-hidden className="h-5 w-px bg-black/15 dark:bg-white/15" />
 
         <NavIcon href="#work" label="Portfolio">
-          <Clapperboard className="size-[18px]" />
+          <Clapperboard className="size-6" />
         </NavIcon>
         <NavIcon href="#process" label="Process">
-          <Layers className="size-[18px]" />
+          <Layers className="size-6" />
         </NavIcon>
 
-        <span aria-hidden className="mx-1 h-4 w-px bg-black/15 dark:bg-white/15" />
+        <span aria-hidden className="h-5 w-px bg-black/15 dark:bg-white/15" />
 
         <Button
           type="button"
-          size="sm"
           onClick={onReserve}
-          className="h-10 gap-2 rounded-full bg-[#25D366] px-5 text-base font-semibold text-[#0b141a] shadow-[0_0_14px_rgba(37,211,102,0.55),0_0_30px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_22px_rgba(37,211,102,0.75),0_0_46px_rgba(37,211,102,0.4)]"
+          className="h-auto gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-base font-bold text-[#0b141a] shadow-[0_0_14px_rgba(37,211,102,0.55),0_0_30px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_22px_rgba(37,211,102,0.75),0_0_46px_rgba(37,211,102,0.4)] md:text-lg"
         >
           Reserve a Spot
-          <ArrowUpRight className="size-3.5" />
+          <ArrowUpRight className="size-4" />
         </Button>
 
         <ThemeToggle />
@@ -308,9 +307,9 @@ function ThemeToggle() {
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       title={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+      className="flex size-10 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
     >
-      {dark ? <Moon className="size-[18px]" /> : <Sun className="size-[18px]" />}
+      {dark ? <Moon className="size-6" /> : <Sun className="size-6" />}
     </button>
   );
 }
@@ -321,7 +320,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
       href={href}
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-full text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+      className="flex size-10 items-center justify-center rounded-full text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
     >
       {children}
     </a>
@@ -393,14 +392,14 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.42, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#25D366] bg-[#25D366]/15 px-4 py-1.5 text-sm font-bold text-[#064E3B] shadow-sm dark:text-[#25D366]">
-            <span className="size-2.5 animate-pulse rounded-full bg-[#25D366]" />
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-[#25D366] bg-[#25D366]/15 px-5 py-2.5 text-base font-bold text-[#064E3B] shadow-sm dark:text-[#25D366]">
+            <span className="size-3 animate-pulse rounded-full bg-[#25D366]" />
             3 Spots Left
           </span>
           <button
             type="button"
             onClick={onReserve}
-            className="inline-flex h-12 items-center rounded-full bg-[#25D366] px-7 text-base font-semibold text-[#0b141a] shadow-[0_0_20px_rgba(37,211,102,0.55),0_0_42px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_28px_rgba(37,211,102,0.75),0_0_60px_rgba(37,211,102,0.4)]"
+            className="inline-flex items-center rounded-full bg-[#25D366] px-7 py-3 text-lg font-bold text-[#0b141a] shadow-[0_0_20px_rgba(37,211,102,0.55),0_0_42px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_28px_rgba(37,211,102,0.75),0_0_60px_rgba(37,211,102,0.4)]"
           >
             Reserve a Spot
           </button>
@@ -701,8 +700,7 @@ function Stats() {
             {index > 0 && (
               <span
                 aria-hidden
-                className="hidden w-[1.5px] self-center bg-black/15 sm:block dark:bg-white/90"
-                style={{ height: 56 }}
+                className="hidden h-14 w-[1.5px] self-center bg-black/15 sm:block dark:bg-white/90"
               />
             )}
             <motion.div
@@ -712,10 +710,10 @@ function Stats() {
               transition={{ duration: 0.5, delay: index * 0.12, ease: "easeOut" }}
               className="gpu-crisp flex-1 px-8 text-center"
             >
-              <p className="font-display text-6xl font-medium tracking-tight text-glow-metric sm:text-7xl">
+              <p className="font-display text-5xl font-extrabold tracking-tight text-[#25D366] md:text-6xl">
                 <Counter value={stat.value} suffix={stat.suffix} />
               </p>
-              <p className="mt-2 text-base font-medium tracking-[-0.01em] text-[#3a3a3e]/85 dark:text-[#f2f4f6]/80">{stat.label}</p>
+              <p className="mt-2 text-base font-semibold text-[#3a3a3e] md:text-lg dark:text-gray-100">{stat.label}</p>
             </motion.div>
           </Fragment>
         ))}
