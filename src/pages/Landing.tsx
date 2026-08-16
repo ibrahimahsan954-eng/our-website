@@ -1216,15 +1216,15 @@ function DmCard({
 }) {
   const card = (
     <>
-      <span className="flex size-12 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/80 transition-colors duration-300 group-hover:border-[#25D366]/60 group-hover:text-[#25D366] dark:border-white/10 dark:bg-white/5 dark:text-white">
+      <span className="flex size-12 items-center justify-center rounded-full border border-[#25D366]/30 bg-[#25D366]/10 text-[#25D366] transition-all duration-300 group-hover:border-[#25D366]/60 group-hover:shadow-[0_0_14px_rgba(37,211,102,0.25)]">
         {icon}
       </span>
       <span className="font-display text-lg font-semibold text-[#101010] dark:text-white">{label}</span>
-      <span className="text-base text-[#55555c] dark:text-[#E5E7EB]">{note}</span>
+      <span className="text-base font-medium text-[#25D366]">{note}</span>
     </>
   );
   const classes =
-    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]";
+    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#25D366]/50 hover:shadow-[0_0_25px_rgba(37,211,102,0.15)] dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm";
   if (!href) {
     return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
   }
