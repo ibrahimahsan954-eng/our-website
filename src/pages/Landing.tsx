@@ -1183,8 +1183,8 @@ function DmSection() {
           />
         </div>
 
-        <div className="mt-12 flex w-full flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
-          <CopyNumberButton large className="w-full sm:w-auto" />
+        <div className="mx-auto mt-12 grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
+          <CopyNumberButton large className="w-full" />
           <Button
             size="lg"
             onClick={() =>
@@ -1192,7 +1192,7 @@ function DmSection() {
                 .getElementById("request-cal")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="h-12 w-full gap-2 rounded-full bg-[#2b7ced] px-8 text-lg font-bold text-white shadow-[0_4px_18px_rgba(43,124,237,0.28)] transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/25 sm:w-auto"
+            className="h-12 w-full gap-2 rounded-full bg-[#2b7ced] px-8 text-lg font-bold text-white shadow-[0_4px_18px_rgba(43,124,237,0.28)] transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/25"
           >
             Start Your Project
             <ArrowUpRight className="size-5" />
