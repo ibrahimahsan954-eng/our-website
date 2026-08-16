@@ -848,7 +848,7 @@ function FinalCta() {
               eyebrow={<PillBadge icon={<Calendar className="size-5" />} label="Booking" />}
               title={
                 <>
-                  <span className="inline-block rounded-lg bg-[#25D366] px-3 py-1 align-middle font-extrabold text-black mr-2">
+                  <span className="inline-block rounded-lg bg-[#25D366] px-3.5 py-1 align-baseline font-extrabold leading-none text-black mr-2">
                     Reserve
                   </span>
                   <span className="whitespace-nowrap">A Spot —</span>
