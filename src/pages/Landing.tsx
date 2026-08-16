@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -26,6 +25,7 @@ import {
   Copy,
   Home,
   Instagram,
+  Layers,
   Loader2,
   Mail,
   MessageCircle,
@@ -40,9 +40,6 @@ import { cn } from "@/lib/utils";
    Config — swap these with your real links and numbers
    ============================================================ */
 
-// Where "Book a Call" pills scroll to — keep as the on-page CTA section,
-// or point at your real Cal.com link (e.g. "https://cal.com/ebadahsan").
-const BOOKING_URL = "#request-cal";
 
 // Embedded calendar widget — paste your public Cal.com / Calendly booking URL
 // here (e.g. "https://cal.com/ebadahsan/15min" or
@@ -168,25 +165,6 @@ const STATS = [
   { value: 100, suffix: "K+", label: "Views" },
 ];
 
-const FAQS = [
-  {
-    q: "What services do you offer?",
-    a: "High-end motion design for brands that want clarity and impact. I create product launch videos, explainers, demos, short-form reels, VSLs, and keynote visuals — combining clean UI motion with strong storytelling to make ideas impossible to ignore.",
-  },
-  {
-    q: "How long does a project usually take?",
-    a: "Most builds take 3–7 days, depending on how much content you provide and any custom sections you want added. I keep the process smooth, fast, and collaborative.",
-  },
-  {
-    q: "Is there a limit to revisions during the process?",
-    a: "No compromises. We offer unlimited revisions at every stage — we'll keep refining your video until it's exactly how you want it.",
-  },
-  {
-    q: "How do payments work?",
-    a: "To keep things simple, I send a quick invoice to get started. Once that's paid, I begin working right away and keep you updated through the entire process. I accept PayPal and Payoneer invoices.",
-  },
-];
-
 /* ============================================================
    Landing page — recreation of zakariahq.com
    ============================================================ */
@@ -208,7 +186,7 @@ export default function Landing() {
         <Hero onReserve={scrollToBooking} />
         <Portfolio />
         <Stats />
-        <Faqs />
+        <ProcessSection />
         <FinalCta />
         <DmSection />
       </main>
@@ -268,8 +246,8 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
         <NavIcon href="#work" label="Portfolio">
           <Clapperboard className="size-[18px]" />
         </NavIcon>
-        <NavIcon href="#faqs" label="FAQs">
-          <MessageCircle className="size-[18px]" />
+        <NavIcon href="#process" label="Process">
+          <Layers className="size-[18px]" />
         </NavIcon>
 
         <span aria-hidden className="mx-1 h-4 w-px bg-black/15 dark:bg-white/15" />
@@ -767,53 +745,86 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
   );
 }
 
-/* ---------------- FAQs ---------------- */
+/* ---------------- Our Process ---------------- */
 
-function Faqs() {
+const PROCESS_STEPS = [
+  {
+    num: "1",
+    title: "Strategy & Retention Research",
+    desc: "We analyze high-retention hooks and competitive research to build out your YouTube branding, positioning, and long-term content strategy.",
+  },
+  {
+    num: "2",
+    title: "High-Impact Video Editing",
+    desc: "Transforming raw footage into dynamic, high-retention videos with precise motion graphics, custom sound design, and engaging pacing.",
+  },
+  {
+    num: "3",
+    title: "Scale & Brand Growth",
+    desc: "Delivering publish-ready assets and optimizing content pillars for continuous growth and audience watch time.",
+  },
+];
+
+function ProcessSection() {
+  const [active, setActive] = useState(0);
   return (
-    <section id="faqs" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
-      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.1fr_1.3fr]">
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          <SectionHeading
-            align="left"
-            eyebrow="FAQs"
-            title="Some of my frequently asked questions"
-            sub="A quick collection of helpful answers so you can get clarity fast. If there's anything else you're wondering about, just reach out!"
-          />
-          <Button
-            asChild
-            variant="outline"
-            className="mt-9 rounded-full border border-black/10 bg-black/5 text-black/80 backdrop-blur-md transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
-          >
-            <a href={BOOKING_URL} className="gap-2">
-              Request a Project
-              <ArrowUpRight className="size-4" />
-            </a>
-          </Button>
-        </div>
+    <section id="process" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="Process"
+          title="Our Process"
+          sub="Three focused phases — from strategy to edit to relentless growth."
+        />
 
-        <Accordion type="single" collapsible className="w-full space-y-4">
-          {FAQS.map((faq, index) => (
-            <AccordionItem
-              key={faq.q}
-              value={`item-${index}`}
-              className="overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors data-[state=open]:border-[#25D366]/60 dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm dark:data-[state=open]:border-[#25D366]/50"
-            >
-              <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-[#101010] hover:no-underline [&[data-state=open]]:text-[#25D366] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(37,211,102,0.5)] dark:text-white">
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent
+        <div className="mt-12 flex h-[460px] flex-col gap-2.5 sm:flex-row">
+          {PROCESS_STEPS.map((step, index) => {
+            const isActive = index === active;
+            return (
+              <motion.button
+                key={step.num}
+                type="button"
+                onClick={() => setActive(index)}
+                aria-expanded={isActive}
+                animate={{ flexBasis: isActive ? "100%" : "8%" }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
-                  "px-6 pb-6 text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]",
-                  faq.q === "How do payments work?" &&
-                    "text-gray-800 dark:text-white",
+                  "group flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border p-5 text-left transition-colors duration-300 sm:p-6",
+                  isActive
+                    ? "border-[#25D366]/70 bg-[#000000] shadow-[0_0_34px_rgba(37,211,102,0.18)]"
+                    : "border-white/10 bg-[#080808] hover:border-[#25D366]/40",
+                  isActive ? "items-start justify-start" : "items-center justify-center",
                 )}
               >
-                {faq.a}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+                <span
+                  className={cn(
+                    "font-display font-semibold tracking-tight transition-all duration-300",
+                    isActive
+                      ? "text-6xl text-[#25D366] drop-shadow-[0_0_14px_rgba(37,211,102,0.45)] sm:text-7xl"
+                      : "text-xl text-white/35 group-hover:text-[#25D366] sm:text-3xl",
+                  )}
+                >
+                  {step.num}
+                </span>
+
+                {isActive && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
+                    className="flex flex-col"
+                  >
+                    <h3 className="mt-6 font-display text-2xl font-semibold text-white sm:text-3xl">
+                      {step.title}
+                    </h3>
+                    <p className="mt-3 max-w-md text-base leading-relaxed text-[#D1D5DB]">
+                      {step.desc}
+                    </p>
+                  </motion.div>
+                )}
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
