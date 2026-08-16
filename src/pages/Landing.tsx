@@ -26,8 +26,8 @@ import {
   Copy,
   Home,
   Instagram,
-  Linkedin,
   Loader2,
+  Mail,
   MessageCircle,
   Moon,
   Play,
@@ -158,7 +158,6 @@ const SOCIALS = {
   x: "",
   instagram: "https://www.instagram.com/editsbyebad/",
   youtube: "",
-  linkedin: "https://www.linkedin.com/in/ebadullah-ahsan-738492247/",
 };
 
 // Stats shown in the counters section (animated on scroll) — update to your real numbers
@@ -1392,10 +1391,10 @@ function DmSection() {
             note="DM me"
           />
           <DmCard
-            href={SOCIALS.linkedin}
-            icon={<Linkedin className="size-5" />}
-            label="LinkedIn"
-            note="Connect"
+            href="mailto:onepunchman5005@gmail.com"
+            icon={<Mail className="size-5" />}
+            label="Gmail"
+            note="Direct email"
           />
         </div>
 
@@ -1500,11 +1499,6 @@ function Footer() {
               {SOCIALS.youtube && (
                 <FooterIcon href={SOCIALS.youtube} label="YouTube">
                   <Youtube className="size-4" />
-                </FooterIcon>
-              )}
-              {SOCIALS.linkedin && (
-                <FooterIcon href={SOCIALS.linkedin} label="LinkedIn">
-                  <Linkedin className="size-4" />
                 </FooterIcon>
               )}
             </div>
