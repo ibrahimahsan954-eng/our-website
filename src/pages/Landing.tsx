@@ -23,6 +23,7 @@ import {
   Check,
   Clapperboard,
   Copy,
+  HelpCircle,
   Home,
   Instagram,
   Layers,
@@ -31,6 +32,7 @@ import {
   MessageCircle,
   Moon,
   Play,
+  Send,
   Sun,
   Youtube,
 } from "lucide-react";
@@ -539,8 +541,8 @@ function Portfolio() {
     <section id="work" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto w-full max-w-7xl">
         <SectionHeading
-          eyebrow="Portfolio"
-          title="Our latest projects"
+          eyebrow={<PillBadge icon={<Home className="size-4" />} label="Portfolio" />}
+          title="My Latest Projects"
           sub="some case studies"
         />
 
@@ -750,18 +752,13 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 const PROCESS_STEPS = [
   {
     num: "1",
-    title: "Strategy & Retention Research",
-    desc: "We analyze high-retention hooks and competitive research to build out your YouTube branding, positioning, and long-term content strategy.",
+    title: "Brand strategy and growth plan",
+    desc: "I use analytics and competitive research to build out your YouTube branding, positioning, and long-term growth plan, with viral trends and already tried and tested methods used on multiple channels and brands.",
   },
   {
     num: "2",
-    title: "High-Impact Video Editing",
-    desc: "Transforming raw footage into dynamic, high-retention videos with precise motion graphics, custom sound design, and engaging pacing.",
-  },
-  {
-    num: "3",
-    title: "Scale & Brand Growth",
-    desc: "Delivering publish-ready assets and optimizing content pillars for continuous growth and audience watch time.",
+    title: "Creative Production",
+    desc: "We produce your content end-to-end, from suggesting new ideas, brand strategy, executing on optimized titles, thumbnails, video outlines, filming support, premium editing, and publication for continuous growth.",
   },
 ];
 
@@ -771,9 +768,9 @@ function ProcessSection() {
     <section id="process" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Process"
+          eyebrow={<PillBadge icon={<HelpCircle className="size-4" />} label="Process" />}
           title="Our Process"
-          sub="Three focused phases — from strategy to edit to relentless growth."
+          sub="You bring the expertise. I will do the rest with two focused phases."
         />
 
         <div className="mt-12 flex h-[460px] flex-col gap-2.5 sm:flex-row">
@@ -1159,7 +1156,7 @@ function DmSection() {
     <section id="dm" className="scroll-mt-24 px-4 pb-24 pt-4 sm:px-6">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Direct"
+          eyebrow={<PillBadge icon={<Send className="size-4" />} label="DIRECT" />}
           title="Shoot me a DM, let's discuss your next project"
           sub="Fastest reply on WhatsApp — or catch me on your favorite platform."
         />
@@ -1186,8 +1183,8 @@ function DmSection() {
           />
         </div>
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-          <CopyNumberButton />
+        <div className="mt-12 flex w-full flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
+          <CopyNumberButton large className="w-full sm:w-auto" />
           <Button
             size="lg"
             onClick={() =>
@@ -1195,10 +1192,10 @@ function DmSection() {
                 .getElementById("request-cal")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="h-11 gap-2 rounded-full bg-[#2b7ced] px-8 font-semibold text-white shadow-[0_4px_18px_rgba(43,124,237,0.28)] transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/25"
+            className="h-12 w-full gap-2 rounded-full bg-[#2b7ced] px-8 text-lg font-bold text-white shadow-[0_4px_18px_rgba(43,124,237,0.28)] transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/25 sm:w-auto"
           >
             Start Your Project
-            <ArrowUpRight className="size-4" />
+            <ArrowUpRight className="size-5" />
           </Button>
         </div>
       </div>
@@ -1325,13 +1322,22 @@ function FooterIcon({
 
 /* ---------------- Shared ---------------- */
 
+function PillBadge({ icon, label }: { icon?: ReactNode; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#25D366]">
+      {icon}
+      {label}
+    </span>
+  );
+}
+
 function SectionHeading({
   eyebrow,
   title,
   sub,
   align = "center",
 }: {
-  eyebrow: string;
+  eyebrow: ReactNode;
   title: ReactNode;
   sub?: string;
   align?: "center" | "left";
@@ -1367,9 +1373,13 @@ function SectionHeading({
 function CopyNumberButton({
   compact,
   iconOnly,
+  large,
+  className,
 }: {
   compact?: boolean;
   iconOnly?: boolean;
+  large?: boolean;
+  className?: string;
 }) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<number | null>(null);
@@ -1409,22 +1419,29 @@ function CopyNumberButton({
       title={copied ? "Number copied" : "Copy WhatsApp number"}
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-full border font-semibold transition-all duration-300",
-        iconOnly ? "size-11" : compact ? "h-11 px-5 text-sm" : "h-11 px-6 text-base",
+        iconOnly
+          ? "size-11"
+          : large
+            ? "h-12 px-8 text-lg font-bold"
+            : compact
+              ? "h-11 px-5 text-sm"
+              : "h-11 px-6 text-base",
         copied
           ? "text-glow-green border-[#25D366]/60 bg-[#25D366]/15 text-[#25D366]"
           : "border-zinc-400/70 bg-black/5 text-zinc-800 hover:bg-black/10 hover:text-black dark:border-zinc-700/60 dark:bg-white/5 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-white",
+        className,
       )}
     >
       {iconOnly ? (
         copied ? <Check className="size-5" /> : <Copy className="size-5" />
       ) : copied ? (
         <>
-          <Check className="size-4" />
+          <Check className={large ? "size-5" : "size-4"} />
           Copied!
         </>
       ) : (
         <>
-          <Copy className="size-4" />
+          <Copy className={large ? "size-5" : "size-4"} />
           Copy number
         </>
       )}
