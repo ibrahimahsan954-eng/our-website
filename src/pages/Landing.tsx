@@ -25,6 +25,7 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import {
   ArrowUpRight,
+  Calendar,
   Check,
   ChevronDown,
   Clapperboard,
@@ -548,7 +549,7 @@ function Portfolio() {
     <section id="work" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto w-full max-w-7xl">
         <SectionHeading
-          eyebrow={<PillBadge icon={<Home className="size-4" />} label="Portfolio" />}
+          eyebrow={<PillBadge icon={<Home className="size-5" />} label="Portfolio" />}
           title="My Latest Projects"
           sub="Some Case Studies"
         />
@@ -775,7 +776,7 @@ function ProcessSection() {
     <section id="process" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow={<PillBadge icon={<HelpCircle className="size-4" />} label="Process" />}
+          eyebrow={<PillBadge icon={<HelpCircle className="size-5" />} label="Process" />}
           title="My Process"
           sub="You bring the expertise. I will do the rest with two focused phases."
         />
@@ -847,7 +848,7 @@ function FinalCta() {
           <div className="flex flex-col items-start">
             <SectionHeading
               align="left"
-              eyebrow="Booking"
+              eyebrow={<PillBadge icon={<Calendar className="size-5" />} label="Booking" />}
               title={
                 <>
                   <span className="whitespace-nowrap">
@@ -1346,7 +1347,7 @@ function DmSection() {
     <section id="dm" className="scroll-mt-24 px-4 pb-24 pt-4 sm:px-6">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow={<PillBadge icon={<Send className="size-4" />} label="Direct" />}
+          eyebrow={<PillBadge icon={<Send className="size-5" />} label="Direct" />}
           title="Shoot Me A DM, Let's Discuss Your Next Project"
           sub="Fastest Reply On WhatsApp — Or Catch Me On Your Favorite Platform."
         />
@@ -1514,7 +1515,7 @@ function FooterIcon({
 
 function PillBadge({ icon, label }: { icon?: ReactNode; label: string }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/10 px-4 py-1.5 text-xs font-semibold normal-case tracking-[0.22em] text-[#25D366]">
+    <span className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-[#25D366]/40 bg-[#25D366]/10 px-5 py-2 text-base font-bold normal-case tracking-wide text-[#25D366] shadow-[0_0_15px_rgba(37,211,102,0.25)]">
       {icon}
       {label}
     </span>
