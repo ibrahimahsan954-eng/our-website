@@ -850,10 +850,13 @@ function FinalCta() {
               eyebrow="Booking"
               title={
                 <>
-                  <span className="inline-flex items-center rounded-lg bg-[#25D366] px-3 py-1 align-middle font-extrabold text-black shadow-[0_0_18px_rgba(37,211,102,0.35)]">
-                    Reserve
-                  </span>{" "}
-                  A Spot —{" "}
+                  <span className="whitespace-nowrap">
+                    <span className="inline-flex items-center justify-center rounded-lg bg-[#25D366] px-3 py-1 align-middle font-extrabold text-black shadow-[0_0_18px_rgba(37,211,102,0.35)]">
+                      Reserve
+                    </span>{" "}
+                    A Spot —
+                  </span>
+                  <br />
                   <span className="font-medium text-[#25D366] text-glow-green">
                     Let&apos;s Discuss Your Project
                   </span>
