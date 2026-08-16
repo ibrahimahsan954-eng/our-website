@@ -181,7 +181,7 @@ export default function Dashboard() {
         </header>
 
         {/* ---------------- Email delivery status ---------------- */}
-        <section className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 p-5 backdrop-blur-sm">
+        <section className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-[#080808] p-5 backdrop-blur-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-white">
               <Mail className="text-glow-green size-4 text-[#25D366]" />
@@ -238,7 +238,7 @@ export default function Dashboard() {
               return (
                 <div
                   key={slot}
-                  className="rounded-2xl border border-white/10 bg-neutral-900/60 p-4 backdrop-blur-sm"
+                  className="rounded-2xl border border-white/10 bg-[#080808] p-4 backdrop-blur-sm"
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
@@ -332,7 +332,7 @@ export default function Dashboard() {
         </section>
 
         {inquiries === null ? (
-          <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 px-6 py-16 text-center backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-[#080808] px-6 py-16 text-center backdrop-blur-sm">
             <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#86868b]">
               <Inbox className="size-6" />
             </span>
@@ -348,7 +348,7 @@ export default function Dashboard() {
             </div>
           </div>
         ) : list.length === 0 ? (
-          <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 px-6 py-16 text-center backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-[#080808] px-6 py-16 text-center backdrop-blur-sm">
             <span className="flex size-14 items-center justify-center rounded-full border border-white/15 text-[#86868b]">
               <Inbox className="size-6" />
             </span>
@@ -370,7 +370,7 @@ export default function Dashboard() {
               <li
                 key={inquiry._id}
                 className={cn(
-                  "rounded-2xl border bg-neutral-900/60 p-5 backdrop-blur-sm transition-all duration-300",
+                  "rounded-2xl border bg-[#080808] p-5 backdrop-blur-sm transition-all duration-300",
                   unread
                     ? "border-[#25D366]/35 hover:border-[#25D366]/70 hover:shadow-[0_0_24px_rgba(37,211,102,0.10)]"
                     : "border-white/10 hover:border-[#25D366]/40",

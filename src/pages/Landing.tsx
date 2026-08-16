@@ -344,7 +344,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
 
 function Hero({ onReserve }: { onReserve?: () => void }) {
   return (
-    <section id="top" className="relative overflow-hidden bg-[#e9e9e5] px-4 pb-16 pt-28 sm:pt-32 md:px-6 dark:bg-[#161616]">
+    <section id="top" className="relative overflow-hidden bg-[#e9e9e5] px-4 pb-16 pt-28 sm:pt-32 md:px-6 dark:bg-black">
       <div className="relative mx-auto w-full text-center">
         {/* Massive name composition — lime-green condensed type with the
             vertical pill portrait window cutting through the middle letters */}
@@ -388,7 +388,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#8b8b91]"
+          className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#a3a3ab]"
         >
           <strong className="inline-flex items-center gap-1.5 font-semibold text-[#101010] dark:text-white">
             Grow on
@@ -446,7 +446,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 
   if (failed) {
     return (
-      <span className="flex size-12 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#e8e8e2] via-[#d9d9d2] to-[#c9c9c0] text-sm font-semibold text-[#25D366] shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:from-[#2c2f26] dark:via-[#1b1c14] dark:to-[#10110b] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]">
+      <span className="flex size-12 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#e8e8e2] via-[#d9d9d2] to-[#c9c9c0] text-sm font-semibold text-[#25D366] shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-black dark:from-[#2c2f26] dark:via-[#1b1c14] dark:to-[#10110b] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]">
         {label}
       </span>
     );
@@ -459,7 +459,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
       loading="lazy"
       decoding="async"
       onError={() => setFailed(true)}
-      className="size-12 rounded-full border-2 border-white object-cover shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]"
+      className="size-12 rounded-full border-2 border-white object-cover shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-black dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]"
     />
   );
 }
@@ -467,7 +467,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 function HeroPortrait() {
   const [failed, setFailed] = useState(false);
   return (
-    <div className="absolute left-1/2 top-1/2 z-20 h-[clamp(8.5rem,36vw,36rem)] w-[clamp(2.75rem,11.5vw,11.5rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[999px] border border-black/10 bg-[#f7f7f4] shadow-[0_0_60px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#0e0e0e] dark:shadow-[0_0_60px_rgba(0,0,0,0.6)]">
+    <div className="absolute left-1/2 top-1/2 z-20 h-[clamp(8.5rem,36vw,36rem)] w-[clamp(2.75rem,11.5vw,11.5rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[999px] border border-black/10 bg-[#f7f7f4] shadow-[0_0_60px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#080808] dark:shadow-[0_0_60px_rgba(0,0,0,0.6)]">
       {!failed ? (
         <img
           src={PORTRAIT_URL}
@@ -629,7 +629,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           setPlaying(true);
         }
       }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]"
     >
       {/* Media area — fixed 16:9 frame; auto-plays muted while in view. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
@@ -697,7 +697,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <h3 className="truncate font-display text-xl font-semibold text-[#101010] dark:text-white">
             {project.title}
           </h3>
-          <p className="mt-0.5 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">{project.category}</p>
+          <p className="mt-0.5 text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">{project.category}</p>
         </div>
         <ArrowUpRight className="size-5 shrink-0 text-black/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#25D366] dark:text-white/40" />
       </div>
@@ -797,14 +797,14 @@ function Faqs() {
             <AccordionItem
               key={faq.q}
               value={`item-${index}`}
-              className="overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors data-[state=open]:border-[#25D366]/60 dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:data-[state=open]:border-[#25D366]/50"
+              className="overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors data-[state=open]:border-[#25D366]/60 dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm dark:data-[state=open]:border-[#25D366]/50"
             >
               <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-[#101010] hover:no-underline [&[data-state=open]]:text-[#25D366] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(37,211,102,0.5)] dark:text-white">
                 {faq.q}
               </AccordionTrigger>
               <AccordionContent
                 className={cn(
-                  "px-6 pb-6 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]",
+                  "px-6 pb-6 text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]",
                   faq.q === "How do payments work?" &&
                     "text-gray-800 dark:text-white",
                 )}
@@ -824,7 +824,7 @@ function Faqs() {
 function FinalCta() {
   return (
     <section id="request-cal" className="scroll-mt-24 px-4 pb-24 pt-8 sm:px-6">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-neutral-900/40 dark:backdrop-blur-sm">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/3 h-72 w-[560px] rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
@@ -862,7 +862,7 @@ function FinalCta() {
           </div>
 
           {CALENDAR_EMBED_URL ? (
-            <div className="overflow-hidden rounded-2xl border border-black/10 bg-white dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm">
+            <div className="overflow-hidden rounded-2xl border border-black/10 bg-white dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm">
               <iframe
                 src={CALENDAR_EMBED_URL}
                 title="Schedule a call"
@@ -946,7 +946,7 @@ function RequestForm() {
           <Check className="size-7" />
         </span>
         <h3 className="font-display text-3xl font-semibold text-[#101010] dark:text-white">Message sent successfully!</h3>
-        <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
+        <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">
           I will get back to you soon.
         </p>
         <Button
@@ -964,7 +964,7 @@ function RequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm"
+      className="rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm"
     >
       {/* Honeypot — hidden from humans, irresistible to bots. */}
       <input
@@ -1121,7 +1121,7 @@ function SelectField({
         <SelectContent
           position="popper"
           align="start"
-          className="z-[100] w-full rounded-lg border border-black/10 bg-white p-1.5 text-[#101010] shadow-[0_18px_44px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-[#151515] dark:text-white dark:shadow-[0_18px_44px_rgba(0,0,0,0.65)]"
+          className="z-[100] w-full rounded-lg border border-black/10 bg-white p-1.5 text-[#101010] shadow-[0_18px_44px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-[#080808] dark:text-white dark:shadow-[0_18px_44px_rgba(0,0,0,0.65)]"
         >
           {options.map((option) => (
             <SelectItem
@@ -1214,11 +1214,11 @@ function DmCard({
         {icon}
       </span>
       <span className="font-display text-lg font-semibold text-[#101010] dark:text-white">{label}</span>
-      <span className="text-sm text-[#55555c] dark:text-[#86868b]">{note}</span>
+      <span className="text-sm text-[#55555c] dark:text-[#a1a1a6]">{note}</span>
     </>
   );
   const classes =
-    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]";
+    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]";
   if (!href) {
     return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
   }
@@ -1253,7 +1253,7 @@ function Footer() {
               Ebad <span className="text-[#25D366] text-glow-green">Ahsan</span>
             </span>
           </div>
-          <p className="text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
+          <p className="text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">
             Premium motion content for brands that move fast.
           </p>
           {Object.values(SOCIALS).some(Boolean) && (
@@ -1281,7 +1281,7 @@ function Footer() {
             </div>
           )}
         </div>
-        <p className="mt-10 text-center text-sm text-[#55555c]/60 dark:text-[#86868b]/60">
+        <p className="mt-10 text-center text-sm text-[#55555c]/60 dark:text-[#a1a1a6]/60">
           © {new Date().getFullYear()} Ebad Ahsan. All rights reserved.
         </p>
       </div>
@@ -1305,7 +1305,7 @@ function FooterIcon({
       rel="noopener noreferrer"
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-full border border-black/10 text-[#55555c] transition-colors hover:border-[#25D366]/70 hover:text-[#25D366] dark:border-white/10 dark:text-[#86868b]"
+      className="flex size-9 items-center justify-center rounded-full border border-black/10 text-[#55555c] transition-colors hover:border-[#25D366]/70 hover:text-[#25D366] dark:border-white/10 dark:text-[#a1a1a6]"
     >
       {children}
     </a>
@@ -1346,7 +1346,7 @@ function SectionHeading({
           {title}
         </h2>
       </div>
-      {sub && <p className="max-w-xl text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">{sub}</p>}
+      {sub && <p className="max-w-xl text-base leading-relaxed text-[#55555c] dark:text-[#a1a1a6]">{sub}</p>}
     </motion.div>
   );
 }
