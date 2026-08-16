@@ -564,7 +564,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [playing, setPlaying] = useState(false);
   const [thumbStep, setThumbStep] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
-  const ytHostRef = useRef<HTMLDivElement>(null);
   const media = useQuery(api.videoAssets.listVideoOverrides);
   const thumbnails = [project.thumbnailUrl, project.thumbnailFallbackUrl].filter(
     Boolean,
@@ -586,15 +585,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
   // Player mounts only on interaction — nothing heavy loads at page load.
   const showPlayer = playing && Boolean(directSrc || facadeSrc);
-
-  // Chrome-free YouTube player for the facade: the captions module is unloaded
-  // so subtitles can never appear (viewer preferences don't matter), and
-  // destroying the player when the card scrolls out of view pauses playback.
-  useChromeFreeYouTubePlayer(
-    ytHostRef,
-    ytId ?? "",
-    showPlayer && !directSrc && Boolean(ytId),
-  );
 
   return (
     <motion.div
@@ -633,24 +623,23 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               className="h-full w-full rounded-2xl bg-black object-cover"
             />
           ) : ytId ? (
-            <>
-              <div ref={ytHostRef} key="yt-host" className="absolute inset-0 h-full w-full" />
-              {/* Invisible overlay — blocks YouTube hover/click UI (title bar, share, overlays). */}
-              <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
-            </>
+            <iframe
+              key={ytId}
+              src={`https://www.youtube.com/embed/${ytId}?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&color=white`}
+              title={`${project.title} — video player`}
+              className="absolute inset-0 h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
           ) : (
-            <>
-              <iframe
-                key={facadeSrc ?? "facade"}
-                src={facadeSrc ?? undefined}
-                title={`${project.title} — video player`}
-                className="absolute inset-0 h-full w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-              {/* Invisible overlay — blocks hover/click UI. */}
-              <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
-            </>
+            <iframe
+              key={facadeSrc ?? "facade"}
+              src={facadeSrc ?? undefined}
+              title={`${project.title} — video player`}
+              className="absolute inset-0 h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
           )
         ) : (
           <>

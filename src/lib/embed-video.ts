@@ -43,7 +43,7 @@ export function getEmbedSrc(url: string): string | null {
   // YouTube (youtube.com/watch?v=, /embed/, /shorts/, or youtu.be/)
   const yt = getYouTubeId(url);
   if (yt) {
-    return `https://www.youtube.com/embed/${yt}?autoplay=1&rel=0&playsinline=1&color=white`;
+    return `https://www.youtube.com/embed/${yt}?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&color=white`;
   }
 
   // Vimeo
@@ -76,9 +76,10 @@ export function getAutoplayEmbedSrc(url: string): string | null {
 
   const yt = getYouTubeId(url);
   if (yt) {
-    // Strict caption opt-out + chrome-free embed. loop+playlist are kept so
-    // the ambient autoplay still loops seamlessly, playsinline for mobile.
-    return `https://www.youtube.com/embed/${yt}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=off&hl=en&loop=1&playlist=${yt}&playsinline=1`;
+    // Full native controls enabled; captions stay opted out by default
+    // (cc_load_policy=0). loop+playlist are kept so ambient autoplay still
+    // loops seamlessly, playsinline for mobile.
+    return `https://www.youtube.com/embed/${yt}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=off&hl=en&loop=1&playlist=${yt}&playsinline=1`;
   }
 
   const vimeo = getVimeoId(url);

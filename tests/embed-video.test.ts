@@ -8,25 +8,25 @@ import {
 describe("getEmbedSrc", () => {
   test("parses youtu.be short links", () => {
     expect(getEmbedSrc("https://youtu.be/T7pNvhwRNBU?si=ogXx4LKdKcYi_YLx")).toBe(
-      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&rel=0&playsinline=1&color=white",
+      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&color=white",
     );
   });
 
   test("parses youtube.com/watch?v= links", () => {
     expect(getEmbedSrc("https://www.youtube.com/watch?v=nLwa6VAWIKg")).toBe(
-      "https://www.youtube.com/embed/nLwa6VAWIKg?autoplay=1&rel=0&playsinline=1&color=white",
+      "https://www.youtube.com/embed/nLwa6VAWIKg?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&color=white",
     );
   });
 
   test("parses youtube.com/shorts/ links", () => {
     expect(getEmbedSrc("https://www.youtube.com/shorts/abc123DEF45")).toBe(
-      "https://www.youtube.com/embed/abc123DEF45?autoplay=1&rel=0&playsinline=1&color=white",
+      "https://www.youtube.com/embed/abc123DEF45?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&color=white",
     );
   });
 
   test("parses youtube.com/embed/ links", () => {
     expect(getEmbedSrc("https://www.youtube.com/embed/xM_Zuwe8gtQ")).toBe(
-      "https://www.youtube.com/embed/xM_Zuwe8gtQ?autoplay=1&rel=0&playsinline=1&color=white",
+      "https://www.youtube.com/embed/xM_Zuwe8gtQ?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1&color=white",
     );
   });
 
@@ -75,9 +75,9 @@ describe("Cloudinary player embeds", () => {
 });
 
 describe("getAutoplayEmbedSrc", () => {
-  test("builds a chrome-free YouTube embed (no controls/branding/captions)", () => {
+  test("builds a YouTube embed with full controls and captions opted out", () => {
     expect(getAutoplayEmbedSrc("https://youtu.be/T7pNvhwRNBU")).toBe(
-      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=off&hl=en&loop=1&playlist=T7pNvhwRNBU&playsinline=1",
+      "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&cc_lang_pref=off&hl=en&loop=1&playlist=T7pNvhwRNBU&playsinline=1",
     );
   });
 
