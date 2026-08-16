@@ -25,7 +25,7 @@ const ytFallback = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 export const PROJECTS: Project[] = [
   {
     id: "project-1",
-    title: "Dubai real estate talking head video",
+    title: "Dubai Real Estate Talking Head Video",
     category: "Talking Head",
     videoUrl: "https://youtu.be/nLwa6VAWIKg?si=mJK5TmqPPVh-wbm9",
     thumbnailUrl: yt("nLwa6VAWIKg"),
@@ -34,7 +34,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "project-2",
-    title: "Talking head video — Adam del duca",
+    title: "Talking Head Video — Adam Del Duca",
     category: "Talking Head",
     videoUrl: "https://youtu.be/_X9ruYli5Ek?si=pbiPkOjRKho-72Hv",
     thumbnailUrl: yt("_X9ruYli5Ek"),
@@ -42,7 +42,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "project-3",
-    title: "Apple style VSL animation",
+    title: "Apple Style VSL Animation",
     category: "VSL · Motion Design",
     videoUrl: "https://youtu.be/xM_Zuwe8gtQ?si=zcX3iV-eh89DggGZ",
     thumbnailUrl: yt("xM_Zuwe8gtQ"),
@@ -50,7 +50,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "project-4",
-    title: "Demo for Dragon Fruit Media",
+    title: "Demo For Dragon Fruit Media",
     category: "Client Work",
     videoUrl: "https://youtu.be/tDfnjPnQ_GU?si=ULV9uzYEwqOPevC4",
     thumbnailUrl: yt("tDfnjPnQ_GU"),

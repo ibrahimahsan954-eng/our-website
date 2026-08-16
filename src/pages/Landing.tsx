@@ -169,8 +169,8 @@ const SOCIALS = {
 
 // Stats shown in the counters section (animated on scroll) — update to your real numbers
 const STATS = [
-  { value: 60, suffix: "+", label: "Happy clients" },
-  { value: 90, suffix: "+", label: "Projects completed" },
+  { value: 60, suffix: "+", label: "Happy Clients" },
+  { value: 90, suffix: "+", label: "Projects Completed" },
   { value: 100, suffix: "K+", label: "Views" },
 ];
 
@@ -210,8 +210,8 @@ export default function Landing() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={openWhatsApp(WHATSAPP_MESSAGE)}
-          aria-label="Chat on WhatsApp"
-          title="Chat on WhatsApp"
+          aria-label="Chat On WhatsApp"
+          title="Chat On WhatsApp"
           initial={{ opacity: 0, scale: 0.7 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
@@ -366,7 +366,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
               <ClientAvatar key={a.src} src={a.src} label={a.label} />
             ))}
           </div>
-          <p className="text-sm font-medium tracking-[-0.01em] text-[#1b1b1e] sm:text-base dark:text-[#e6e6e9]">
+          <p className="text-sm font-medium capitalize tracking-[-0.01em] text-[#1b1b1e] sm:text-base dark:text-[#e6e6e9]">
             Trusted by <strong className="font-semibold text-[#101010] dark:text-white">80+</strong> Happy Clients
           </p>
         </motion.div>
@@ -397,7 +397,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#25D366] opacity-70" />
               <span className="relative inline-flex size-2 rounded-full bg-[#25D366]" />
             </span>
-            3 spots left
+            3 Spots Left
           </span>
           <button
             type="button"
@@ -550,7 +550,7 @@ function Portfolio() {
         <SectionHeading
           eyebrow={<PillBadge icon={<Home className="size-4" />} label="Portfolio" />}
           title="My Latest Projects"
-          sub="some case studies"
+          sub="Some Case Studies"
         />
 
         <div className="mt-14 grid w-full gap-6 sm:grid-cols-2">
@@ -853,9 +853,9 @@ function FinalCta() {
                   <span className="inline-flex items-center rounded-lg bg-[#25D366] px-3 py-1 align-middle font-extrabold text-black shadow-[0_0_18px_rgba(37,211,102,0.35)]">
                     Reserve
                   </span>{" "}
-                  a spot —{" "}
+                  A Spot —{" "}
                   <span className="font-medium text-[#25D366] text-glow-green">
-                    let&apos;s discuss your project
+                    Let&apos;s Discuss Your Project
                   </span>
                 </>
               }
@@ -962,7 +962,7 @@ function RequestForm() {
         <span className="flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0e0e0e]">
           <Check className="size-7" />
         </span>
-        <h3 className="font-display text-3xl font-semibold text-[#101010] dark:text-white">Message sent successfully!</h3>
+        <h3 className="font-display text-3xl font-semibold text-[#101010] dark:text-white">Message Sent Successfully!</h3>
         <p className="max-w-sm text-base leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">
           I will get back to you soon.
         </p>
@@ -972,7 +972,7 @@ function RequestForm() {
           className="text-glow-green mt-2 rounded-full text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
           onClick={() => setStatus("idle")}
         >
-          Send another request
+          Send Another Request
         </Button>
       </motion.div>
     );
@@ -1016,7 +1016,7 @@ function RequestForm() {
           label="Budget"
           name="budget"
           required
-          placeholder="Select a range"
+          placeholder="Select A Range"
           options={BUDGET_RANGES}
           invalid={invalid.budget}
           errorMessage="Please select a budget range."
@@ -1025,7 +1025,7 @@ function RequestForm() {
           label="Timeline"
           name="timeline"
           required
-          placeholder="When do you need it?"
+          placeholder="When Do You Need It?"
           options={TIMELINES}
           invalid={invalid.timeline}
           errorMessage="Please select your timeline."
@@ -1068,7 +1068,7 @@ function RequestForm() {
           </>
         ) : (
           <>
-            Request a Project
+            Request A Project
             <ArrowUpRight className="size-4" />
           </>
         )}
@@ -1286,7 +1286,7 @@ function PhoneNumberField() {
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search country..."
+                placeholder="Search Country..."
                 autoFocus
                 className="w-full rounded-lg border border-black/10 bg-black/5 py-2 pl-9 pr-3 text-sm text-[#101010] placeholder:text-black/35 outline-none focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/50"
               />
@@ -1343,9 +1343,9 @@ function DmSection() {
     <section id="dm" className="scroll-mt-24 px-4 pb-24 pt-4 sm:px-6">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow={<PillBadge icon={<Send className="size-4" />} label="DIRECT" />}
-          title="Shoot me a DM, let's discuss your next project"
-          sub="Fastest reply on WhatsApp — or catch me on your favorite platform."
+          eyebrow={<PillBadge icon={<Send className="size-4" />} label="Direct" />}
+          title="Shoot Me A DM, Let's Discuss Your Next Project"
+          sub="Fastest Reply On WhatsApp — Or Catch Me On Your Favorite Platform."
         />
 
         <div className="mx-auto mt-10 grid w-full max-w-4xl gap-4 sm:grid-cols-3">
@@ -1448,7 +1448,7 @@ function Footer() {
               Ebad <span className="text-[#25D366] text-glow-green">Ahsan</span>
             </span>
           </div>
-          <p className="text-base leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">
+          <p className="text-base capitalize leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">
             Premium motion content for brands that move fast.
           </p>
           {Object.values(SOCIALS).some(Boolean) && (
@@ -1511,7 +1511,7 @@ function FooterIcon({
 
 function PillBadge({ icon, label }: { icon?: ReactNode; label: string }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#25D366]">
+    <span className="inline-flex items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/10 px-4 py-1.5 text-xs font-semibold normal-case tracking-[0.22em] text-[#25D366]">
       {icon}
       {label}
     </span>
@@ -1546,11 +1546,11 @@ function SectionHeading({
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#25D366]/10 blur-3xl"
         />
-        <h2 className="relative font-display text-4xl font-semibold tracking-tight text-gradient-silver sm:text-5xl lg:text-6xl">
+        <h2 className="relative font-display text-4xl font-semibold capitalize tracking-tight text-gradient-silver sm:text-5xl lg:text-6xl">
           {title}
         </h2>
       </div>
-      {sub && <p className="max-w-xl text-base leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">{sub}</p>}
+      {sub && <p className="max-w-xl text-base capitalize leading-relaxed text-[#55555c] dark:text-[#E5E7EB]">{sub}</p>}
     </motion.div>
   );
 }
@@ -1629,7 +1629,7 @@ function CopyNumberButton({
       ) : (
         <>
           <Copy className={large ? "size-5" : "size-4"} />
-          Copy number
+          Copy Number
         </>
       )}
     </button>
@@ -1649,7 +1649,7 @@ function CopyNumberButton({
             : "border-white/10 bg-black/80 text-[#E5E7EB] opacity-0 group-hover:opacity-100",
         )}
       >
-        {copied ? "Copied!" : "Copy number"}
+        {copied ? "Copied!" : "Copy Number"}
       </span>
     </span>
   );
