@@ -137,6 +137,15 @@
 }
 
 @layer base {
+  /* CRISP TYPOGRAPHY — force pixel-sharp rendering on every element. */
+  html,
+  body,
+  * {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+    font-synthesis: none !important;
+  }
   * {
     @apply border-border outline-ring/50;
   }
@@ -202,7 +211,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.22));
+    filter: none;
   }
 
   /* Light-mode headings: dark charcoal-to-gray gradient, no white halo. */
@@ -225,6 +234,13 @@
     color: #25D366;
     filter: drop-shadow(0 0 12px rgba(37, 211, 102, 0.5))
       drop-shadow(0 0 28px rgba(37, 211, 102, 0.3));
+  }
+
+  /* Composited crisp layer: keeps animated/hovered text containers on
+     their own GPU layer so subpixel blur never bleeds into glyphs. */
+  .gpu-crisp {
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 
   /* Subtle film grain overlay */

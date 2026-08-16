@@ -237,7 +237,7 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed inset-x-0 top-5 z-50 flex justify-center px-4 sm:top-6"
+      className="gpu-crisp fixed inset-x-0 top-5 z-50 flex justify-center px-4 sm:top-6"
     >
       <motion.nav className="flex items-center gap-1.5 rounded-full border border-black/10 bg-white/80 p-2 dark:border-white/10 dark:bg-white/5">
         <a
@@ -339,9 +339,9 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative mx-auto w-fit select-none"
+          className="gpu-crisp relative mx-auto w-fit select-none"
         >
-          <h1 className="font-condensed text-[#25D366] drop-shadow-[0_0_30px_rgba(37,211,102,0.35)]">
+          <h1 className="font-condensed text-[#25D366]">
             <span className="block text-[clamp(3.5rem,20vw,20rem)] leading-[0.85] tracking-[0.07em]">
               EBAD
             </span>
@@ -375,7 +375,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.32, ease: "easeOut" }}
-          className="mx-auto mt-6 max-w-2xl text-lg font-medium capitalize leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#F3F4F6]"
+          className="gpu-crisp mx-auto mt-6 max-w-2xl text-lg font-medium capitalize leading-relaxed tracking-[-0.01em] text-[#4f4f56] sm:text-xl dark:text-[#F3F4F6]"
         >
           <strong className="inline-flex items-center gap-1.5 font-semibold text-[#101010] dark:text-white">
             Grow On
@@ -486,7 +486,7 @@ function Showreel() {
       initial={{ opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.65, delay: 0.56, ease: "easeOut" }}
-      className="relative mx-auto mt-8 w-full overflow-hidden rounded-2xl border border-black/10 bg-[#e6e6e2] sm:mt-10 dark:border-white/10 dark:bg-[#141414]"
+      className="gpu-crisp relative mx-auto mt-8 w-full overflow-hidden rounded-2xl border border-black/10 bg-[#e6e6e2] sm:mt-10 dark:border-white/10 dark:bg-[#141414]"
     >
       {/* Fallback gradient behind the video */}
       <div
@@ -616,7 +616,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           setPlaying(true);
         }
       }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-[#080808] dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]"
+      className="gpu-crisp group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-[#080808] dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]"
     >
       {/* Media area — fixed 16:9 frame; auto-plays muted while in view. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
@@ -712,7 +712,7 @@ function Stats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: index * 0.12, ease: "easeOut" }}
-              className="flex-1 px-8 text-center"
+              className="gpu-crisp flex-1 px-8 text-center"
             >
               <p className="font-display text-6xl font-medium tracking-tight text-glow-metric sm:text-7xl">
                 <Counter value={stat.value} suffix={stat.suffix} />
@@ -790,7 +790,7 @@ function ProcessSection() {
                 onClick={() => setActive(index)}
                 aria-expanded={isActive}
                 className={cn(
-                  "group flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border p-5 text-left transition-all duration-300 ease-in-out sm:p-6",
+                  "gpu-crisp group flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border p-5 text-left transition-all duration-300 ease-in-out sm:p-6",
                   isActive
                     ? "flex-[3] border-[#25D366]/70 bg-[#000000] shadow-[0_0_34px_rgba(37,211,102,0.18)]"
                     : "w-16 flex-none border-white/10 bg-[#080808] hover:border-[#25D366]/40 sm:w-20",
@@ -837,7 +837,7 @@ function ProcessSection() {
 function FinalCta() {
   return (
     <section id="request-cal" className="scroll-mt-24 px-4 pb-24 pt-8 sm:px-6">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-[#080808]">
+      <div className="gpu-crisp relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-[#080808]">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/3 h-72 w-[560px] rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
@@ -954,10 +954,10 @@ function RequestForm() {
   if (status === "success") {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#25D366]/50 bg-[#25D366]/15 p-10 text-center dark:border-[#25D366]/40 dark:bg-[#25D366]/10"
+        className="gpu-crisp flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#25D366]/50 bg-[#25D366]/15 p-10 text-center dark:border-[#25D366]/40 dark:bg-[#25D366]/10"
       >
         <span className="flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0e0e0e]">
           <Check className="size-7" />
@@ -981,7 +981,7 @@ function RequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-[#080808]"
+      className="gpu-crisp rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-[#080808]"
     >
       {/* Honeypot — hidden from humans, irresistible to bots. */}
       <input
@@ -1413,7 +1413,7 @@ function DmCard({
     </>
   );
   const classes =
-    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#25D366]/50 hover:shadow-[0_0_25px_rgba(37,211,102,0.15)] dark:border-white/10 dark:bg-[#080808]";
+    "gpu-crisp group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#25D366]/50 hover:shadow-[0_0_25px_rgba(37,211,102,0.15)] dark:border-white/10 dark:bg-[#080808]";
   if (!href) {
     return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
   }
@@ -1535,7 +1535,7 @@ function SectionHeading({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, ease: "easeOut" }}
-      className={cn("flex flex-col gap-4", align === "center" && "items-center text-center")}
+      className={cn("gpu-crisp flex flex-col gap-4", align === "center" && "items-center text-center")}
     >
       <span className="text-glow-green text-xs font-medium uppercase tracking-[0.28em] text-[#25D366]">
         {eyebrow}
