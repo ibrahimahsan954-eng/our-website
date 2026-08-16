@@ -752,7 +752,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 const PROCESS_STEPS = [
   {
     num: "1",
-    title: "Brand strategy and growth plan",
+    title: "Brand Strategy And Growth Plan",
     desc: "I use analytics and competitive research to build out your YouTube branding, positioning, and long-term growth plan, with viral trends and already tried and tested methods used on multiple channels and brands.",
   },
   {
@@ -808,7 +808,7 @@ function ProcessSection() {
                     transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
                     className="flex w-full flex-col space-y-6"
                   >
-                    <h3 className="font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+                    <h3 className="font-display text-3xl font-extrabold capitalize leading-tight text-white sm:text-4xl">
                       {step.title}
                     </h3>
                     <p className="max-w-2xl text-lg leading-relaxed text-[#D1D5DB] sm:text-xl">
