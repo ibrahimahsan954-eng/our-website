@@ -852,7 +852,7 @@ function FinalCta() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={openWhatsApp(WHATSAPP_MESSAGE)}
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-6 text-base font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-[#25D366]/70 hover:bg-[#25D366]/25"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-6 text-base font-semibold text-[#0B4F37] backdrop-blur-md transition-all duration-300 hover:border-[#25D366]/70 hover:bg-[#25D366]/25 hover:text-[#064a30] dark:text-white dark:hover:text-white dark:hover:bg-[#25D366]/30"
               >
                 <WhatsAppIcon className="size-4" />
                 Chat on WhatsApp
