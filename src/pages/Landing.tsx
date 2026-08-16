@@ -232,13 +232,13 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="fixed inset-x-0 top-5 z-50 flex justify-center px-4 sm:top-6"
     >
-      <motion.nav className="flex items-center gap-1.5 rounded-full border border-black/10 bg-white/80 p-2 backdrop-blur-md dark:border-white/10 dark:bg-white/5">
+      <motion.nav className="flex items-center gap-1.5 rounded-full border border-black/10 bg-white/80 p-2 dark:border-white/10 dark:bg-white/5">
         <a
           href="#top"
           onClick={scrollToTop}
           aria-label="Back to top"
           title="Back to top"
-          className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 backdrop-blur-md transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+          className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
         >
           <Home className="size-[18px]" />
         </a>
@@ -385,7 +385,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.42, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#25D366] shadow-[0_0_18px_rgba(37,211,102,0.18)] backdrop-blur-md dark:border-[#25D366]/30 dark:bg-[#25D366]/10">
+          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#25D366] shadow-[0_0_18px_rgba(37,211,102,0.18)] dark:border-[#25D366]/30 dark:bg-[#25D366]/10">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#25D366] opacity-70" />
               <span className="relative inline-flex size-2 rounded-full bg-[#25D366]" />
@@ -609,7 +609,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           setPlaying(true);
         }
       }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-[#080808] dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]"
     >
       {/* Media area — fixed 16:9 frame; auto-plays muted while in view. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
@@ -665,7 +665,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             )}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.2),transparent_50%,rgba(10,10,10,0.4))]" />
             {/* Centered minimal play button — clicking anywhere on the card starts playback */}
-            <span className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-white/60 group-hover:bg-white/35">
+            <span className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white transition-all duration-300 group-hover:scale-110 group-hover:border-white/60 group-hover:bg-white/35">
               <Play className="ml-0.5 size-6 fill-current" />
             </span>
           </>
@@ -830,7 +830,7 @@ function ProcessSection() {
 function FinalCta() {
   return (
     <section id="request-cal" className="scroll-mt-24 px-4 pb-24 pt-8 sm:px-6">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-[#080808]">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/3 h-72 w-[560px] rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
@@ -858,7 +858,7 @@ function FinalCta() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={openWhatsApp(WHATSAPP_MESSAGE)}
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-6 text-base font-semibold text-[#0B4F37] backdrop-blur-md transition-all duration-300 hover:border-[#25D366]/70 hover:bg-[#25D366]/25 hover:text-[#064a30] dark:text-white dark:hover:text-white dark:hover:bg-[#25D366]/30"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-6 text-base font-semibold text-[#0B4F37] transition-all duration-300 hover:border-[#25D366]/70 hover:bg-[#25D366]/25 hover:text-[#064a30] dark:text-white dark:hover:text-white dark:hover:bg-[#25D366]/30"
               >
                 <WhatsAppIcon className="size-4" />
                 Chat on WhatsApp
@@ -868,7 +868,7 @@ function FinalCta() {
           </div>
 
           {CALENDAR_EMBED_URL ? (
-            <div className="overflow-hidden rounded-2xl border border-black/10 bg-white dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm">
+            <div className="overflow-hidden rounded-2xl border border-black/10 bg-white dark:border-white/10 dark:bg-[#080808]">
               <iframe
                 src={CALENDAR_EMBED_URL}
                 title="Schedule a call"
@@ -970,7 +970,7 @@ function RequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm"
+      className="rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-[#080808]"
     >
       {/* Honeypot — hidden from humans, irresistible to bots. */}
       <input
@@ -1224,7 +1224,7 @@ function DmCard({
     </>
   );
   const classes =
-    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#25D366]/50 hover:shadow-[0_0_25px_rgba(37,211,102,0.15)] dark:border-white/10 dark:bg-[#080808] dark:backdrop-blur-sm";
+    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#25D366]/50 hover:shadow-[0_0_25px_rgba(37,211,102,0.15)] dark:border-white/10 dark:bg-[#080808]";
   if (!href) {
     return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
   }
@@ -1357,7 +1357,7 @@ function SectionHeading({
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#25D366]/10 blur-3xl"
         />
-        <h2 className="relative font-display text-4xl font-medium tracking-tight text-gradient-silver sm:text-5xl lg:text-6xl">
+        <h2 className="relative font-display text-4xl font-semibold tracking-tight text-gradient-silver sm:text-5xl lg:text-6xl">
           {title}
         </h2>
       </div>
