@@ -782,13 +782,11 @@ function ProcessSection() {
                 type="button"
                 onClick={() => setActive(index)}
                 aria-expanded={isActive}
-                animate={{ flexBasis: isActive ? "100%" : "8%" }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
-                  "group flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border p-5 text-left transition-colors duration-300 sm:p-6",
+                  "group flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border p-5 text-left transition-all duration-300 ease-in-out sm:p-6",
                   isActive
-                    ? "border-[#25D366]/70 bg-[#000000] shadow-[0_0_34px_rgba(37,211,102,0.18)]"
-                    : "border-white/10 bg-[#080808] hover:border-[#25D366]/40",
+                    ? "flex-[3] border-[#25D366]/70 bg-[#000000] shadow-[0_0_34px_rgba(37,211,102,0.18)]"
+                    : "w-16 flex-none border-white/10 bg-[#080808] hover:border-[#25D366]/40 sm:w-20",
                   isActive ? "items-start justify-start gap-6" : "items-center justify-center",
                 )}
               >
