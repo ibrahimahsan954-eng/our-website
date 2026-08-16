@@ -789,12 +789,12 @@ function ProcessSection() {
                   isActive
                     ? "border-[#25D366]/70 bg-[#000000] shadow-[0_0_34px_rgba(37,211,102,0.18)]"
                     : "border-white/10 bg-[#080808] hover:border-[#25D366]/40",
-                  isActive ? "items-start justify-start" : "items-center justify-center",
+                  isActive ? "items-start justify-start gap-6" : "items-center justify-center",
                 )}
               >
                 <span
                   className={cn(
-                    "font-display font-semibold tracking-tight transition-all duration-300",
+                    "font-display font-black tracking-tight transition-all duration-300",
                     isActive
                       ? "text-6xl text-[#25D366] drop-shadow-[0_0_14px_rgba(37,211,102,0.45)] sm:text-7xl"
                       : "text-xl text-white/70 group-hover:text-[#25D366] sm:text-3xl",
@@ -808,12 +808,12 @@ function ProcessSection() {
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
-                    className="flex flex-col"
+                    className="flex w-full flex-col space-y-6"
                   >
-                    <h3 className="mt-6 font-display text-2xl font-semibold text-white sm:text-3xl">
+                    <h3 className="font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl">
                       {step.title}
                     </h3>
-                    <p className="mt-3 max-w-md text-base leading-relaxed text-[#D1D5DB]">
+                    <p className="max-w-2xl text-lg leading-relaxed text-[#D1D5DB] sm:text-xl">
                       {step.desc}
                     </p>
                   </motion.div>
