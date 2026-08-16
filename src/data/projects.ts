@@ -25,8 +25,8 @@ const ytFallback = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 export const PROJECTS: Project[] = [
   {
     id: "project-5",
-    title: "Freebuff Integration Setup",
-    category: "Screen Demo",
+    title: "Demo For MDMZ",
+    category: "Client Work",
     videoUrl: "https://player.vimeo.com/video/1218698436",
     thumbnailUrl: "https://vumbnail.com/1218698436.jpg",
   },
