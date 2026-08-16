@@ -393,11 +393,8 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.42, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#25D366] shadow-[0_0_18px_rgba(37,211,102,0.18)] dark:border-[#25D366]/30 dark:bg-[#25D366]/10">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#25D366] opacity-70" />
-              <span className="relative inline-flex size-2 rounded-full bg-[#25D366]" />
-            </span>
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#25D366] bg-[#25D366]/15 px-4 py-1.5 text-sm font-bold text-[#064E3B] shadow-sm dark:text-[#25D366]">
+            <span className="size-2.5 animate-pulse rounded-full bg-[#25D366]" />
             3 Spots Left
           </span>
           <button
@@ -851,14 +848,12 @@ function FinalCta() {
               eyebrow={<PillBadge icon={<Calendar className="size-5" />} label="Booking" />}
               title={
                 <>
-                  <span className="whitespace-nowrap">
-                    <span className="inline-flex items-center justify-center rounded-lg bg-[#25D366] px-3 py-1 align-middle font-extrabold text-black shadow-[0_0_18px_rgba(37,211,102,0.35)]">
-                      Reserve
-                    </span>{" "}
-                    A Spot —
+                  <span className="inline-block rounded-lg bg-[#25D366] px-3 py-1 align-middle font-extrabold text-black mr-2">
+                    Reserve
                   </span>
+                  <span className="whitespace-nowrap">A Spot —</span>
                   <br />
-                  <span className="font-medium text-[#25D366] text-glow-green">
+                  <span className="font-bold text-[#25D366]">
                     Let&apos;s Discuss Your Project
                   </span>
                 </>
