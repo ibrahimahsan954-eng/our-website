@@ -69,12 +69,14 @@ const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.
 const PORTRAIT_URL = "/portrait.jpg";
 
 // Social proof avatar stack — small overlapping client photos under the hero
-// portrait. Each falls back to a gradient monogram tile if the image can't load.
+// portrait. The four files below are the current client PFPs in public/assets/
+// (swap the src paths to change them). Each falls back to a gradient monogram
+// tile if the image can't load.
 const CLIENT_AVATARS = [
-  { src: "/assets/channels4_profile.jpg", label: "M" },
-  { src: "/assets/channels4_profile__1_.jpg", label: "S" },
-  { src: "/assets/channels4_profile__2_.jpg", label: "A" },
-  { src: "/assets/channels4_profile__3_.jpg", label: "K" },
+  { src: "/assets/channels4_profile.jpg?v=2", label: "M" },
+  { src: "/assets/channels4_profile__1_.jpg?v=2", label: "S" },
+  { src: "/assets/channels4_profile__2_.jpg?v=2", label: "A" },
+  { src: "/assets/channels4_profile__3_.jpg?v=2", label: "K" },
 ];
 
 // WhatsApp — wired up everywhere. Every trigger is a plain native <a> link
@@ -370,7 +372,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.26, ease: "easeOut" }}
           className="mt-9 flex items-center justify-center gap-3"
         >
-          <div className="flex -space-x-2.5">
+          <div className="flex -space-x-3">
             {CLIENT_AVATARS.map((a) => (
               <ClientAvatar key={a.src} src={a.src} label={a.label} />
             ))}
@@ -442,7 +444,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 
   if (failed) {
     return (
-      <span className="flex size-9 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#e8e8e2] via-[#d9d9d2] to-[#c9c9c0] text-xs font-semibold text-[#25D366] shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:from-[#2c2f26] dark:via-[#1b1c14] dark:to-[#10110b] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]">
+      <span className="flex size-12 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#e8e8e2] via-[#d9d9d2] to-[#c9c9c0] text-sm font-semibold text-[#25D366] shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:from-[#2c2f26] dark:via-[#1b1c14] dark:to-[#10110b] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]">
         {label}
       </span>
     );
@@ -455,7 +457,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
       loading="lazy"
       decoding="async"
       onError={() => setFailed(true)}
-      className="size-9 rounded-full border-2 border-white object-cover shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]"
+      className="size-12 rounded-full border-2 border-white object-cover shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]"
     />
   );
 }
