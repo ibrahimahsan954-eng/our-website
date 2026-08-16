@@ -60,7 +60,7 @@
 }
 
 /* Palette matched to zakariahq.com — near-black stage, warm gray text,
-   green (#71b25c) accent, white CTAs on #212121 pills, blue #2b7ced call button.
+   green (#25D366) accent, white CTAs on #212121 pills, blue #2b7ced call button.
    :root holds the LIGHT theme; .dark (below) holds the dark theme and is the
    default (html starts with class="dark"). */
 :root {
@@ -71,7 +71,7 @@
   --card-foreground: oklch(0.21 0.008 95);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.008 95);
-  --primary: oklch(0.71 0.115 132);
+  --primary: oklch(0.761 0.201 150);
   --primary-foreground: oklch(0.16 0.03 132);
   --secondary: oklch(0.95 0.005 95);
   --secondary-foreground: oklch(0.28 0.01 95);
@@ -82,22 +82,22 @@
   --destructive: oklch(0.58 0.19 25);
   --border: oklch(0.2 0.008 95 / 14%);
   --input: oklch(0.2 0.008 95 / 24%);
-  --ring: oklch(0.71 0.115 132);
-  --brand: oklch(0.71 0.115 132);
+  --ring: oklch(0.761 0.201 150);
+  --brand: oklch(0.761 0.201 150);
   --brand-foreground: oklch(0.16 0.03 132);
-  --chart-1: oklch(0.71 0.115 132);
+  --chart-1: oklch(0.761 0.201 150);
   --chart-2: oklch(0.7 0.16 160);
   --chart-3: oklch(0.75 0.17 60);
   --chart-4: oklch(0.65 0.2 300);
   --chart-5: oklch(0.7 0.18 350);
   --sidebar: oklch(0.975 0.003 95);
   --sidebar-foreground: oklch(0.21 0.008 95);
-  --sidebar-primary: oklch(0.71 0.115 132);
+  --sidebar-primary: oklch(0.761 0.201 150);
   --sidebar-primary-foreground: oklch(0.16 0.03 132);
   --sidebar-accent: oklch(0.93 0.008 95);
   --sidebar-accent-foreground: oklch(0.28 0.01 95);
   --sidebar-border: oklch(0.2 0.008 95 / 14%);
-  --sidebar-ring: oklch(0.71 0.115 132);
+  --sidebar-ring: oklch(0.761 0.201 150);
 }
 
 .dark {
@@ -107,7 +107,7 @@
   --card-foreground: oklch(0.95 0.004 250);
   --popover: oklch(0.14 0.005 250);
   --popover-foreground: oklch(0.95 0.004 250);
-  --primary: oklch(0.71 0.115 132);
+  --primary: oklch(0.761 0.201 150);
   --primary-foreground: oklch(0.16 0.03 132);
   --secondary: oklch(0.19 0.005 250);
   --secondary-foreground: oklch(0.95 0.004 250);
@@ -118,22 +118,22 @@
   --destructive: oklch(0.65 0.2 25);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.71 0.115 132);
-  --brand: oklch(0.71 0.115 132);
+  --ring: oklch(0.761 0.201 150);
+  --brand: oklch(0.761 0.201 150);
   --brand-foreground: oklch(0.16 0.03 132);
-  --chart-1: oklch(0.71 0.115 132);
+  --chart-1: oklch(0.761 0.201 150);
   --chart-2: oklch(0.7 0.16 160);
   --chart-3: oklch(0.75 0.17 60);
   --chart-4: oklch(0.65 0.2 300);
   --chart-5: oklch(0.7 0.18 350);
   --sidebar: oklch(0.14 0.005 250);
   --sidebar-foreground: oklch(0.95 0.004 250);
-  --sidebar-primary: oklch(0.71 0.115 132);
+  --sidebar-primary: oklch(0.761 0.201 150);
   --sidebar-primary-foreground: oklch(0.16 0.03 132);
   --sidebar-accent: oklch(0.19 0.005 250);
   --sidebar-accent-foreground: oklch(0.95 0.004 250);
   --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.71 0.115 132);
+  --sidebar-ring: oklch(0.761 0.201 150);
 }
 
 @layer base {
@@ -175,12 +175,12 @@
 }
 
 @layer utilities {
-  /* Subtle high-end glow for green accent text + icons (brand green #71b25c).
+  /* Subtle high-end glow for green accent text + icons (brand green #25D366).
      Drop-shadow follows rendered pixels, so it works for both text and SVG
      glyphs and keeps edges sharp against the dark background. */
   .text-glow-green {
-    filter: drop-shadow(0 0 8px rgba(113, 178, 92, 0.5))
-      drop-shadow(0 0 18px rgba(113, 178, 92, 0.25));
+    filter: drop-shadow(0 0 8px rgba(37, 211, 102, 0.5))
+      drop-shadow(0 0 18px rgba(37, 211, 102, 0.25));
   }
 
   /* Premium backlit headings: crisp white-to-silver gradient + soft white
@@ -213,12 +213,12 @@
     filter: none;
   }
 
-  /* Neon accent-green numbers (counters) — solid #71b25c to match the
+  /* Neon accent-green numbers (counters) — solid #25D366 to match the
      "Reserve a Spot" button, with the same vibrant green halo. */
   .text-glow-metric {
-    color: #71b25c;
-    filter: drop-shadow(0 0 12px rgba(113, 178, 92, 0.5))
-      drop-shadow(0 0 28px rgba(113, 178, 92, 0.3));
+    color: #25D366;
+    filter: drop-shadow(0 0 12px rgba(37, 211, 102, 0.5))
+      drop-shadow(0 0 28px rgba(37, 211, 102, 0.3));
   }
 
   /* Subtle film grain overlay */

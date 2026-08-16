@@ -25,7 +25,7 @@ function DeliveryRow({ ok, label }: { ok?: boolean; label: string }) {
       {ok === undefined ? (
         <Loader2 className="size-3.5 shrink-0 animate-spin text-[#86868b]" />
       ) : ok ? (
-        <span className="size-2 shrink-0 rounded-full bg-[#71b25c]" />
+        <span className="size-2 shrink-0 rounded-full bg-[#25D366]" />
       ) : (
         <span className="size-2 shrink-0 rounded-full border border-white/30" />
       )}
@@ -147,8 +147,8 @@ export default function Dashboard() {
                 Project inbox{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
               </h1>
               {unreadCount > 0 && (
-                <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-sm font-semibold text-[#71b25c]">
-                  <span className="size-1.5 rounded-full bg-[#71b25c]" />
+                <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#25D366]/15 px-2.5 py-0.5 text-sm font-semibold text-[#25D366]">
+                  <span className="size-1.5 rounded-full bg-[#25D366]" />
                   {unreadCount} new
                 </span>
               )}
@@ -184,7 +184,7 @@ export default function Dashboard() {
         <section className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-neutral-900/60 p-5 backdrop-blur-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-white">
-              <Mail className="text-glow-green size-4 text-[#71b25c]" />
+              <Mail className="text-glow-green size-4 text-[#25D366]" />
               Email delivery
             </h2>
             <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#a1a1a6]">
@@ -219,7 +219,7 @@ export default function Dashboard() {
         <section className="flex flex-col gap-4">
           <div>
             <h2 className="flex items-center gap-2 font-display text-2xl font-semibold text-white">
-              <Clapperboard className="text-glow-green size-5 text-[#71b25c]" />
+              <Clapperboard className="text-glow-green size-5 text-[#25D366]" />
               Video library
             </h2>
             <p className="mt-1 text-base leading-relaxed text-[#86868b]">
@@ -248,7 +248,7 @@ export default function Dashboard() {
                       <p className="mt-0.5 text-sm text-[#86868b]">
                         {override ? (
                           <>
-                            <span className="text-[#71b25c] text-glow-green">MP4 uploaded</span>
+                            <span className="text-[#25D366] text-glow-green">MP4 uploaded</span>
                             {" · "}
                             <span className="truncate">{override.fileName}</span>
                           </>
@@ -284,7 +284,7 @@ export default function Dashboard() {
                         type="button"
                         size="sm"
                         disabled={!fileMap[slot] || busy}
-                        className="gap-1.5 rounded-full bg-[#71b25c] font-semibold text-black hover:bg-[#71b25c]/90 disabled:opacity-40"
+                        className="gap-1.5 rounded-full bg-[#25D366] font-semibold text-black hover:bg-[#25D366]/90 disabled:opacity-40"
                         onClick={() => handleUpload(slot, label)}
                       >
                         {busy ? (
@@ -314,7 +314,7 @@ export default function Dashboard() {
                       className={cn(
                         "mt-2 text-sm",
                         slotStatus.kind === "ok"
-                          ? "text-[#71b25c] text-glow-green"
+                          ? "text-[#25D366] text-glow-green"
                           : "text-red-400",
                       )}
                     >
@@ -372,8 +372,8 @@ export default function Dashboard() {
                 className={cn(
                   "rounded-2xl border bg-neutral-900/60 p-5 backdrop-blur-sm transition-all duration-300",
                   unread
-                    ? "border-[#71b25c]/35 hover:border-[#71b25c]/70 hover:shadow-[0_0_24px_rgba(113,178,92,0.10)]"
-                    : "border-white/10 hover:border-[#71b25c]/40",
+                    ? "border-[#25D366]/35 hover:border-[#25D366]/70 hover:shadow-[0_0_24px_rgba(37,211,102,0.10)]"
+                    : "border-white/10 hover:border-[#25D366]/40",
                 )}
               >
                 <div className="flex items-start justify-between gap-4">
@@ -383,8 +383,8 @@ export default function Dashboard() {
                         {inquiry.name}
                       </h2>
                       {unread && (
-                        <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#71b25c]/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-[#71b25c]">
-                          <span className="size-1.5 rounded-full bg-[#71b25c]" />
+                        <span className="text-glow-green inline-flex items-center gap-1.5 rounded-full bg-[#25D366]/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-[#25D366]">
+                          <span className="size-1.5 rounded-full bg-[#25D366]" />
                           New
                         </span>
                       )}
@@ -397,7 +397,7 @@ export default function Dashboard() {
                     </div>
                     <a
                       href={`mailto:${inquiry.email}`}
-                      className="mt-0.5 inline-flex items-center gap-1.5 text-base text-[#a1a1a6] transition-colors hover:text-[#71b25c]"
+                      className="mt-0.5 inline-flex items-center gap-1.5 text-base text-[#a1a1a6] transition-colors hover:text-[#25D366]"
                     >
                       <Mail className="size-3.5" />
                       {inquiry.email}
@@ -409,7 +409,7 @@ export default function Dashboard() {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="gap-1.5 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
+                        className="gap-1.5 rounded-full text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
                         onClick={() => markInquiryRead({ id: inquiry._id, read: true })}
                         title="Mark as read"
                       >

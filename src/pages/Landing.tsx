@@ -274,7 +274,7 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
           type="button"
           size="sm"
           onClick={onReserve}
-          className="h-10 gap-2 rounded-full bg-[#71b25c] px-5 text-base font-semibold text-[#0b141a] shadow-[0_0_14px_rgba(113,178,92,0.55),0_0_30px_rgba(113,178,92,0.3)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_22px_rgba(113,178,92,0.75),0_0_46px_rgba(113,178,92,0.4)]"
+          className="h-10 gap-2 rounded-full bg-[#25D366] px-5 text-base font-semibold text-[#0b141a] shadow-[0_0_14px_rgba(37,211,102,0.55),0_0_30px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_22px_rgba(37,211,102,0.75),0_0_46px_rgba(37,211,102,0.4)]"
         >
           Reserve a Spot
           <ArrowUpRight className="size-3.5" />
@@ -350,7 +350,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="relative mx-auto w-fit select-none"
         >
-          <h1 className="font-condensed text-[#71b25c] drop-shadow-[0_0_30px_rgba(113,178,92,0.35)]">
+          <h1 className="font-condensed text-[#25D366] drop-shadow-[0_0_30px_rgba(37,211,102,0.35)]">
             <span className="block text-[clamp(3.5rem,20vw,20rem)] leading-[0.85] tracking-[0.07em]">
               EBAD
             </span>
@@ -391,7 +391,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
             <YouTubeLogo className="size-[1.1em]" />
             YouTube
           </strong>
-          <span aria-hidden className="mx-2 text-[#71b25c]">—</span>
+          <span aria-hidden className="mx-2 text-[#25D366]">—</span>
           Become the <strong className="font-semibold text-[#101010] dark:text-white">best brand</strong> in your niche
         </motion.p>
 
@@ -401,17 +401,17 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.55, delay: 0.42, ease: "easeOut" }}
           className="mx-auto mt-8 flex max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-emerald-500/40 bg-emerald-100/90 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#71b25c] shadow-[0_0_18px_rgba(113,178,92,0.18)] backdrop-blur-md dark:border-emerald-500/30 dark:bg-emerald-950/40">
+          <span className="text-glow-green inline-flex items-center gap-2.5 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-4 py-2 text-sm font-medium tracking-[-0.01em] text-[#25D366] shadow-[0_0_18px_rgba(37,211,102,0.18)] backdrop-blur-md dark:border-[#25D366]/30 dark:bg-[#25D366]/10">
             <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-              <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#25D366] opacity-70" />
+              <span className="relative inline-flex size-2 rounded-full bg-[#25D366]" />
             </span>
             3 spots left
           </span>
           <button
             type="button"
             onClick={onReserve}
-            className="inline-flex h-12 items-center rounded-full bg-[#71b25c] px-7 text-base font-semibold text-[#0b141a] shadow-[0_0_20px_rgba(113,178,92,0.55),0_0_42px_rgba(113,178,92,0.3)] transition-all duration-300 hover:bg-[#83c26f] hover:shadow-[0_0_28px_rgba(113,178,92,0.75),0_0_60px_rgba(113,178,92,0.4)]"
+            className="inline-flex h-12 items-center rounded-full bg-[#25D366] px-7 text-base font-semibold text-[#0b141a] shadow-[0_0_20px_rgba(37,211,102,0.55),0_0_42px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_28px_rgba(37,211,102,0.75),0_0_60px_rgba(37,211,102,0.4)]"
           >
             Reserve a Spot
           </button>
@@ -442,7 +442,7 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 
   if (failed) {
     return (
-      <span className="flex size-9 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#e8e8e2] via-[#d9d9d2] to-[#c9c9c0] text-xs font-semibold text-[#71b25c] shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:from-[#2c2f26] dark:via-[#1b1c14] dark:to-[#10110b] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]">
+      <span className="flex size-9 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#e8e8e2] via-[#d9d9d2] to-[#c9c9c0] text-xs font-semibold text-[#25D366] shadow-[0_0_12px_rgba(0,0,0,0.15)] dark:border-[#161616] dark:from-[#2c2f26] dark:via-[#1b1c14] dark:to-[#10110b] dark:shadow-[0_0_12px_rgba(0,0,0,0.4)]">
         {label}
       </span>
     );
@@ -473,7 +473,7 @@ function HeroPortrait() {
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-          <span className="font-condensed text-[clamp(2.5rem,8vw,8rem)] leading-none text-[#71b25c]/85">
+          <span className="font-condensed text-[clamp(2.5rem,8vw,8rem)] leading-none text-[#25D366]/85">
             E
           </span>
         </div>
@@ -625,7 +625,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           setPlaying(true);
         }
       }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white p-2 pb-3 text-left transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]"
     >
       {/* Media area — fixed 16:9 frame; auto-plays muted while in view. */}
       <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
@@ -695,7 +695,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </h3>
           <p className="mt-0.5 text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">{project.category}</p>
         </div>
-        <ArrowUpRight className="size-5 shrink-0 text-black/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#71b25c] dark:text-white/40" />
+        <ArrowUpRight className="size-5 shrink-0 text-black/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#25D366] dark:text-white/40" />
       </div>
     </motion.div>
   );
@@ -793,9 +793,9 @@ function Faqs() {
             <AccordionItem
               key={faq.q}
               value={`item-${index}`}
-              className="overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors data-[state=open]:border-[#71b25c]/60 dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:data-[state=open]:border-[#71b25c]/50"
+              className="overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors data-[state=open]:border-[#25D366]/60 dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:data-[state=open]:border-[#25D366]/50"
             >
-              <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-[#101010] hover:no-underline [&[data-state=open]]:text-[#71b25c] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(113,178,92,0.5)] dark:text-white">
+              <AccordionTrigger className="px-6 py-5 text-left font-display text-xl font-medium text-[#101010] hover:no-underline [&[data-state=open]]:text-[#25D366] [&[data-state=open]]:drop-shadow-[0_0_8px_rgba(37,211,102,0.5)] dark:text-white">
                 {faq.q}
               </AccordionTrigger>
               <AccordionContent
@@ -834,7 +834,7 @@ function FinalCta() {
               title={
                 <>
                   Reserve a spot —{" "}
-                  <span className="font-medium text-[#71b25c] text-glow-green">
+                  <span className="font-medium text-[#25D366] text-glow-green">
                     let&apos;s discuss your project
                   </span>
                 </>
@@ -848,7 +848,7 @@ function FinalCta() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={openWhatsApp(WHATSAPP_MESSAGE)}
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#25d366]/40 bg-[#25d366]/15 px-6 text-base font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-[#25d366]/70 hover:bg-[#25d366]/25"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-6 text-base font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-[#25D366]/70 hover:bg-[#25D366]/25"
               >
                 <WhatsAppIcon className="size-4" />
                 Chat on WhatsApp
@@ -936,9 +936,9 @@ function RequestForm() {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#71b25c]/50 bg-[#e9f1e4] p-10 text-center dark:border-[#71b25c]/40 dark:bg-[#101810]"
+        className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#25D366]/50 bg-[#25D366]/15 p-10 text-center dark:border-[#25D366]/40 dark:bg-[#25D366]/10"
       >
-        <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
+        <span className="flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0e0e0e]">
           <Check className="size-7" />
         </span>
         <h3 className="font-display text-3xl font-semibold text-[#101010] dark:text-white">Message sent successfully!</h3>
@@ -948,7 +948,7 @@ function RequestForm() {
         <Button
           type="button"
           variant="ghost"
-          className="text-glow-green mt-2 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
+          className="text-glow-green mt-2 rounded-full text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
           onClick={() => setStatus("idle")}
         >
           Send another request
@@ -1056,7 +1056,7 @@ function RequestForm() {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-[#101010] placeholder:text-black/35 outline-none transition-colors focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/35";
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-[#101010] placeholder:text-black/35 outline-none transition-colors focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/35";
 
 function Field({
   label,
@@ -1071,7 +1071,7 @@ function Field({
     <label className="flex flex-col gap-1.5">
       <span className="text-sm font-medium text-[#5b5b62] dark:text-[#a1a1a6]">
         {label}
-        {required && <span className="text-[#71b25c]"> *</span>}
+        {required && <span className="text-[#25D366]"> *</span>}
       </span>
       {children}
     </label>
@@ -1107,7 +1107,7 @@ function SelectField({
           className={cn(
             "h-auto w-full rounded-xl border px-4 py-3 text-base transition-colors",
             "border-black/10 bg-white text-[#101010] outline-none dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white",
-            "focus:border-[#71b25c]/70 focus:ring-2 focus:ring-[#71b25c]/20",
+            "focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20",
             "data-[placeholder]:text-black/35 dark:data-[placeholder]:text-white/35",
             invalid && "border-red-500/60",
           )}
@@ -1123,7 +1123,7 @@ function SelectField({
             <SelectItem
               key={option}
               value={option}
-              className="cursor-pointer rounded-md py-2.5 pl-3 pr-8 text-base text-black/85 transition-colors focus:bg-[#71b25c]/15 focus:text-black data-[highlighted]:bg-[#71b25c]/15 data-[highlighted]:text-black dark:text-white/90 dark:focus:text-white dark:data-[highlighted]:text-white"
+              className="cursor-pointer rounded-md py-2.5 pl-3 pr-8 text-base text-black/85 transition-colors focus:bg-[#25D366]/15 focus:text-black data-[highlighted]:bg-[#25D366]/15 data-[highlighted]:text-black dark:text-white/90 dark:focus:text-white dark:data-[highlighted]:text-white"
             >
               {option}
             </SelectItem>
@@ -1257,8 +1257,8 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
             </div>
 
             {status === "success" ? (
-              <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#71b25c]/50 bg-[#e9f1e4] px-6 py-12 text-center dark:border-[#71b25c]/40 dark:bg-[#101810]">
-                <span className="flex size-14 items-center justify-center rounded-full bg-[#71b25c] text-[#0e0e0e]">
+              <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#25D366]/50 bg-[#25D366]/15 px-6 py-12 text-center dark:border-[#25D366]/40 dark:bg-[#25D366]/10">
+                <span className="flex size-14 items-center justify-center rounded-full bg-[#25D366] text-[#0e0e0e]">
                   <Check className="size-7" />
                 </span>
                 <h4 className="font-display text-2xl font-semibold text-[#101010] dark:text-white">
@@ -1270,7 +1270,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                 <Button
                   type="button"
                   variant="ghost"
-                  className="text-glow-green mt-2 rounded-full text-[#71b25c] hover:bg-[#71b25c]/10 hover:text-[#71b25c]"
+                  className="text-glow-green mt-2 rounded-full text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
                   onClick={onClose}
                 >
                   Close
@@ -1353,7 +1353,7 @@ function ReserveModal({ open, onClose }: { open: boolean; onClose: () => void })
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={openWhatsApp(WHATSAPP_MESSAGE)}
-                    className="text-glow-green font-medium text-[#25d366] transition-colors hover:text-[#4be07f]"
+                    className="text-glow-green font-medium text-[#25D366] transition-colors hover:text-[#25D366] hover:brightness-110"
                   >
                     Reach out on WhatsApp
                   </a>
@@ -1439,7 +1439,7 @@ function DmCard({
 }) {
   const card = (
     <>
-      <span className="flex size-12 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/80 transition-colors duration-300 group-hover:border-[#71b25c]/60 group-hover:text-[#71b25c] dark:border-white/10 dark:bg-white/5 dark:text-white">
+      <span className="flex size-12 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/80 transition-colors duration-300 group-hover:border-[#25D366]/60 group-hover:text-[#25D366] dark:border-white/10 dark:bg-white/5 dark:text-white">
         {icon}
       </span>
       <span className="font-display text-lg font-semibold text-[#101010] dark:text-white">{label}</span>
@@ -1447,7 +1447,7 @@ function DmCard({
     </>
   );
   const classes =
-    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:border-[#71b25c]/60 hover:shadow-[0_0_28px_rgba(113,178,92,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(113,178,92,0.12)]";
+    "group flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 text-center transition-all duration-300 hover:border-[#25D366]/60 hover:shadow-[0_0_28px_rgba(37,211,102,0.18)] dark:border-white/10 dark:bg-neutral-900/60 dark:backdrop-blur-sm dark:hover:shadow-[0_0_28px_rgba(37,211,102,0.12)]";
   if (!href) {
     return <div className={cn(classes, "cursor-not-allowed opacity-45")}>{card}</div>;
   }
@@ -1474,12 +1474,12 @@ function Footer() {
           <div className="flex items-center gap-3">
             <span className="flex size-8 items-center justify-center rounded-lg bg-[#e4e4e0] dark:bg-[#212121]">
               <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-                <circle cx="12" cy="12" r="6.5" fill="none" stroke="#71b25c" strokeWidth="1.6" />
-                <path d="M9.8 8.7 L9.8 15.3 L14.5 12 Z" fill="#71b25c" />
+                <circle cx="12" cy="12" r="6.5" fill="none" stroke="#25D366" strokeWidth="1.6" />
+                <path d="M9.8 8.7 L9.8 15.3 L14.5 12 Z" fill="#25D366" />
               </svg>
             </span>
             <span className="font-display text-lg font-semibold tracking-tight text-[#101010] dark:text-white">
-              Ebad <span className="text-[#71b25c] text-glow-green">Ahsan</span>
+              Ebad <span className="text-[#25D366] text-glow-green">Ahsan</span>
             </span>
           </div>
           <p className="text-base leading-relaxed text-[#55555c] dark:text-[#86868b]">
@@ -1534,7 +1534,7 @@ function FooterIcon({
       rel="noopener noreferrer"
       title={label}
       aria-label={label}
-      className="flex size-9 items-center justify-center rounded-full border border-black/10 text-[#55555c] transition-colors hover:border-[#71b25c]/70 hover:text-[#71b25c] dark:border-white/10 dark:text-[#86868b]"
+      className="flex size-9 items-center justify-center rounded-full border border-black/10 text-[#55555c] transition-colors hover:border-[#25D366]/70 hover:text-[#25D366] dark:border-white/10 dark:text-[#86868b]"
     >
       {children}
     </a>
@@ -1562,14 +1562,14 @@ function SectionHeading({
       transition={{ duration: 0.55, ease: "easeOut" }}
       className={cn("flex flex-col gap-4", align === "center" && "items-center text-center")}
     >
-      <span className="text-glow-green text-xs font-medium uppercase tracking-[0.28em] text-[#71b25c]">
+      <span className="text-glow-green text-xs font-medium uppercase tracking-[0.28em] text-[#25D366]">
         {eyebrow}
       </span>
       <div className="relative max-w-3xl">
         {/* Ambient light behind the section title */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-3xl"
+          className="pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#25D366]/10 blur-3xl"
         />
         <h2 className="relative font-display text-4xl font-medium tracking-tight text-gradient-silver sm:text-5xl lg:text-6xl">
           {title}
@@ -1629,7 +1629,7 @@ function CopyNumberButton({
         "inline-flex items-center justify-center gap-2 rounded-full border font-semibold transition-all duration-300",
         iconOnly ? "size-11" : compact ? "h-11 px-5 text-sm" : "h-11 px-6 text-base",
         copied
-          ? "text-glow-green border-[#71b25c]/60 bg-[#71b25c]/15 text-[#71b25c]"
+          ? "text-glow-green border-[#25D366]/60 bg-[#25D366]/15 text-[#25D366]"
           : "border-zinc-400/70 bg-black/5 text-zinc-800 hover:bg-black/10 hover:text-black dark:border-zinc-700/60 dark:bg-white/5 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-white",
       )}
     >
@@ -1659,7 +1659,7 @@ function CopyNumberButton({
         className={cn(
           "pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-all duration-200",
           copied
-            ? "text-glow-green border-[#71b25c]/60 bg-[#71b25c]/15 text-[#71b25c] opacity-100"
+            ? "text-glow-green border-[#25D366]/60 bg-[#25D366]/15 text-[#25D366] opacity-100"
             : "border-white/10 bg-black/80 text-[#a1a1a6] opacity-0 group-hover:opacity-100",
         )}
       >

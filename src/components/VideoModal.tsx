@@ -52,7 +52,7 @@ export function VideoModal({
             {title}
           </DialogTitle>
           {category && (
-            <span className="rounded-full border border-[#71b25c]/40 bg-[#71b25c]/15 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-widest text-[#71b25c]">
+            <span className="rounded-full border border-[#25D366]/40 bg-[#25D366]/15 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-widest text-[#25D366]">
               {category}
             </span>
           )}

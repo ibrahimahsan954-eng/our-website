@@ -20,7 +20,7 @@ export default function NotFound() {
           <Clapperboard className="size-7 text-white/70" />
         </motion.div>
 
-        <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-[#71b25c]">
+        <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-[#25D366]">
           Error 404
         </p>
         <h1 className="mt-3 font-display text-5xl font-medium tracking-tight text-white sm:text-6xl">
