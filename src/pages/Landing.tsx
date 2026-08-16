@@ -993,17 +993,17 @@ function RequestForm() {
         className="absolute -left-[9999px] h-px w-px overflow-hidden"
       />
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Your name" required>
+        <Field label="Your Name" required>
           <input name="name" required maxLength={120} placeholder="Jane Doe" className={inputClass} />
         </Field>
         <Field label="Email" required>
           <input name="email" type="email" required placeholder="jane@company.com" className={inputClass} />
         </Field>
-        <Field label="Company / Channel (optional)">
+        <Field label="Company / Channel (Optional)">
           <input name="company" maxLength={120} placeholder="Acme Inc. or @channelname" className={inputClass} />
         </Field>
         <PhoneNumberField />
-        <Field label="Your niche" required>
+        <Field label="Your Niche" required>
           <input
             name="niche"
             required
@@ -1033,7 +1033,7 @@ function RequestForm() {
       </div>
 
       <div className="mt-4 flex flex-col gap-4">
-        <Field label="Reference / Inspiration (optional)">
+        <Field label="Reference / Inspiration (Optional)">
           <input
             name="reference"
             maxLength={500}
@@ -1041,7 +1041,7 @@ function RequestForm() {
             className={inputClass}
           />
         </Field>
-        <Field label="Tell me about your project" required>
+        <Field label="Tell Me About Your Project" required>
           <textarea
             name="message"
             required
@@ -1078,7 +1078,7 @@ function RequestForm() {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-[#101010] placeholder:text-black/35 outline-none transition-colors focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/70";
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-[#101010] placeholder:capitalize placeholder:text-black/35 outline-none transition-colors focus:border-[#25D366]/70 focus:ring-2 focus:ring-[#25D366]/20 dark:border-white/15 dark:bg-[#0d0d0d] dark:text-white dark:placeholder:text-white/70";
 
 function Field({
   label,
@@ -1091,7 +1091,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-[#5b5b62] dark:text-[#E5E7EB]">
+      <span className="text-sm font-medium capitalize text-[#5b5b62] dark:text-[#E5E7EB]">
         {label}
         {required && <span className="text-[#25D366]"> *</span>}
       </span>
@@ -1255,7 +1255,7 @@ function PhoneNumberField() {
   };
 
   return (
-    <Field label="Phone Number (optional)">
+    <Field label="Phone Number (Optional)">
       {/* Hidden input carries the full dial code + number into FormData */}
       <input type="hidden" name="phone" value={fullValue.replace(/\s/g, "")} />
       <div className="flex w-full gap-2">
@@ -1353,20 +1353,20 @@ function DmSection() {
             href={getWhatsAppHref(WHATSAPP_MESSAGE)}
             icon={<WhatsAppIcon className="size-5" />}
             label="WhatsApp"
-            note="Fastest reply"
+            note="Fastest Reply"
             onClick={openWhatsApp(WHATSAPP_MESSAGE)}
           />
           <DmCard
             href={SOCIALS.instagram}
             icon={<Instagram className="size-5" />}
             label="Instagram"
-            note="DM me"
+            note="DM Me"
           />
           <DmCard
             href="mailto:onepunchman5005@gmail.com"
             icon={<Mail className="size-5" />}
             label="Gmail"
-            note="Direct email"
+            note="Direct Email"
           />
         </div>
 
@@ -1409,7 +1409,7 @@ function DmCard({
         {icon}
       </span>
       <span className="font-display text-lg font-semibold text-[#101010] dark:text-white">{label}</span>
-      <span className="text-base font-medium text-[#25D366]">{note}</span>
+      <span className="text-base font-medium capitalize text-[#25D366]">{note}</span>
     </>
   );
   const classes =
