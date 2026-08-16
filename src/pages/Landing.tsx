@@ -850,7 +850,10 @@ function FinalCta() {
               eyebrow="Booking"
               title={
                 <>
-                  Reserve a spot —{" "}
+                  <span className="inline-block rounded-md bg-[#25D366] px-2 py-0.5 font-semibold leading-none text-black">
+                    Reserve
+                  </span>{" "}
+                  a spot —{" "}
                   <span className="font-medium text-[#25D366] text-glow-green">
                     let&apos;s discuss your project
                   </span>
