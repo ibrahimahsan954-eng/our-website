@@ -53,6 +53,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 // context (JSX or HTML email).
 function sanitize(value: string): string {
   return value
+    // Intentional: strip control characters (keeping \t, \n, \r) so raw
+    // control bytes can never smuggle into stored text or email headers.
+    // eslint-disable-next-line no-control-regex
     .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "")
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, " ")
