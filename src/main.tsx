@@ -82,6 +82,29 @@ class RootErrorBoundary extends React.Component<
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
+/**
+ * Lightweight visitor analytics — Plausible (privacy-friendly, no cookies).
+ * The script is only injected once the site domain is configured, so dev and
+ * unconfigured builds stay clean. The default script.js auto-tracks page views
+ * on SPA navigation (History API) with no extra wiring.
+ *
+ * Configure in the project's Keys/API keys tab:
+ *   VITE_PLAUSIBLE_DOMAIN     — e.g. zakariahq.com (required to enable)
+ *   VITE_PLAUSIBLE_SCRIPT_SRC — optional, for self-hosted Plausible
+ */
+function initAnalytics() {
+  const domain = import.meta.env.VITE_PLAUSIBLE_DOMAIN as string | undefined;
+  if (!domain) return;
+  const script = document.createElement("script");
+  script.defer = true;
+  script.dataset.domain = domain;
+  script.src =
+    (import.meta.env.VITE_PLAUSIBLE_SCRIPT_SRC as string | undefined) ??
+    "https://plausible.io/js/script.js";
+  document.head.appendChild(script);
+}
+
+initAnalytics();
 
 
 function RouteSyncer() {

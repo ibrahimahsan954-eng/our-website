@@ -13,7 +13,8 @@
       } catch (e) {}
     })();
   </script>
-  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
@@ -21,38 +22,45 @@
     content="Ebad Ahsan — video editor & motion designer. Premium product launch videos, explainers, demos, short-form reels, VSLs and keynote visuals — your story told in one powerful minute."
   />
   <meta name="theme-color" content="#0a0a0a" />
-  <title>Ebad Ahsan — Video Editor & Motion Designer</title>
+  <title>Ebad Ahsan | Video Editor & Motion Designer</title>
 
   <!--
     Security: Content-Security-Policy — restricts scripts to this origin
-    (plus Vite's dev-mode inline bootstrap) and locks down frames, media,
-    connections, and fonts to the hosts the site actually uses. Mirrors the
-    dev-server policy in vite.config.ts so development and production behave
-    identically. X-Frame-Options for the HTML document itself is applied by
-    the hosting edge; frame-ancestors 'none' is included here for any
-    header-based deployment that picks this policy up.
+    (plus Vite's dev-mode inline bootstrap and the Plausible analytics script),
+    and locks down frames, media, connections, and fonts to the hosts the site
+    actually uses. Mirrors the dev-server policy in vite.config.ts so
+    development and production behave identically. X-Frame-Options for the HTML
+    document itself is applied by the hosting edge; frame-ancestors 'none' is
+    included here for any header-based deployment that picks this policy up.
   -->
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.cdnfonts.com; font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' http: https: ws: wss:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://player.cloudinary.com https://cal.com https://app.cal.com https://calendly.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.cdnfonts.com; font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' http: https: ws: wss:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://player.cloudinary.com https://cal.com https://app.cal.com https://calendly.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
   />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-  <!-- Social sharing previews -->
+  <!-- Open Graph — proper preview card when shared on WhatsApp, Instagram, etc. -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Ebad Ahsan" />
-  <meta property="og:title" content="Ebad Ahsan — Video Editor & Motion Designer" />
+  <meta property="og:title" content="Ebad Ahsan | Video Editor & Motion Designer" />
   <meta
     property="og:description"
-    content="Video editor & motion designer. Premium product launch videos, explainers, demos, short-form reels and keynote visuals — your story told in one powerful minute."
+    content="Premium product launch videos, explainers, demos, short-form reels, VSLs and keynote visuals — your story told in one powerful minute. Book a spot to discuss your project."
   />
-  <meta property="og:image" content="/logo.svg" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Ebad Ahsan — Video Editor & Motion Designer" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:alt" content="Ebad Ahsan — Video Editor & Motion Designer" />
+
+  <!-- Twitter / X card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ebad Ahsan | Video Editor & Motion Designer" />
   <meta
     name="twitter:description"
-    content="Video editor & motion designer. Premium product launch videos, explainers, demos, short-form reels and keynote visuals — your story told in one powerful minute."
+    content="Premium product launch videos, explainers, demos, short-form reels, VSLs and keynote visuals — your story told in one powerful minute."
   />
+  <meta name="twitter:image" content="/og-image.png" />
 
   <!-- Resource hints: warm up connections to video hosts/CDNs (thumbnails + embeds) -->
   <link rel="preconnect" href="https://www.youtube.com" />

@@ -249,3 +249,14 @@
     background-size: 160px 160px;
   }
 }
+
+/* Mobile section headings: scale down from text-4xl so long titles — and the
+   inline "Reserve" badge in the booking heading — never clip on small phones
+   (375-428px). Scoped below the sm breakpoint; sm:text-5xl+ utilities take
+   over from 640px up. Higher specificity than Tailwind's text-4xl utility. */
+@media (max-width: 639px) {
+  h2.font-display.text-gradient-silver {
+    font-size: 1.875rem; /* text-3xl */
+    line-height: 2.25rem;
+  }
+}

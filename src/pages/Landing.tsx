@@ -204,13 +204,13 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="gpu-crisp fixed inset-x-0 top-5 z-50 flex justify-center px-4 sm:top-6"
     >
-      <motion.nav className="flex items-center gap-4 rounded-full border border-black/10 bg-white/80 px-6 py-3 dark:border-white/10 dark:bg-white/5">
+      <motion.nav className="flex items-center gap-3 rounded-full border border-black/10 bg-white/80 px-4 py-3 sm:gap-4 sm:px-6 dark:border-white/10 dark:bg-white/5">
         <a
           href="#top"
           onClick={scrollToTop}
           aria-label="Back to top"
           title="Back to top"
-          className="flex size-10 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+          className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black sm:size-10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
         >
           <Home className="size-6" />
         </a>
@@ -229,9 +229,9 @@ function Nav({ onReserve }: { onReserve?: () => void }) {
         <Button
           type="button"
           onClick={onReserve}
-          className="h-auto gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-base font-bold text-[#0b141a] shadow-[0_0_14px_rgba(37,211,102,0.55),0_0_30px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_22px_rgba(37,211,102,0.75),0_0_46px_rgba(37,211,102,0.4)] md:text-lg"
+          className="h-auto gap-2 rounded-full bg-[#25D366] px-3 py-2.5 text-base font-bold text-[#0b141a] shadow-[0_0_14px_rgba(37,211,102,0.55),0_0_30px_rgba(37,211,102,0.3)] transition-all duration-300 hover:bg-[#25D366]/90 hover:shadow-[0_0_22px_rgba(37,211,102,0.75),0_0_46px_rgba(37,211,102,0.4)] sm:px-5 md:text-lg"
         >
-          Reserve a Spot
+          <span className="hidden sm:inline">Reserve a Spot</span>
           <ArrowUpRight className="size-4" />
         </Button>
 
@@ -271,7 +271,7 @@ function ThemeToggle() {
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       title={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="flex size-10 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+      className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-black/60 transition-colors hover:bg-black/10 hover:text-black sm:size-10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
     >
       {dark ? <Moon className="size-6" /> : <Sun className="size-6" />}
     </button>
@@ -284,7 +284,7 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
       href={href}
       title={label}
       aria-label={label}
-      className="flex size-10 items-center justify-center rounded-full text-black/60 transition-colors hover:bg-black/10 hover:text-black dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+      className="flex size-9 items-center justify-center rounded-full text-black/60 transition-colors hover:bg-black/10 hover:text-black sm:size-10 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
     >
       {children}
     </a>
@@ -323,7 +323,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.26, ease: "easeOut" }}
-          className="mt-9 flex items-center justify-center gap-3"
+          className="mt-9 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
         >
           <div className="flex -space-x-3">
             {CLIENT_AVATARS.map((a) => (
@@ -466,7 +466,7 @@ function Showreel() {
             loop
             playsInline
             autoPlay
-            preload="auto"
+            preload="metadata"
             controlsList="nodownload"
             onContextMenu={(event) => event.preventDefault()}
             className="absolute inset-0 h-full w-full rounded-2xl bg-black object-cover"
@@ -786,7 +786,7 @@ function ProcessSection() {
 function FinalCta() {
   return (
     <section id="request-cal" className="scroll-mt-24 px-4 pb-24 pt-8 sm:px-6">
-      <div className="gpu-crisp relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-6 py-14 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-[#080808]">
+      <div className="gpu-crisp relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-black/10 bg-white/70 px-5 py-12 sm:px-10 sm:py-20 dark:border-white/10 dark:bg-[#080808]">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-32 left-1/3 h-72 w-[560px] rounded-full bg-[#5ca5ff]/[0.14] blur-[120px]" />
           <div className="absolute inset-0 bg-noise opacity-[0.04]" />
