@@ -53,6 +53,16 @@ const schema = defineSchema(
     // Uploaded MP4 video assets (hero showreel + portfolio projects), keyed by
     // slot name ("showreel" | "project-N"). The landing page reads these as
     // native <video> overrides over the default YouTube sources.
+    // IP-based rate limiting for public submission endpoints (booking form).
+    // One row per rate-limit key ("ip:<address>") tracking the current hourly
+    // window and how many submissions have been counted in it.
+    rateLimits: defineTable({
+      key: v.string(),
+      windowStart: v.number(),
+      count: v.number(),
+      updatedAt: v.number(),
+    }).index("by_key", ["key"]),
+
     videoAssets: defineTable({
       slot: v.string(),
       url: v.string(),

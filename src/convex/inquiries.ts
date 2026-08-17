@@ -1,6 +1,12 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { api } from "./_generated/api";
-import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
+import {
+  internalMutation,
+  mutation,
+  MutationCtx,
+  query,
+  QueryCtx,
+} from "./_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -26,10 +32,7 @@ export async function getOwnerUserId(ctx: QueryCtx | MutationCtx) {
   return userId;
 }
 
-/**
- * Public mutation — anyone can submit a project inquiry from the landing page.
- * No auth required so visitors don't need an account to reach out.
- */
+// Limits enforced server-side before anything is written to the DB.
 const MAX_NAME = 100;
 const MAX_COMPANY = 100;
 const MAX_PROJECT_TYPE = 100;
@@ -51,7 +54,69 @@ function sanitize(value: string): string {
     .trim();
 }
 
-export const submitInquiry = mutation({
+/**
+ * IP-based rate limit for the booking form: at most `limit` submissions per
+ * `windowMs` per IP. Runs as a mutation so the read-check-write is atomic —
+ * concurrent submissions from the same IP are serialized and can't both slip
+ * through. Called by the public HTTP action (src/convex/http.ts) after the
+ * real client IP is extracted from the request headers.
+ */
+export const checkIpRateLimit = internalMutation({
+  args: {
+    ip: v.string(),
+    limit: v.optional(v.number()),
+    windowMs: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const limit = args.limit ?? 3;
+    const windowMs = args.windowMs ?? 60 * 60 * 1000; // 1 hour
+    const key = `ip:${args.ip}`;
+    const now = Date.now();
+
+    const existing = await ctx.db
+      .query("rateLimits")
+      .withIndex("by_key", (q) => q.eq("key", key))
+      .first();
+
+    // First request, or the hourly window rolled over — start a fresh window.
+    if (!existing || now - existing.windowStart >= windowMs) {
+      if (existing) {
+        await ctx.db.patch(existing._id, {
+          windowStart: now,
+          count: 1,
+          updatedAt: now,
+        });
+      } else {
+        await ctx.db.insert("rateLimits", {
+          key,
+          windowStart: now,
+          count: 1,
+          updatedAt: now,
+        });
+      }
+      return { allowed: true };
+    }
+
+    // Already at the cap inside this window — reject.
+    if (existing.count >= limit) {
+      return { allowed: false };
+    }
+
+    await ctx.db.patch(existing._id, {
+      count: existing.count + 1,
+      updatedAt: now,
+    });
+    return { allowed: true };
+  },
+});
+
+/**
+ * Internal mutation — only reachable through the public HTTP action at
+ * POST /inquiry, which enforces the per-IP rate limit before delegating here.
+ * Kept as a mutation (instead of doing everything in the HTTP action) so the
+ * validation + DB insert run atomically on the primary.
+ */
+export const submitInquiry = internalMutation({
   args: {
     name: v.string(),
     email: v.string(),

@@ -22,7 +22,7 @@ import {
 } from "@/lib/embed-video";
 import { useChromeFreeYouTubePlayer } from "@/hooks/use-chrome-free-youtube";
 import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Calendar,
@@ -852,8 +852,42 @@ const BUDGET_RANGES = ["$1k – $3k", "$3k – $7k", "$7k – $15k", "$15k+", "N
 
 const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flexible"];
 
+// Public booking-form endpoint — a Convex HTTP action (src/convex/http.ts)
+// that rate-limits per IP (3 submissions/hour) and validates server-side
+// before anything is stored. Convex serves HTTP actions at the site URL:
+// <deployment>.convex.site in production, or the same local URL as
+// VITE_CONVEX_URL during local dev (where the ".cloud" replacement is a no-op).
+const CONVEX_URL = (import.meta.env.VITE_CONVEX_URL as string | undefined) ?? "";
+const INQUIRY_ENDPOINT = `${CONVEX_URL.replace(".cloud", ".site")}/inquiry`;
+
+// POSTs the form to the HTTP action and returns a clean result so raw
+// provider/server error strings never reach the UI.
+async function submitInquiry(
+  payload: Record<string, string | undefined>,
+): Promise<{ success: boolean; message?: string }> {
+  try {
+    const response = await fetch(INQUIRY_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = (await response.json().catch(() => null)) as {
+      success?: boolean;
+      message?: string;
+    } | null;
+    if (!data || data.success !== true) {
+      return {
+        success: false,
+        message: data?.message ?? "Please try again in a moment.",
+      };
+    }
+    return { success: true };
+  } catch {
+    return { success: false, message: "Please try again in a moment." };
+  }
+}
+
 function RequestForm() {
-  const submitInquiry = useMutation(api.inquiries.submitInquiry);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [invalid, setInvalid] = useState<{
