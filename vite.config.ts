@@ -96,5 +96,25 @@ export default defineConfig({
     hmr: {
       overlay: false,
     },
+    // Basic security headers for local dev. The strict production CSP lives
+    // in main.ts; dev needs 'unsafe-inline' for Vite's react-refresh preamble
+    // and open connect-src for the local Convex dev server + HMR websocket.
+    headers: {
+      "X-Frame-Options": "DENY",
+      "Content-Security-Policy": [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline'",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.cdnfonts.com",
+        "font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com",
+        "img-src 'self' data: blob: https:",
+        "media-src 'self' blob: https:",
+        "connect-src 'self' http: https: ws: wss:",
+        "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://player.cloudinary.com https://cal.com https://app.cal.com https://calendly.com",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'none'",
+      ].join("; "),
+    },
   },
 });
