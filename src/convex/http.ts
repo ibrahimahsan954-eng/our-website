@@ -57,6 +57,21 @@ function corsHeaders(origin: string | null): Record<string, string> {
   };
 }
 
+// Hardening headers applied to every response from this HTTP surface:
+// X-Frame-Options + CSP prevent clickjacking/framing of the endpoint,
+// nosniff blocks content-type sniffing, no-store keeps rate-limit responses
+// and any echoed data out of shared caches, and no-referrer stops the client
+// URL from leaking upstream.
+function securityHeaders(): Record<string, string> {
+  return {
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
+    "Referrer-Policy": "no-referrer",
+    "Cache-Control": "no-store",
+  };
+}
+
 function jsonResponse(
   body: unknown,
   status = 200,
@@ -64,7 +79,11 @@ function jsonResponse(
 ): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...corsHeaders(origin) },
+    headers: {
+      "Content-Type": "application/json",
+      ...securityHeaders(),
+      ...corsHeaders(origin),
+    },
   });
 }
 
@@ -87,9 +106,12 @@ http.route({
   handler: httpAction(async (_ctx, request) => {
     const origin = request.headers.get("origin");
     if (!originAllowed(origin)) {
-      return new Response(null, { status: 403 });
+      return new Response(null, { status: 403, headers: securityHeaders() });
     }
-    return new Response(null, { status: 204, headers: corsHeaders(origin) });
+    return new Response(null, {
+      status: 204,
+      headers: { ...securityHeaders(), ...corsHeaders(origin) },
+    });
   }),
 });
 
