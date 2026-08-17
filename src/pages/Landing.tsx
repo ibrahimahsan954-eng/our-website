@@ -70,10 +70,10 @@ const SHOWREEL_MP4 = "/showreel.mp4";
 const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
 
 // Hero portrait — rounded-square photo sitting between "EBAD" and "AHSAN"
-// in the hero heading. Drop your photo at public/portrait.jpg (a square
-// headshot works best; it is cropped to a rounded square). Falls back to a
-// lime monogram tile until it exists.
-const PORTRAIT_URL = "/portrait.jpg";
+// in the hero heading. Points at the profile photo in public/assets/ebu.png
+// (a square headshot works best; it is cropped to a rounded square). Falls
+// back to a dark monogram tile only if the image can't load.
+const PORTRAIT_URL = "/assets/ebu.png?v=1";
 
 // Social proof avatar stack — small overlapping client photos under the hero
 // portrait. The four files below are the current client PFPs in public/assets/
