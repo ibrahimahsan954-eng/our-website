@@ -30,6 +30,27 @@ export async function getOwnerUserId(ctx: QueryCtx | MutationCtx) {
  * Public mutation — anyone can submit a project inquiry from the landing page.
  * No auth required so visitors don't need an account to reach out.
  */
+const MAX_NAME = 100;
+const MAX_COMPANY = 100;
+const MAX_PROJECT_TYPE = 100;
+const MAX_BUDGET = 100;
+const MAX_TIMELINE = 100;
+const MAX_PHONE = 40;
+const MAX_REFERENCE = 500;
+const MAX_MESSAGE = 2000;
+
+// Reasonably strict server-side email check: one or more non-space chars,
+// an @, a domain with a dot, and a TLD of at least 2 letters.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+// Sanitize free text: trim and strip control characters (keeping line breaks
+// and tabs in messages) so stored values can't smuggle hidden payloads.
+function sanitize(value: string): string {
+  return value
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "")
+    .trim();
+}
+
 export const submitInquiry = mutation({
   args: {
     name: v.string(),
@@ -39,6 +60,8 @@ export const submitInquiry = mutation({
     budget: v.string(),
     timeline: v.string(),
     message: v.string(),
+    phone: v.optional(v.string()),
+    reference: v.optional(v.string()),
     // Honeypot — bots fill this hidden field; real visitors never see it.
     website: v.optional(v.string()),
   },
@@ -49,27 +72,47 @@ export const submitInquiry = mutation({
       return { success: true };
     }
 
-    const name = args.name.trim();
-    const email = args.email.trim();
-    const message = args.message.trim();
+    const name = sanitize(args.name);
+    const email = sanitize(args.email).toLowerCase();
+    const company = args.company ? sanitize(args.company) : "";
+    const projectType = sanitize(args.projectType);
+    const budget = sanitize(args.budget);
+    const timeline = sanitize(args.timeline);
+    const message = sanitize(args.message);
+    const phone = args.phone ? sanitize(args.phone) : "";
+    const reference = args.reference ? sanitize(args.reference) : "";
 
-    if (name.length === 0 || name.length > 120) {
-      return { success: false, message: "Please provide your name." };
+    // Server-side validation — runs before anything is written to the DB, so
+    // invalid or empty submissions are rejected up front.
+    if (name.length === 0 || name.length > MAX_NAME) {
+      return { success: false, message: "Please provide your name (max 100 characters)." };
     }
-    if (email.length === 0 || email.length > 254 || !email.includes("@")) {
+    if (email.length === 0 || email.length > 254 || !EMAIL_RE.test(email)) {
       return { success: false, message: "Please provide a valid email address." };
     }
-    if (message.length === 0 || message.length > 4000) {
-      return {
-        success: false,
-        message: "Please describe your project (max 4000 characters).",
-      };
+    if (company.length > MAX_COMPANY) {
+      return { success: false, message: "Company name is limited to 100 characters." };
     }
-    if (args.budget.trim().length === 0) {
+    if (projectType.length === 0 || projectType.length > MAX_PROJECT_TYPE) {
+      return { success: false, message: "Please tell us your niche (max 100 characters)." };
+    }
+    if (budget.length === 0 || budget.length > MAX_BUDGET) {
       return { success: false, message: "Please select a budget range." };
     }
-    if (args.timeline.trim().length === 0) {
+    if (timeline.length === 0 || timeline.length > MAX_TIMELINE) {
       return { success: false, message: "Please select your timeline." };
+    }
+    if (phone.length > MAX_PHONE) {
+      return { success: false, message: "Phone number is too long." };
+    }
+    if (reference.length > MAX_REFERENCE) {
+      return { success: false, message: "References are limited to 500 characters." };
+    }
+    if (message.length === 0 || message.length > MAX_MESSAGE) {
+      return {
+        success: false,
+        message: "Please describe your project (max 2000 characters).",
+      };
     }
 
     // Rate limit: at most one submission per email every 60 seconds, so bots
@@ -90,11 +133,13 @@ export const submitInquiry = mutation({
     await ctx.db.insert("projectInquiries", {
       name,
       email,
-      company: args.company?.trim() || undefined,
-      projectType: args.projectType,
-      budget: args.budget,
-      timeline: args.timeline,
+      company: company || undefined,
+      projectType,
+      budget,
+      timeline,
       message,
+      phone: phone || undefined,
+      reference: reference || undefined,
       status: "new",
       createdAt: Date.now(),
     });
@@ -105,11 +150,13 @@ export const submitInquiry = mutation({
       await ctx.scheduler.runAfter(0, api.emails.sendInquiryEmails, {
         name,
         email,
-        company: args.company?.trim() || undefined,
-        projectType: args.projectType,
-        budget: args.budget,
-        timeline: args.timeline,
+        company: company || undefined,
+        projectType,
+        budget,
+        timeline,
         message,
+        phone: phone || undefined,
+        reference: reference || undefined,
       });
     } catch (error) {
       console.error("Failed to schedule inquiry emails:", error);

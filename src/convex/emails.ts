@@ -92,6 +92,8 @@ export const sendInquiryEmails = action({
     budget: v.string(),
     timeline: v.string(),
     message: v.string(),
+    phone: v.optional(v.string()),
+    reference: v.optional(v.string()),
   },
   handler: async (_ctx, args) => {
     const ownerEmail =
@@ -139,9 +141,11 @@ Ebad Ahsan`,
 Name: ${args.name}
 Email: ${args.email}
 Company: ${args.company || "—"}
-Project type: ${args.projectType}
+Phone: ${args.phone || "—"}
+Project type (niche): ${args.projectType}
 Budget: ${args.budget}
 Timeline: ${args.timeline}
+Reference / inspiration: ${args.reference || "—"}
 
 Project details / links:
 ${args.message}
@@ -155,9 +159,11 @@ Reply to ${args.email} to follow up.`,
       <tr><td style="padding:6px 0;color:#86868b">Name</td><td style="padding:6px 0;color:#ffffff">${args.name}</td></tr>
       <tr><td style="padding:6px 0;color:#86868b">Email</td><td style="padding:6px 0;color:#ffffff">${args.email}</td></tr>
       <tr><td style="padding:6px 0;color:#86868b">Company</td><td style="padding:6px 0;color:#ffffff">${args.company || "—"}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Project type</td><td style="padding:6px 0;color:#ffffff">${args.projectType}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Phone</td><td style="padding:6px 0;color:#ffffff">${args.phone || "—"}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Project type (niche)</td><td style="padding:6px 0;color:#ffffff">${args.projectType}</td></tr>
       <tr><td style="padding:6px 0;color:#86868b">Budget</td><td style="padding:6px 0;color:#ffffff">${args.budget}</td></tr>
       <tr><td style="padding:6px 0;color:#86868b">Timeline</td><td style="padding:6px 0;color:#ffffff">${args.timeline}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Reference / inspiration</td><td style="padding:6px 0;color:#ffffff">${args.reference || "—"}</td></tr>
     </table>
     <p style="font-size:12px;color:#86868b;margin:16px 0 4px">Project details / links</p>
     <p style="font-size:14px;line-height:1.6;color:#ffffff;margin:0;padding-top:12px;border-top:1px solid #2a2a2a;white-space:pre-wrap">${args.message}</p>

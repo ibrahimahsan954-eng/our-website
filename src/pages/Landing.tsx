@@ -22,7 +22,7 @@ import {
 } from "@/lib/embed-video";
 import { useChromeFreeYouTubePlayer } from "@/hooks/use-chrome-free-youtube";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Calendar,
@@ -121,42 +121,6 @@ function openWhatsApp(message: string) {
       window.location.href = targetUrl;
     }
   };
-}
-
-// Web3Forms — contact forms POST here so every submission lands straight in
-// the owner's inbox (the access key is bound to the destination email on
-// web3forms.com). The hidden-field equivalents of access_key/subject are sent
-// in the JSON body so the SPA never navigates away from the page.
-const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
-const WEB3FORMS_ACCESS_KEY = "29857f35-c5a0-46fb-b8a4-3d7930ace8b0";
-const WEB3FORMS_SUBJECT = "New Portfolio Contact Submission!";
-
-// POSTs form fields to Web3Forms and returns a clean result so raw provider
-// error strings never reach the UI.
-async function submitToWeb3Forms(
-  payload: Record<string, string>,
-): Promise<{ success: boolean; message?: string }> {
-  try {
-    const response = await fetch(WEB3FORMS_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        access_key: WEB3FORMS_ACCESS_KEY,
-        subject: WEB3FORMS_SUBJECT,
-        ...payload,
-      }),
-    });
-    const data = (await response.json().catch(() => null)) as {
-      success?: boolean;
-      message?: string;
-    } | null;
-    if (!response.ok || !data?.success) {
-      return { success: false, message: "Please try again in a moment." };
-    }
-    return { success: true };
-  } catch {
-    return { success: false, message: "Please try again in a moment." };
-  }
 }
 
 // Social profiles — paste your real profile URLs here. Any entry left as ""
@@ -889,6 +853,7 @@ const BUDGET_RANGES = ["$1k – $3k", "$3k – $7k", "$7k – $15k", "$15k+", "N
 const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flexible"];
 
 function RequestForm() {
+  const submitInquiry = useMutation(api.inquiries.submitInquiry);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [invalid, setInvalid] = useState<{
@@ -911,16 +876,18 @@ function RequestForm() {
 
     setStatus("loading");
     try {
-      const result = await submitToWeb3Forms({
+      const result = await submitInquiry({
         name: (formData.get("name") as string) ?? "",
         email: (formData.get("email") as string) ?? "",
         company: ((formData.get("company") as string) ?? "").trim(),
         phone: ((formData.get("phone") as string) ?? "").trim(),
-        project_type: niche,
+        projectType: niche,
         budget,
         timeline,
         reference: ((formData.get("reference") as string) ?? "").trim(),
         message: (formData.get("message") as string) ?? "",
+        // Honeypot — hidden field bots fill; the server discards those.
+        website: ((formData.get("website") as string) ?? "").trim(),
       });
       if (result.success) {
         setStatus("success");
@@ -980,20 +947,20 @@ function RequestForm() {
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Your Name" required>
-          <input name="name" required maxLength={120} placeholder="Jane Doe" className={inputClass} />
+          <input name="name" required maxLength={100} placeholder="Jane Doe" className={inputClass} />
         </Field>
         <Field label="Email" required>
           <input name="email" type="email" required placeholder="jane@company.com" className={inputClass} />
         </Field>
         <Field label="Company / Channel (Optional)">
-          <input name="company" maxLength={120} placeholder="Acme Inc. or @channelname" className={inputClass} />
+          <input name="company" maxLength={100} placeholder="Acme Inc. or @channelname" className={inputClass} />
         </Field>
         <PhoneNumberField />
         <Field label="Your Niche" required>
           <input
             name="niche"
             required
-            maxLength={120}
+            maxLength={100}
             placeholder="e.g., Tech, Finance, Gaming, Fitness"
             className={inputClass}
           />
@@ -1032,7 +999,7 @@ function RequestForm() {
             name="message"
             required
             rows={4}
-            maxLength={4000}
+            maxLength={2000}
             placeholder="Your product, the story you want to tell, links to anything relevant…"
             className={cn(inputClass, "min-h-28 resize-y")}
           />

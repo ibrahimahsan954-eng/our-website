@@ -41,6 +41,8 @@ const schema = defineSchema(
       budget: v.string(),
       timeline: v.string(),
       message: v.string(),
+      phone: v.optional(v.string()),
+      reference: v.optional(v.string()),
       status: v.union(v.literal("new"), v.literal("archived")),
       readAt: v.optional(v.number()),
       createdAt: v.number(),
