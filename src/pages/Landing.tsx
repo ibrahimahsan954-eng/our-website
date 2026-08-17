@@ -729,7 +729,7 @@ function ProcessSection() {
           sub="You bring the expertise. I will do the rest with two focused phases."
         />
 
-        <div className="mt-12 flex h-[460px] flex-col gap-2.5 sm:flex-row">
+        <div className="mt-12 flex min-h-[460px] flex-col gap-2.5 sm:h-[460px] sm:min-h-0 sm:flex-row">
           {PROCESS_STEPS.map((step, index) => {
             const isActive = index === active;
             return (
