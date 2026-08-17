@@ -1059,6 +1059,10 @@ function RequestForm() {
           </>
         )}
       </Button>
+
+      <p className="mt-3 text-center text-xs font-medium text-black/45 dark:text-white/45">
+        Your information stays private and is only used to discuss your project.
+      </p>
     </form>
   );
 }
