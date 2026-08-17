@@ -133,7 +133,7 @@ const SOCIALS = {
 const STATS = [
   { value: 30, suffix: "+", label: "Happy Clients" },
   { value: 60, suffix: "+", label: "Projects Delivered" },
-  { value: 100, suffix: "K+", label: "Views Generated" },
+  { value: 300, suffix: "K+", label: "Views Generated" },
 ];
 
 /* ============================================================
