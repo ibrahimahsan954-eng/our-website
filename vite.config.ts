@@ -92,10 +92,10 @@ export default defineConfig({
     // Bind to all interfaces so WebContainer's server-ready event fires.
     host: true,
     port: 5173,
-    // Keep HMR on, but disable full-screen error overlay
-    hmr: {
-      overlay: false,
-    },
+    // HMR must stay fully disabled in this environment (Freebuff runs the
+    // dev server in a managed session); an active HMR websocket breaks the
+    // preview tunnel, causing "refused to connect" on the sandbox URL.
+    hmr: false,
     // Basic security headers for local dev. The strict production CSP lives
     // in main.ts; dev needs 'unsafe-inline' for Vite's react-refresh preamble
     // and open connect-src for the local Convex dev server + HMR websocket.
