@@ -69,9 +69,10 @@ const SHOWREEL_MP4 = "/showreel.mp4";
 
 const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
 
-// Hero portrait — fills the vertical pill window cutout through the name.
-// Drop your photo at public/portrait.jpg (a square headshot works best; it is
-// cropped to the pill). Falls back to a lime monogram tile until it exists.
+// Hero portrait — rounded-square photo sitting between "EBAD" and "AHSAN"
+// in the hero heading. Drop your photo at public/portrait.jpg (a square
+// headshot works best; it is cropped to a rounded square). Falls back to a
+// lime monogram tile until it exists.
 const PORTRAIT_URL = "/portrait.jpg";
 
 // Social proof avatar stack — small overlapping client photos under the hero
@@ -295,24 +296,20 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
     <section id="top" className="relative overflow-hidden bg-[#e9e9e5] px-4 pb-16 pt-28 sm:pt-32 md:px-6 dark:bg-black">
       <div className="relative mx-auto w-full text-center">
         {/* Massive name composition — lime-green condensed type with the
-            vertical pill portrait window cutting through the middle letters */}
+            profile photo sitting between "EBAD" and "AHSAN" on one line */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="gpu-crisp relative mx-auto w-fit select-none"
+          className="gpu-crisp mx-auto w-fit select-none"
         >
-          <h1 className="font-condensed text-[#25D366]">
-            <span className="block text-[clamp(3.5rem,20vw,20rem)] leading-[0.85] tracking-[0.07em]">
-              EBAD
-            </span>
-            <span className="block text-[clamp(3.5rem,20vw,20rem)] leading-[0.85] tracking-[-0.01em]">
-              AHSAN
+          <h1 className="font-condensed leading-[0.85] text-[#25D366]">
+            <span className="flex items-center justify-center gap-[0.3em] whitespace-nowrap text-[clamp(2.75rem,15vw,20rem)]">
+              <span className="tracking-[0.07em]">EBAD</span>
+              <HeroPortrait />
+              <span className="tracking-[-0.01em]">AHSAN</span>
             </span>
           </h1>
-
-          {/* Vertical pill window — portrait overlaps the middle of the letters */}
-          <HeroPortrait />
         </motion.div>
 
         {/* Social proof — client avatar stack under the portrait */}
@@ -412,22 +409,22 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 function HeroPortrait() {
   const [failed, setFailed] = useState(false);
   return (
-    <div className="absolute left-1/2 top-1/2 z-20 h-[clamp(8.5rem,36vw,36rem)] w-[clamp(2.75rem,11.5vw,11.5rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[999px] border border-black/10 bg-[#f7f7f4] shadow-[0_0_60px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#080808] dark:shadow-[0_0_60px_rgba(0,0,0,0.6)]">
+    <span className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[18px] border border-black/10 bg-[#f7f7f4] shadow-[0_8px_30px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#080808] dark:shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
       {!failed ? (
         <img
           src={PORTRAIT_URL}
           alt="Ebad Ahsan"
           onError={() => setFailed(true)}
-          className="h-full w-full object-cover"
+          className="h-[0.9em] w-[0.9em] object-cover"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-          <span className="font-condensed text-[clamp(2.5rem,8vw,8rem)] leading-none text-[#25D366]/85">
+        <span className="flex h-[0.9em] w-[0.9em] items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
+          <span className="font-condensed text-[0.55em] leading-none text-[#25D366]/85">
             E
           </span>
-        </div>
+        </span>
       )}
-    </div>
+    </span>
   );
 }
 
