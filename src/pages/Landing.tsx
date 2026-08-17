@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { GrowthStatsCard } from "@/components/GrowthStatsCard";
 import {
   Popover,
   PopoverContent,
@@ -42,6 +43,7 @@ import {
   Search,
   Send,
   Sun,
+  TrendingUp,
   Youtube,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -158,6 +160,7 @@ export default function Landing() {
         <Hero onReserve={scrollToBooking} />
         <Portfolio />
         <Stats />
+        <GrowthSection />
         <ProcessSection />
         <FinalCta />
         <DmSection />
@@ -694,6 +697,65 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
       {display}
       {suffix}
     </span>
+  );
+}
+
+/* ---------------- Client Growth ---------------- */
+
+// Example growth cards — swap in real clients, avatars, and numbers. Each
+// entry maps 1:1 to a <GrowthStatsCard /> (see src/components/GrowthStatsCard.tsx).
+const GROWTH_CARDS = [
+  {
+    name: "FlowSavvy",
+    subtitle: "168K subscribers",
+    avatar: "/assets/channels4_profile.jpg?v=2",
+    verified: true,
+    accent: "green" as const,
+    stats: {
+      views: { label: "Views", value: 1_420_000, delta: "+38%" },
+      watchTime: { label: "Watch Time", value: 92_400, delta: "+41%" },
+      subscribers: { label: "Subscribers", value: 168_000, delta: "+52%" },
+    },
+    // 12 monthly points (Jan → Dec), any scale — normalized for the chart.
+    chart: [4200, 4700, 5100, 5900, 6400, 7100, 7800, 8600, 9500, 11000, 12500, 14200],
+    headline: { value: 168_000, badge: "Subscribers added in 12 months" },
+  },
+  {
+    name: "Dragon Fruit Media",
+    subtitle: "24.6K subscribers",
+    avatar: "/assets/channels4_profile__2_.jpg?v=2",
+    verified: true,
+    accent: "red" as const,
+    stats: {
+      views: { label: "Views", value: 2_100_000, delta: "+64%" },
+      watchTime: { label: "Watch Time", value: 148_000, delta: "+57%" },
+      subscribers: { label: "Subscribers", value: 24_600, delta: "+73%" },
+    },
+    chart: [1800, 2100, 2600, 3300, 4100, 5200, 6100, 7900, 9800, 12400, 15800, 21000],
+    headline: { value: 2_100_000, badge: "Views generated in 12 months" },
+  },
+];
+
+function GrowthSection() {
+  return (
+    <section className="relative px-4 py-16 sm:px-6">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow={<PillBadge icon={<TrendingUp className="size-5" />} label="Results" />}
+          title={
+            <>
+              Client Growth, <span className="text-[#25D366]">By The Numbers</span>
+            </>
+          }
+          sub="Real channels I've helped grow — views, watch time, and subscribers heading up month after month."
+        />
+        <div className="mt-12 grid gap-8 lg:grid-cols-2">
+          {GROWTH_CARDS.map((card) => (
+            <GrowthStatsCard key={card.name} {...card} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
