@@ -397,6 +397,8 @@ export default function Dashboard() {
                     </div>
                     <a
                       href={`mailto:${inquiry.email}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="mt-0.5 inline-flex items-center gap-1.5 text-base text-[#E5E7EB] transition-colors hover:text-[#25D366]"
                     >
                       <Mail className="size-3.5" />

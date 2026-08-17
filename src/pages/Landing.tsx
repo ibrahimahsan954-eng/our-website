@@ -107,19 +107,16 @@ function getWhatsAppHref(message: string): string {
     : `https://web.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encoded}`;
 }
 
-// Iframe-escape handler: forces the link to open at top-level. Inside the
-// preview iframe (window.top !== window.self) we pop a fresh top-level window;
-// on the real site we navigate directly. The <a href> stays as a backup.
+// External-link handler: WhatsApp links always open in a new browser tab
+// (noopener, noreferrer). Kept as JS instead of relying purely on the
+// anchor's target="_blank" because the sandboxed preview iframe can intercept
+// plain _blank navigations — window.open from a click gesture is always
+// allowed and lands outside the iframe. The <a href> stays as a no-JS backup.
 function openWhatsApp(message: string) {
   return (e: ReactMouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    const targetUrl = getWhatsAppHref(message);
-    if (window.top !== window.self) {
-      window.open(targetUrl, "_blank", "noopener,noreferrer");
-    } else {
-      window.location.href = targetUrl;
-    }
+    window.open(getWhatsAppHref(message), "_blank", "noopener,noreferrer");
   };
 }
 
