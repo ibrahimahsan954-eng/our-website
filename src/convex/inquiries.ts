@@ -46,11 +46,18 @@ const MAX_MESSAGE = 2000;
 // an @, a domain with a dot, and a TLD of at least 2 letters.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-// Sanitize free text: trim and strip control characters (keeping line breaks
-// and tabs in messages) so stored values can't smuggle hidden payloads.
+// Sanitize free text before storing: trim, strip control characters (keeping
+// line breaks and tabs in messages), normalize line endings so a stray \r can't
+// smuggle into an email header, and strip HTML tags / angle brackets so user
+// input is stored as plain text that can never form markup in any render
+// context (JSX or HTML email).
 function sanitize(value: string): string {
   return value
     .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, " ")
+    .replace(/<[^>]*>/g, "")
+    .replace(/[<>]/g, "")
     .trim();
 }
 

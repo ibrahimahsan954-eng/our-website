@@ -4,6 +4,20 @@ import { vly } from "../lib/vly-integrations";
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 
+// Escape user-supplied text before it's interpolated into HTML email bodies,
+// so any HTML/script tags submitted by users render as plain text and can
+// never execute in a mail client. This is belt-and-suspenders on top of the
+// storage-time sanitization in src/convex/inquiries.ts — it also protects
+// rows that were stored before that sanitization existed.
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 /**
  * Delivers one email.
  *
@@ -99,6 +113,19 @@ export const sendInquiryEmails = action({
     const ownerEmail =
       process.env.OWNER_NOTIFICATION_EMAIL ?? "onepunchman5005@gmail.com";
 
+    // Escaped copies of every user field, used only inside the HTML bodies.
+    const safe = {
+      name: escapeHtml(args.name),
+      email: escapeHtml(args.email),
+      company: escapeHtml(args.company || "—"),
+      projectType: escapeHtml(args.projectType),
+      budget: escapeHtml(args.budget),
+      timeline: escapeHtml(args.timeline),
+      message: escapeHtml(args.message),
+      phone: escapeHtml(args.phone || "—"),
+      reference: escapeHtml(args.reference || "—"),
+    };
+
     const results: Record<string, unknown> = {};
 
     // 1. Confirmation to the visitor.
@@ -118,7 +145,7 @@ Ebad Ahsan`,
   <div style="max-width:480px;margin:0 auto">
     <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.02em">Ebad<span style="color:#25D366">Ahsan</span></div>
     <h1 style="font-size:22px;color:#ffffff;margin:24px 0 8px">We received your project request</h1>
-    <p style="font-size:15px;line-height:1.6;color:#cccccc;margin:0 0 16px">Thanks, <strong style="color:#ffffff">${args.name}</strong> — I've got your ${args.projectType || "project"} inquiry and will get back to you within 24 hours to talk scope, timeline, and budget.</p>
+    <p style="font-size:15px;line-height:1.6;color:#cccccc;margin:0 0 16px">Thanks, <strong style="color:#ffffff">${safe.name}</strong> — I've got your ${safe.projectType || "project"} inquiry and will get back to you within 24 hours to talk scope, timeline, and budget.</p>
     <p style="font-size:13px;line-height:1.6;color:#86868b;margin:0">Prefer to chat right away? Message me on <strong style="color:#a1a1a6">WhatsApp</strong> with any questions.</p>
   </div>
 </div>`,
@@ -156,18 +183,18 @@ Reply to ${args.email} to follow up.`,
     <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.02em">Ebad<span style="color:#25D366">Ahsan</span></div>
     <h1 style="font-size:20px;color:#ffffff;margin:24px 0 12px">New project inquiry</h1>
     <table style="width:100%;font-size:14px;color:#cccccc;border-collapse:collapse">
-      <tr><td style="padding:6px 0;color:#86868b">Name</td><td style="padding:6px 0;color:#ffffff">${args.name}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Email</td><td style="padding:6px 0;color:#ffffff">${args.email}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Company</td><td style="padding:6px 0;color:#ffffff">${args.company || "—"}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Phone</td><td style="padding:6px 0;color:#ffffff">${args.phone || "—"}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Project type (niche)</td><td style="padding:6px 0;color:#ffffff">${args.projectType}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Budget</td><td style="padding:6px 0;color:#ffffff">${args.budget}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Timeline</td><td style="padding:6px 0;color:#ffffff">${args.timeline}</td></tr>
-      <tr><td style="padding:6px 0;color:#86868b">Reference / inspiration</td><td style="padding:6px 0;color:#ffffff">${args.reference || "—"}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Name</td><td style="padding:6px 0;color:#ffffff">${safe.name}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Email</td><td style="padding:6px 0;color:#ffffff">${safe.email}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Company</td><td style="padding:6px 0;color:#ffffff">${safe.company}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Phone</td><td style="padding:6px 0;color:#ffffff">${safe.phone}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Project type (niche)</td><td style="padding:6px 0;color:#ffffff">${safe.projectType}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Budget</td><td style="padding:6px 0;color:#ffffff">${safe.budget}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Timeline</td><td style="padding:6px 0;color:#ffffff">${safe.timeline}</td></tr>
+      <tr><td style="padding:6px 0;color:#86868b">Reference / inspiration</td><td style="padding:6px 0;color:#ffffff">${safe.reference}</td></tr>
     </table>
     <p style="font-size:12px;color:#86868b;margin:16px 0 4px">Project details / links</p>
-    <p style="font-size:14px;line-height:1.6;color:#ffffff;margin:0;padding-top:12px;border-top:1px solid #2a2a2a;white-space:pre-wrap">${args.message}</p>
-    <p style="font-size:12px;color:#86868b;margin:20px 0 0">Reply to <a href="mailto:${args.email}" style="color:#25D366">${args.email}</a> to follow up.</p>
+    <p style="font-size:14px;line-height:1.6;color:#ffffff;margin:0;padding-top:12px;border-top:1px solid #2a2a2a;white-space:pre-wrap">${safe.message}</p>
+    <p style="font-size:12px;color:#86868b;margin:20px 0 0">Reply to <a href="mailto:${safe.email}" style="color:#25D366">${safe.email}</a> to follow up.</p>
   </div>
 </div>`,
     });
