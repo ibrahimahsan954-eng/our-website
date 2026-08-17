@@ -26,7 +26,11 @@ export const emailOtp = Email({
         },
         {
           headers: {
-            "x-api-key": "fb_email_2crN1hqIArZP2bEfvjp5Qik4",
+            // Read from the project's Keys/API keys tab; the fallback keeps
+            // OTP email working until FREEBUFF_EMAIL_API_KEY is configured.
+            "x-api-key":
+              process.env.FREEBUFF_EMAIL_API_KEY ??
+              "fb_email_2crN1hqIArZP2bEfvjp5Qik4",
           },
         },
       );
