@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { formatCompact, useCountUp } from "@/components/GrowthStatsCard";
+import { formatCompact, useCountUp } from "@/lib/count-up";
 
 /* ============================================================
    GrowthCalloutCard — the oversized headline number that pairs
