@@ -35,12 +35,19 @@ export function useScriptInkOffset(
         const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return;
 
+        // Measure the advance with the real webfont first...
         ctx.font = font;
         ctx.textBaseline = "middle";
         const advance = ctx.measureText(sample).width;
-        // Wide enough to hold the text centered with room for swash overhang.
+
+        // ...then size the canvas. IMPORTANT: assigning canvas.width/height
+        // RESETS the 2D context state (including the font), so the font must
+        // be re-applied afterward or the sample renders in the default 10px
+        // sans-serif and the measured "ink" is meaningless.
         canvas.width = Math.max(4, Math.ceil(advance + fontSize * 3));
         canvas.height = Math.ceil(fontSize * 2);
+        ctx.font = font;
+        ctx.textBaseline = "middle";
 
         ctx.fillStyle = "#000";
         ctx.fillText(sample, canvas.width / 2, canvas.height / 2);

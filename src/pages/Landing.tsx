@@ -301,8 +301,38 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
   // overhang their advance boxes — read as perfectly centered. No guessing:
   // an offscreen canvas measures the real ink bounds of "Ebad Ahsan".
   const headingInkOffset = useScriptInkOffset("Dancing Script", "Ebad Ahsan", 700);
+  const heroRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLSpanElement>(null);
+  const [viewportOffsetEm, setViewportOffsetEm] = useState(0);
+
+  // Center the heading in the TRUE viewport (window.innerWidth), not just in
+  // the page flow — compensates scrollbars and any asymmetric surroundings so
+  // the visible spacing left and right is equal.
+  useEffect(() => {
+    const section = heroRef.current;
+    const heading = headingRef.current;
+    if (!section || !heading) return;
+    const update = () => {
+      const rect = section.getBoundingClientRect();
+      const shiftPx = window.innerWidth / 2 - (rect.left + rect.width / 2);
+      const fontSize = parseFloat(getComputedStyle(heading).fontSize);
+      setViewportOffsetEm(fontSize > 0 ? shiftPx / fontSize : 0);
+    };
+    update();
+    window.addEventListener("resize", update);
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(update);
+      ro.observe(section);
+      return () => {
+        window.removeEventListener("resize", update);
+        ro.disconnect();
+      };
+    }
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   return (
-    <section id="top" className="relative overflow-hidden bg-[#e9e9e5] px-4 pb-16 pt-28 sm:pt-32 md:px-6 dark:bg-black">
+    <section id="top" ref={heroRef} className="relative overflow-hidden bg-[#e9e9e5] px-4 pb-16 pt-28 sm:pt-32 md:px-6 dark:bg-black">
       <div className="relative mx-auto w-full text-center">
         {/* Massive name composition — lime-green condensed type with the
             profile photo sitting between "EBAD" and "AHSAN" on one line */}
@@ -312,19 +342,24 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="gpu-crisp flex w-full justify-center select-none"
         >
-          {/* The h1 group is centered as one unit by the flex wrapper; the
-              measured ink offset (em) compensates the script font's swash
-              overhang so the visible text is centered, not just its box. */}
+          {/* The h1 group is centered as one unit by the flex wrapper above
+              (justify-center). The measured transform then compensates (a) the
+              script font's swash overhang and (b) any offset between the page
+              flow center and the true viewport center, so the visible spacing
+              left and right is equal. */}
           <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366]">
-            {/* Staggered baseline: "Ebad" rides slightly high, "Ahsan" slightly
-                low, like a handwritten signature. */}
+            {/* "Ebad" and "Ahsan" share the same baseline, vertically centered
+                with the portrait — matching the reference layout. */}
             <span
+              ref={headingRef}
               className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,11vw,16rem)]"
-              style={{ transform: `translateX(${headingInkOffset}em)` }}
+              style={{
+                transform: `translateX(${(headingInkOffset + viewportOffsetEm).toFixed(5)}em)`,
+              }}
             >
-              <span className="-translate-y-[0.07em]">Ebad</span>
+              <span>Ebad</span>
               <HeroPortrait />
-              <span className="translate-y-[0.07em]">Ahsan</span>
+              <span>Ahsan</span>
             </span>
           </h1>
         </motion.div>
