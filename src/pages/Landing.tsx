@@ -22,7 +22,6 @@ import {
   getYouTubeId,
   isDirectVideo,
 } from "@/lib/embed-video";
-import { useChromeFreeYouTubePlayer } from "@/hooks/use-chrome-free-youtube";
 
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
@@ -69,9 +68,6 @@ const SHOWREEL_ID = "T7pNvhwRNBU";
 // native <video> player (muted, loop, autoplay, no controls, playsInline)
 // instead of any YouTube facade. An MP4 uploaded from the dashboard overrides
 // this.
-const SHOWREEL_MP4 = "/showreel.mp4";
-
-const SHOWREEL_THUMBNAIL = `https://i.ytimg.com/vi/${SHOWREEL_ID}/maxresdefault.jpg`;
 
 // Hero portrait — rounded-square photo sitting between "EBAD" and "AHSAN"
 // in the hero heading. Points at the profile photo in public/assets/ebu.png
@@ -437,14 +433,10 @@ function HeroPortrait() {
   );
 }
 
-function Showreel() {
-  const media = useQuery(api.videoAssets.listVideoOverrides);
-  const ytHostRef = useRef<HTMLDivElement>(null);
-  // Use the uploaded MP4 when one exists; otherwise build a fully chrome-free
-  // YouTube player (captions module unloaded — subtitles can never appear).
-  const showreelMp4 = media?.showreel?.url ?? SHOWREEL_MP4;
-  useChromeFreeYouTubePlayer(ytHostRef, SHOWREEL_ID, !showreelMp4);
+const SHOWREEL_EMBED =
+  "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&loop=1&playlist=T7pNvhwRNBU&controls=1&rel=0";
 
+function Showreel() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 26 }}
@@ -458,31 +450,14 @@ function Showreel() {
         className="absolute inset-0 bg-[#deded8] dark:bg-[radial-gradient(120%_120%_at_20%_0%,#1c2b1e_0%,#0e0e0e_62%)]"
       />
 
-      {/* Autoplay on load: muted + loop + playsinline so browsers allow it */}
       <div className="relative aspect-video w-full">
-        {showreelMp4 ? (
-          <video
-            key={showreelMp4}
-            src={showreelMp4}
-            poster={SHOWREEL_THUMBNAIL}
-            autoPlay
-            loop
-            muted
-            playsInline
-            controls
-            preload="metadata"
-            controlsList="nodownload"
-            onContextMenu={(event) => event.preventDefault()}
-            className="absolute inset-0 h-full w-full rounded-2xl bg-black object-cover"
-          />
-        ) : (
-          <>
-            <div ref={ytHostRef} key="yt-host" className="absolute inset-0 h-full w-full" />
-            {/* Invisible overlay — blocks hover/click events from reaching
-                YouTube so its title bar, share buttons, and overlays never appear. */}
-            <span aria-hidden className="absolute inset-0 z-10 cursor-default" />
-          </>
-        )}
+        <iframe
+          src={SHOWREEL_EMBED}
+          title="Main Video Showcase"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full rounded-2xl"
+        />
       </div>
     </motion.div>
   );
