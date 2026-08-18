@@ -23,6 +23,7 @@ import {
   isDirectVideo,
 } from "@/lib/embed-video";
 import { useChromeFreeYouTubePlayer } from "@/hooks/use-chrome-free-youtube";
+import { useScriptInkOffset } from "@/hooks/use-script-ink-offset";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import {
@@ -296,6 +297,10 @@ function NavIcon({ href, label, children }: { href: string; label: string; child
 /* ---------------- Hero ---------------- */
 
 function Hero({ onReserve }: { onReserve?: () => void }) {
+  // Measured optical correction (em) so the script font's swash strokes — which
+  // overhang their advance boxes — read as perfectly centered. No guessing:
+  // an offscreen canvas measures the real ink bounds of "Ebad Ahsan".
+  const headingInkOffset = useScriptInkOffset("Dancing Script", "Ebad Ahsan", 700);
   return (
     <section id="top" className="relative overflow-hidden bg-[#e9e9e5] px-4 pb-16 pt-28 sm:pt-32 md:px-6 dark:bg-black">
       <div className="relative mx-auto w-full text-center">
@@ -307,14 +312,16 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="gpu-crisp flex w-full justify-center select-none"
         >
-          {/* The h1 is centered as one unit by the flex wrapper above; the tiny
-              translate-x compensates the script font's entry strokes (the capital
-              E/A sweep left of their advance boxes), so the ink reads optically
-              centered with equal space on both sides. */}
-          <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366] translate-x-[0.03em]">
+          {/* The h1 group is centered as one unit by the flex wrapper; the
+              measured ink offset (em) compensates the script font's swash
+              overhang so the visible text is centered, not just its box. */}
+          <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366]">
             {/* Staggered baseline: "Ebad" rides slightly high, "Ahsan" slightly
                 low, like a handwritten signature. */}
-            <span className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,11vw,16rem)]">
+            <span
+              className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,11vw,16rem)]"
+              style={{ transform: `translateX(${headingInkOffset}em)` }}
+            >
               <span className="-translate-y-[0.07em]">Ebad</span>
               <HeroPortrait />
               <span className="translate-y-[0.07em]">Ahsan</span>
