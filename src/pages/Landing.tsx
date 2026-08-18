@@ -308,7 +308,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="gpu-crisp flex w-full justify-center select-none"
         >
-          <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366]">
+          <h1 className="font-script leading-none tracking-normal text-[#25D366]">
             <span className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,11vw,16rem)]">
               <span>Ebad</span>
               <HeroPortrait />
@@ -428,7 +428,7 @@ function HeroPortrait() {
         />
       ) : (
         <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-          <span className="font-script font-bold text-[0.84em] leading-none text-[#25D366]/85">
+          <span className="font-script text-[0.84em] leading-none text-[#25D366]/85">
             E
           </span>
         </span>
