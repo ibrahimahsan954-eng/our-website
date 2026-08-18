@@ -897,12 +897,16 @@ const BUDGET_RANGES = ["$1k – $3k", "$3k – $7k", "$7k – $15k", "$15k+", "N
 
 const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flexible"];
 
+// Web3Forms access key — configured in the project's Keys/API keys tab.
+// The key below is a placeholder; replace it with your real key.
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? "";
+
 function RequestForm() {
-  // Submit directly through the Convex SDK (WebSocket) — no cross-origin
-  // HTTP fetch needed, so this works in both local dev and the sandbox.
+  // Parallel: store in Convex DB + trigger Resend owner notification.
   const submitToConvex = useMutation(api.inquiries.submitInquiry);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [invalid, setInvalid] = useState<{
     budget?: boolean;
     timeline?: boolean;
@@ -910,48 +914,102 @@ function RequestForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(null);
+    setErrorMessage(null);
+
     const formData = new FormData(event.currentTarget);
+    const name = ((formData.get("name") as string) ?? "").trim();
+    const email = ((formData.get("email") as string) ?? "").trim();
+    const company = ((formData.get("company") as string) ?? "").trim();
+    const phone = ((formData.get("phone") as string) ?? "").trim();
     const niche = ((formData.get("niche") as string) ?? "").trim();
     const budget = (formData.get("budget") as string) ?? "";
     const timeline = (formData.get("timeline") as string) ?? "";
+    const reference = ((formData.get("reference") as string) ?? "").trim();
+    const message = ((formData.get("message") as string) ?? "").trim();
+    const website = ((formData.get("website") as string) ?? "").trim();
+
+    // Client-side validation for required selects.
     const nextInvalid: typeof invalid = {};
     if (!budget) nextInvalid.budget = true;
     if (!timeline) nextInvalid.timeline = true;
     setInvalid(nextInvalid);
     if (Object.keys(nextInvalid).length > 0) return;
 
-    setStatus("loading");
+    setIsSubmitting(true);
+
+    // Build a human-readable message block for Web3Forms.
+    const detailLines = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      company && `Company: ${company}`,
+      phone && `Phone: ${phone}`,
+      `Niche: ${niche}`,
+      `Budget: ${budget}`,
+      `Timeline: ${timeline}`,
+      reference && `Reference: ${reference}`,
+      "",
+      "Project Details:",
+      message,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    // --- Primary: Web3Forms POST (delivers email to your inbox) ---
+    let web3Success = false;
     try {
-      const result = await submitToConvex({
-        name: (formData.get("name") as string) ?? "",
-        email: (formData.get("email") as string) ?? "",
-        company: ((formData.get("company") as string) ?? "").trim(),
-        phone: ((formData.get("phone") as string) ?? "").trim(),
-        projectType: niche,
-        budget,
-        timeline,
-        reference: ((formData.get("reference") as string) ?? "").trim(),
-        message: (formData.get("message") as string) ?? "",
-        // Honeypot — hidden field bots fill; the server discards those.
-        website: ((formData.get("website") as string) ?? "").trim(),
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          name,
+          email,
+          message: detailLines,
+          subject: `New Project Inquiry from ${name}`,
+        }),
       });
+      const result = (await response.json()) as {
+        success?: boolean;
+        message?: string;
+      };
       if (result.success) {
-        setStatus("success");
+        web3Success = true;
       } else {
-        // Clean, user-facing message — never a raw Convex/server error string.
-        setError(result.message ?? "Please try again in a moment.");
-        setStatus("error");
+        setErrorMessage(result.message || "Something went wrong. Please try again.");
       }
     } catch (err) {
-      console.error("Inquiry submit error:", err);
-      // Keep raw Convex error strings (e.g. "[CONVEX M...]") out of the UI.
-      setError("Something went wrong. Please try again.");
-      setStatus("error");
+      console.error("Web3Forms submit error:", err);
+      setErrorMessage("Network error. Please try again.");
     }
+
+    // --- Parallel: Convex DB storage + Resend owner notification ---
+    // Fire-and-forget; do not block the success UI on this.
+    submitToConvex({
+      name,
+      email,
+      company: company || undefined,
+      phone: phone || undefined,
+      projectType: niche,
+      budget,
+      timeline,
+      reference: reference || undefined,
+      message,
+      website: website || undefined,
+    }).catch((err) => console.error("Convex storage error (non-blocking):", err));
+
+    if (web3Success) {
+      setIsSuccess(true);
+    } else if (!errorMessage) {
+      setErrorMessage("Something went wrong. Please try again.");
+    }
+
+    setIsSubmitting(false);
   };
 
-  if (status === "success") {
+  if (isSuccess) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -970,7 +1028,7 @@ function RequestForm() {
           type="button"
           variant="ghost"
           className="text-glow-green mt-2 rounded-full text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
-          onClick={() => setStatus("idle")}
+          onClick={() => { setIsSuccess(false); setErrorMessage(null); }}
         >
           Send Another Request
         </Button>
@@ -1053,15 +1111,15 @@ function RequestForm() {
         </Field>
       </div>
 
-      {error && <p className="mt-3 text-base text-red-400">{error}</p>}
+      {errorMessage && <p className="mt-3 text-base text-red-400">{errorMessage}</p>}
 
       <Button
         type="submit"
-        disabled={status === "loading"}
-        aria-busy={status === "loading"}
+        disabled={isSubmitting}
+        aria-busy={isSubmitting}
         className="mt-5 h-12 w-full gap-2 rounded-full bg-[#2b7ced] text-white hover:bg-[#3d87f0]"
       >
-        {status === "loading" ? (
+        {isSubmitting ? (
           <>
             <Loader2 className="size-4 animate-spin" />
             Sending...
