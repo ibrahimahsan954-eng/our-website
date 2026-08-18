@@ -307,13 +307,17 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="gpu-crisp flex w-full justify-center select-none"
         >
-          <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366]">
-            {/* One centered line — "Ebad" and "Ahsan" share the same baseline
-                and the portrait sits exactly centered between them. */}
+          {/* The h1 is centered as one unit by the flex wrapper above; the tiny
+              translate-x compensates the script font's entry strokes (the capital
+              E/A sweep left of their advance boxes), so the ink reads optically
+              centered with equal space on both sides. */}
+          <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366] translate-x-[0.03em]">
+            {/* Staggered baseline: "Ebad" rides slightly high, "Ahsan" slightly
+                low, like a handwritten signature. */}
             <span className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,11vw,16rem)]">
-              <span>Ebad</span>
+              <span className="-translate-y-[0.07em]">Ebad</span>
               <HeroPortrait />
-              <span>Ahsan</span>
+              <span className="translate-y-[0.07em]">Ahsan</span>
             </span>
           </h1>
         </motion.div>
