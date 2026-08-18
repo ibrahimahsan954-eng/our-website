@@ -1,6 +1,6 @@
 "use node";
 
-import { vly } from "../lib/vly-integrations";
+import { Resend } from "resend";
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -21,14 +21,13 @@ function escapeHtml(value: string): string {
 /**
  * Delivers one email.
  *
- * Primary channel — the VLY integration (Resend-backed, billed through the
- * platform's VLY_INTEGRATION_KEY, no separate Resend account needed).
+ * Primary channel — Resend (RESEND_API_KEY env var). Clean, reliable,
+ * generous free tier (100 emails/day). Send domain must be verified in the
+ * Resend dashboard; use "onboarding@resend.dev" for testing.
  *
- * Fallback channel — Web3Forms (WEB3FORMS_ACCESS_KEY): if the VLY key is
+ * Fallback channel — Web3Forms (WEB3FORMS_ACCESS_KEY): if the Resend key is
  * missing or the send fails, the same message is POSTed to Web3Forms, which
- * forwards it to the inbox registered with that access key. This guarantees
- * owner notifications still arrive even if the primary provider is down or
- * unconfigured.
+ * forwards it to the inbox registered with that access key.
  *
  * Throws a descriptive error only when neither channel can deliver, so
  * failures surface in the Convex logs instead of silently vanishing.
@@ -39,37 +38,42 @@ async function deliverEmail(opts: {
   text: string;
   html: string;
   replyTo?: string;
-}): Promise<{ channel: "vly" | "web3forms" }> {
+}): Promise<{ channel: "resend" | "web3forms" }> {
   const { to, subject, text, html, replyTo } = opts;
-  const sender = process.env.VLY_EMAIL_FROM;
 
-  if (process.env.VLY_INTEGRATION_KEY) {
+  // Primary: Resend
+  const resendKey = process.env.RESEND_API_KEY;
+  if (resendKey) {
     try {
-      await vly.email.send({
-        ...(sender ? { from: sender } : {}),
+      const resend = new Resend(resendKey);
+      const fromAddress =
+        process.env.EMAIL_FROM || "Ebad Ahsan <onboarding@resend.dev>";
+      await resend.emails.send({
+        from: fromAddress,
         to,
         subject,
         text,
         html,
-        ...(replyTo ? { replyTo } : {}),
+        ...(replyTo ? { reply_to: replyTo } : {}),
       });
-      return { channel: "vly" };
+      return { channel: "resend" };
     } catch (error) {
-      console.error("[emails] VLY delivery failed, trying Web3Forms:", error);
+      console.error("[emails] Resend delivery failed, trying Web3Forms:", error);
     }
   }
 
+  // Fallback: Web3Forms
   const web3Key = process.env.WEB3FORMS_ACCESS_KEY;
   if (!web3Key) {
     throw new Error(
-      "No email provider is configured: set VLY_INTEGRATION_KEY (or WEB3FORMS_ACCESS_KEY) in the project's Keys/API keys tab.",
+      "No email provider is configured: set RESEND_API_KEY (or WEB3FORMS_ACCESS_KEY) in the project's Keys/API keys tab.",
     );
   }
 
   const form = new FormData();
   form.append("access_key", web3Key);
   form.append("subject", subject);
-  form.append("from_name", "Ebad Ahsan portfolio");
+  form.append("from_name", "Ebad Ahsan Portfolio");
   form.append("_replyto", replyTo ?? to);
   form.append("email", to);
   form.append("message", text);
@@ -89,12 +93,11 @@ async function deliverEmail(opts: {
 /**
  * Emails triggered by a new project inquiry.
  *
- * 1. A confirmation to the visitor (via the primary VLY channel — Web3Forms
- *    can only deliver to the inbox registered with its key, not to arbitrary
- *    recipients).
+ * 1. A confirmation to the visitor (via Resend — Web3Forms can only deliver
+ *    to the inbox registered with its key, not to arbitrary recipients).
  * 2. An instant notification to the site owner with all inquiry details,
- *    sent by default to onepunchman5005@gmail.com (override with the
- *    OWNER_NOTIFICATION_EMAIL env var in the project's Keys/API keys tab).
+ *    sent to ibrahimahsan954@gmail.com (override with the OWNER_NOTIFICATION_EMAIL
+ *    env var in the project's Keys/API keys tab).
  *    This one falls back to Web3Forms so it always arrives.
  */
 export const sendInquiryEmails = action({
@@ -111,7 +114,7 @@ export const sendInquiryEmails = action({
   },
   handler: async (_ctx, args) => {
     const ownerEmail =
-      process.env.OWNER_NOTIFICATION_EMAIL ?? "onepunchman5005@gmail.com";
+      process.env.OWNER_NOTIFICATION_EMAIL ?? "ibrahimahsan954@gmail.com";
 
     // Escaped copies of every user field, used only inside the HTML bodies.
     const safe = {
@@ -139,8 +142,7 @@ Thanks for reaching out about your ${args.projectType || "project"}. I've receiv
 
 In the meantime, feel free to message me on WhatsApp with any questions.
 
-— Ebad Ahsan
-Ebad Ahsan`,
+— Ebad Ahsan`,
         html: `<div style="background:#0d0d0d;padding:32px;font-family:Arial,sans-serif;color:#f2f4f6">
   <div style="max-width:480px;margin:0 auto">
     <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.02em">Ebad<span style="color:#25D366">Ahsan</span></div>
@@ -157,7 +159,7 @@ Ebad Ahsan`,
       results.confirmation = { error: "delivery failed" };
     }
 
-    // 2. Owner notification — VLY primary, Web3Forms fallback. If both fail
+    // 2. Owner notification — Resend primary, Web3Forms fallback. If both fail
     //    this throws, so the failure is visible in the Convex logs.
     results.owner = await deliverEmail({
       to: ownerEmail,
