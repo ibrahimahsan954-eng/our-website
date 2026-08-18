@@ -69,17 +69,20 @@ const SIZES = {
   },
   large: {
     card: "p-6 sm:p-10",
-    topRowGap: "gap-8",
-    identityGap: "gap-4 sm:gap-6",
-    avatar: "size-16 sm:size-20",
+    // flex-wrap + guaranteed gaps mean the identity block and the KPI grid
+    // can never overlap: when they don't fit on one line, the stats wrap
+    // below the logo/name row instead of colliding with it.
+    topRowGap: "gap-6 sm:gap-x-8 sm:gap-y-6",
+    identityGap: "gap-4 sm:gap-5",
+    avatar: "size-14 sm:size-16",
     name: "text-2xl font-bold sm:text-3xl",
     check: "size-6 sm:size-7",
     subtitle: "text-base sm:text-lg",
-    kpiGap: "gap-8 sm:gap-14",
+    kpiGap: "gap-6 sm:gap-10",
     kpiLabel: "text-sm text-white/45 sm:text-base",
-    kpiValue: "mt-1.5 text-2xl font-bold sm:mt-2 sm:text-4xl",
-    kpiArrow: "size-6 sm:size-7",
-    kpiArrowIcon: "size-3.5 sm:size-4",
+    kpiValue: "mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl lg:text-3xl",
+    kpiArrow: "size-5 sm:size-6",
+    kpiArrowIcon: "size-3 sm:size-3.5",
     chartGap: "mt-8 sm:mt-10",
     chart: "h-44 w-full sm:h-64",
     monthLabel: "text-xs font-medium tracking-wide text-white/40",
@@ -192,7 +195,7 @@ export function GrowthStatsCard({
       />
 
       {/* ---- Top row: channel identity + 3 KPI columns ---- */}
-      <div className={cn("relative flex flex-col lg:flex-row lg:items-center lg:justify-between", s.topRowGap)}>
+      <div className={cn("relative flex flex-col lg:flex-row lg:flex-wrap lg:items-center lg:justify-between", s.topRowGap)}>
         <div className={cn("flex min-w-0 items-center", s.identityGap)}>
           {/* Circular logo — the circle is enforced by an overflow-hidden
               container (not by the img itself) so the crop can never stretch
