@@ -1,4 +1,4 @@
-import { useId, useRef } from "react";
+import { useId, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowUp, BadgeCheck } from "lucide-react";
 import { formatCompact, useCountUp } from "@/lib/count-up";
@@ -151,6 +151,7 @@ export function GrowthStatsCard({
   const gradientId = useId();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [avatarFailed, setAvatarFailed] = useState(false);
 
   const { pts, line, area } = chartGeometry(chart);
   const end = pts[pts.length - 1];
@@ -193,14 +194,26 @@ export function GrowthStatsCard({
       {/* ---- Top row: channel identity + 3 KPI columns ---- */}
       <div className={cn("relative flex flex-col lg:flex-row lg:items-center lg:justify-between", s.topRowGap)}>
         <div className={cn("flex min-w-0 items-center", s.identityGap)}>
-          <img
-            src={avatar}
-            alt={name}
-            loading="lazy"
-            className={cn("shrink-0 rounded-full object-cover", s.avatar)}
-          />
+          {/* Circular logo — the circle is enforced by an overflow-hidden
+              container (not by the img itself) so the crop can never stretch
+              or leak out of the frame in any browser. */}
+          <span className={cn("relative block shrink-0 overflow-hidden rounded-full bg-[#1d9bf0]", s.avatar)}>
+            {!avatarFailed ? (
+              <img
+                src={avatar}
+                alt={name}
+                loading="lazy"
+                onError={() => setAvatarFailed(true)}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : (
+              <span className="flex h-full w-full items-center justify-center font-display text-xl font-bold text-white sm:text-2xl">
+                P
+              </span>
+            )}
+          </span>
           <div className="min-w-0">
-            <p className={cn("flex items-center gap-1.5", s.name)}>
+            <p className={cn("flex items-center gap-1.5 text-white", s.name)}>
               <span className="truncate">{name}</span>
               {verified && (
                 <BadgeCheck className={cn("shrink-0", s.check, accentCfg.text)} aria-label="Verified" />
