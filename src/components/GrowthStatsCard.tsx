@@ -38,8 +38,9 @@ export interface GrowthStatsCardProps {
   };
   /** 12 monthly data points (Jan → Dec), any scale — normalized for the chart. */
   chart: number[];
-  /** Oversized headline number (raw value, formatted like 9M / 168K) + period badge. */
-  headline: { value: number; badge: string };
+  /** Oversized headline number (raw value, formatted like 9M / 168K) + period badge.
+      Optional prefix renders before the number (e.g. "+" → "+16K"). */
+  headline: { value: number; badge: string; prefix?: string };
   className?: string;
 }
 
@@ -92,22 +93,29 @@ function formatCompact(n: number): string {
   return `${Math.round(n)}`;
 }
 
-/** rAF count-up from 0 → target, starting once `active` flips true. */
-function useCountUp(target: number, active: boolean, duration = 1500) {
+/** rAF count-up from 0 → target, starting once `active` flips true (after an
+    optional `delay` so multiple counters can sequence instead of firing together). */
+function useCountUp(target: number, active: boolean, duration = 1500, delay = 0) {
   const [display, setDisplay] = useState(0);
   useEffect(() => {
     if (!active) return;
     let raf = 0;
-    const start = performance.now();
+    let timeout = 0;
+    const start = performance.now() + delay;
     const tick = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setDisplay(Math.round(eased * target));
       if (progress < 1) raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [active, target, duration]);
+    timeout = window.setTimeout(() => {
+      raf = requestAnimationFrame(tick);
+    }, delay);
+    return () => {
+      window.clearTimeout(timeout);
+      cancelAnimationFrame(raf);
+    };
+  }, [active, target, duration, delay]);
   return display;
 }
 
@@ -158,10 +166,12 @@ export function GrowthStatsCard({
   const { pts, line, area } = chartGeometry(chart);
   const end = pts[pts.length - 1];
 
-  const views = useCountUp(stats.views.value, inView);
-  const watchTime = useCountUp(stats.watchTime.value, inView);
-  const subscribers = useCountUp(stats.subscribers.value, inView);
-  const headlineValue = useCountUp(headline.value, inView);
+  // Staggered starts: Views → Watch Time → Subscribers → headline, so the
+  // counters cascade instead of all racing at once.
+  const views = useCountUp(stats.views.value, inView, 1500, 0);
+  const watchTime = useCountUp(stats.watchTime.value, inView, 1500, 150);
+  const subscribers = useCountUp(stats.subscribers.value, inView, 1500, 300);
+  const headlineValue = useCountUp(headline.value, inView, 1700, 550);
 
   const statsList = [
     { stat: stats.views, value: views },
@@ -339,6 +349,7 @@ export function GrowthStatsCard({
           className="font-condensed text-6xl leading-none tracking-wide sm:text-7xl md:text-8xl"
           style={{ color: accentCfg.stroke }}
         >
+          {headline.prefix ?? ""}
           {formatCompact(headlineValue)}
         </p>
         <span

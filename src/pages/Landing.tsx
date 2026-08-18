@@ -718,7 +718,7 @@ const GROWTH_CARDS = [
     },
     // 12 monthly points (Jan → Dec), any scale — normalized for the chart.
     chart: [4200, 4700, 5100, 5900, 6400, 7100, 7800, 8600, 9500, 11000, 12500, 14200],
-    headline: { value: 168_000, badge: "Subscribers added in 12 months" },
+    headline: { value: 168_000, prefix: "+", badge: "Subscribers added in 12 months" },
   },
   {
     name: "Dragon Fruit Media",
@@ -732,7 +732,7 @@ const GROWTH_CARDS = [
       subscribers: { label: "Subscribers", value: 24_600, delta: "+73%" },
     },
     chart: [1800, 2100, 2600, 3300, 4100, 5200, 6100, 7900, 9800, 12400, 15800, 21000],
-    headline: { value: 2_100_000, badge: "Views generated in 12 months" },
+    headline: { value: 2_100_000, prefix: "+", badge: "Views generated in 12 months" },
   },
 ];
 
