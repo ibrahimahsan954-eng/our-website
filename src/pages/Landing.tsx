@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { GrowthCalloutCard } from "@/components/GrowthCalloutCard";
 import { GrowthStatsCard } from "@/components/GrowthStatsCard";
 import {
   Popover,
@@ -702,22 +703,22 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
 /* ---------------- Client Growth ---------------- */
 
-// The featured client growth showcase — a single large card (swap in the real
-// client, avatar, and numbers; see src/components/GrowthStatsCard.tsx).
+// The featured client growth showcase — PMPlace's real numbers, split into a
+// dark analytics card (identity + KPIs + chart) and a light callout card with
+// the headline stat (see src/components/GrowthStatsCard.tsx / GrowthCalloutCard.tsx).
 const GROWTH_CARD = {
-  name: "MDMZ",
-  subtitle: "89.2K subscribers",
+  name: "PMPlace",
+  subtitle: "16.4K subscribers",
   avatar: "/assets/channels4_profile__3_.jpg?v=2",
   verified: true,
   accent: "green" as const,
   stats: {
-    views: { label: "Views", value: 980_000, delta: "+46%" },
-    watchTime: { label: "Watch Time", value: 61_500, delta: "+39%" },
-    subscribers: { label: "Subscribers", value: 89_200, delta: "+48%" },
+    views: { label: "Views", value: 179_600 },
+    watchTime: { label: "Watch Time", value: 11_800 },
+    subscribers: { label: "Subscribers", value: 16_400, prefix: "+" },
   },
-  // 12 monthly points (Jan → Dec), any scale — normalized for the chart.
-  chart: [3100, 3600, 4100, 4800, 5600, 6500, 7600, 8800, 10200, 11800, 13600, 15800],
-  headline: { value: 980_000, prefix: "+", badge: "Views generated in 12 months" },
+  // 12 monthly points (Jan → Dec) ending at 16.4K subscribers.
+  chart: [2600, 3100, 3700, 4400, 5200, 6100, 7300, 8700, 10100, 9600, 12600, 16400],
 };
 
 function GrowthSection() {
@@ -731,10 +732,11 @@ function GrowthSection() {
               Client Growth, <span className="text-[#25D366]">By The Numbers</span>
             </>
           }
-          sub="A channel I've helped grow — views, watch time, and subscribers heading up month after month."
+          sub="PMPlace went from 0 to 16.4K subscribers in 12 months — views, watch time, and subscribers heading up month after month."
         />
-        <div className="mt-12">
+        <div className="mt-12 grid gap-6 lg:grid-cols-[1.7fr_1fr]">
           <GrowthStatsCard {...GROWTH_CARD} variant="large" />
+          <GrowthCalloutCard value={16_400} badge="16.4K subscribers in 12 months" />
         </div>
       </div>
     </section>
