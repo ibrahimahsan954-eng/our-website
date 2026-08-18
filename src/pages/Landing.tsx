@@ -310,9 +310,9 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
         >
           <h1 className="font-script leading-none tracking-normal text-[#25D366]">
             <span className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,11vw,16rem)]">
-              <span className="-translate-y-[0.08em]">Ebad</span>
+              <span className="-translate-y-[0.3em]">Ebad</span>
               <HeroPortrait />
-              <span className="translate-y-[0.08em]">Ahsan</span>
+              <span className="translate-y-[0.3em]">Ahsan</span>
             </span>
           </h1>
         </motion.div>
