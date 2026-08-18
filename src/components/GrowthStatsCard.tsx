@@ -114,7 +114,11 @@ const ACCENTS = {
 
 const VB_W = 600;
 const VB_H = 170;
-const PAD_X = 6;
+// Asymmetric horizontal padding: the line starts slightly inset on the left
+// (under "Jan") and runs all the way to the right edge (under "Dec"), so the
+// drawn line + end dot land exactly on the final data point at full width.
+const PAD_X_L = 6;
+const PAD_X_R = 2;
 const PAD_TOP = 14;
 const PAD_BOTTOM = 10;
 
@@ -123,9 +127,9 @@ function chartGeometry(points: number[]) {
   const min = Math.min(...points);
   const range = Math.max(max - min, 1);
   const innerH = VB_H - PAD_TOP - PAD_BOTTOM;
-  const stepX = (VB_W - PAD_X * 2) / Math.max(points.length - 1, 1);
+  const stepX = (VB_W - PAD_X_L - PAD_X_R) / Math.max(points.length - 1, 1);
   const pts = points.map((p, i) => ({
-    x: PAD_X + i * stepX,
+    x: PAD_X_L + i * stepX,
     y: PAD_TOP + (1 - (p - min) / range) * innerH,
   }));
   const line = pts
@@ -272,12 +276,13 @@ export function GrowthStatsCard({
               d={area}
               fill={`url(#${gradientId})`}
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-60px" }}
+              animate={inView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.9, delay: 0.85, ease: "easeOut" }}
             />
 
-            {/* line draw left → right */}
+            {/* line draw left → right — driven by the card's once-only inView
+                flag (not whileInView variants) so the tween always runs 0→1
+                to completion and reaches the final data point at the right. */}
             <motion.path
               d={line}
               fill="none"
@@ -287,9 +292,8 @@ export function GrowthStatsCard({
               strokeLinejoin="round"
               vectorEffect="non-scaling-stroke"
               initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 1.7, ease: "easeInOut" }}
+              animate={inView ? { pathLength: 1 } : { pathLength: 0 }}
+              transition={{ duration: 1.7, delay: 0.15, ease: "easeInOut" }}
             />
           </svg>
 
@@ -307,9 +311,8 @@ export function GrowthStatsCard({
               y: "-50%",
             }}
             initial={{ scale: 0, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 1.5, duration: 0.35, ease: "easeOut" }}
+            animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+            transition={{ delay: 1.85, duration: 0.35, ease: "easeOut" }}
           >
             <span
               className="absolute -inset-2 rounded-full"
