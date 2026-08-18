@@ -41,8 +41,58 @@ export interface GrowthStatsCardProps {
   /** Oversized headline number (raw value, formatted like 9M / 168K) + period badge.
       Optional prefix renders before the number (e.g. "+" → "+16K"). */
   headline: { value: number; badge: string; prefix?: string };
+  /** Layout size — "large" renders a single wide hero-style card. */
+  variant?: "default" | "large";
   className?: string;
 }
+
+/* ---- Size variants: default (grid card) vs large (single wide hero card) ---- */
+const SIZES = {
+  default: {
+    card: "p-5 sm:p-7",
+    topRowGap: "gap-6",
+    identityGap: "gap-4",
+    avatar: "size-12 sm:size-14",
+    avatarDot: "size-3.5",
+    name: "text-lg font-bold sm:text-xl",
+    check: "size-5",
+    subtitle: "text-sm",
+    kpiGap: "gap-6 sm:gap-8",
+    kpiValue: "text-lg font-bold sm:text-2xl",
+    kpiArrow: "size-4",
+    kpiLabel: "mt-1 text-xs text-white/45 sm:text-sm",
+    kpiDelta: "mt-0.5 text-[11px] font-semibold text-[#25D366]",
+    chartGap: "mt-7",
+    chart: "h-36 w-full sm:h-44",
+    monthLabel: "text-[10px] font-medium tracking-wide text-white/35",
+    headlineGap: "mt-7 border-t border-white/10 pt-6",
+    headline: "font-condensed text-6xl leading-none tracking-wide sm:text-7xl md:text-8xl",
+    badge: "mt-3 inline-block rounded-full border px-3.5 py-1.5 text-xs font-semibold sm:text-sm",
+  },
+  large: {
+    card: "p-6 sm:p-10",
+    topRowGap: "gap-8",
+    identityGap: "gap-4 sm:gap-6",
+    avatar: "size-16 sm:size-20",
+    avatarDot: "size-4 sm:size-5",
+    name: "text-2xl font-bold sm:text-3xl",
+    check: "size-6 sm:size-7",
+    subtitle: "text-base sm:text-lg",
+    kpiGap: "gap-8 sm:gap-14",
+    kpiValue: "text-2xl font-bold sm:text-4xl",
+    kpiArrow: "size-5 sm:size-6",
+    kpiLabel: "mt-1.5 text-sm text-white/45 sm:text-base",
+    kpiDelta: "mt-1 text-xs font-semibold text-[#25D366] sm:text-sm",
+    chartGap: "mt-8 sm:mt-10",
+    chart: "h-44 w-full sm:h-64",
+    monthLabel: "text-xs font-medium tracking-wide text-white/35",
+    headlineGap: "mt-8 border-t border-white/10 pt-6 sm:mt-10 sm:pt-8",
+    headline: "font-condensed text-7xl leading-none tracking-wide sm:text-8xl md:text-9xl",
+    badge: "mt-4 inline-block rounded-full border px-5 py-2 text-sm font-semibold sm:text-base",
+  },
+} as const;
+
+type SizeVariant = keyof typeof SIZES;
 
 const ACCENTS = {
   green: {
@@ -156,9 +206,11 @@ export function GrowthStatsCard({
   stats,
   chart,
   headline,
+  variant = "default",
   className,
 }: GrowthStatsCardProps) {
   const accentCfg = ACCENTS[accent];
+  const s = SIZES[variant as SizeVariant];
   const gradientId = useId();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -187,7 +239,8 @@ export function GrowthStatsCard({
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={cn(
-        "relative overflow-hidden rounded-3xl border bg-[#0a0a0a] p-5 text-white transition-colors duration-300 sm:p-7",
+        "relative overflow-hidden rounded-3xl border bg-[#0a0a0a] text-white transition-colors duration-300",
+        s.card,
         accentCfg.border,
         accentCfg.glow,
         accentCfg.hoverBorder,
@@ -202,41 +255,44 @@ export function GrowthStatsCard({
       />
 
       {/* ---- Top row: channel + 3 KPI columns ---- */}
-      <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex min-w-0 items-center gap-4">
+      <div className={cn("relative flex flex-col lg:flex-row lg:items-center lg:justify-between", s.topRowGap)}>
+        <div className={cn("flex min-w-0 items-center", s.identityGap)}>
           <span className="relative shrink-0">
             <img
               src={avatar}
               alt={name}
               loading="lazy"
-              className="size-12 rounded-full border border-white/10 object-cover sm:size-14"
+              className={cn("rounded-full border border-white/10 object-cover", s.avatar)}
             />
             <span
-              className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full border-2 border-[#0a0a0a] bg-[#25D366]"
+              className={cn(
+                "absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-[#0a0a0a] bg-[#25D366]",
+                s.avatarDot,
+              )}
               aria-hidden
             />
           </span>
           <div className="min-w-0">
-            <p className="flex items-center gap-1.5 text-lg font-bold sm:text-xl">
+            <p className={cn("flex items-center gap-1.5", s.name)}>
               <span className="truncate">{name}</span>
               {verified && (
-                <BadgeCheck className={cn("size-5 shrink-0", accentCfg.text)} aria-label="Verified" />
+                <BadgeCheck className={cn("shrink-0", s.check, accentCfg.text)} aria-label="Verified" />
               )}
             </p>
-            <p className="truncate text-sm text-white/50">{subtitle}</p>
+            <p className={cn("truncate text-white/50", s.subtitle)}>{subtitle}</p>
           </div>
         </div>
 
-        <div className="grid shrink-0 grid-cols-3 gap-6 sm:gap-8">
+        <div className={cn("grid shrink-0 grid-cols-3", s.kpiGap)}>
           {statsList.map(({ stat, value }) => (
             <div key={stat.label}>
-              <p className="flex items-center gap-1.5 text-lg font-bold sm:text-2xl">
+              <p className={cn("flex items-center gap-1.5", s.kpiValue)}>
                 <span>{formatCompact(value)}</span>
-                <TrendingUp className="size-4 shrink-0 text-[#25D366]" aria-hidden />
+                <TrendingUp className={cn("shrink-0 text-[#25D366]", s.kpiArrow)} aria-hidden />
               </p>
-              <p className="mt-1 text-xs text-white/45 sm:text-sm">{stat.label}</p>
+              <p className={cn("text-white/45", s.kpiLabel)}>{stat.label}</p>
               {stat.delta && (
-                <p className="mt-0.5 text-[11px] font-semibold text-[#25D366]">
+                <p className={s.kpiDelta}>
                   {stat.delta}
                 </p>
               )}
@@ -246,14 +302,14 @@ export function GrowthStatsCard({
       </div>
 
       {/* ---- 12-month area chart, line draws in on scroll ---- */}
-      <div className="relative mt-7">
+      <div className={cn("relative", s.chartGap)}>
         <div className="relative">
           <svg
             viewBox={`0 0 ${VB_W} ${VB_H}`}
             preserveAspectRatio="none"
             role="img"
             aria-label={`12-month growth chart for ${name}`}
-            className="h-36 w-full sm:h-44"
+            className={s.chart}
           >
             <defs>
               <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
@@ -335,7 +391,7 @@ export function GrowthStatsCard({
           {chart.map((_, i) => (
             <span
               key={i}
-              className="text-[10px] font-medium tracking-wide text-white/35"
+              className={s.monthLabel}
             >
               {MONTHS[i % MONTHS.length]}
             </span>
@@ -344,9 +400,9 @@ export function GrowthStatsCard({
       </div>
 
       {/* ---- Headline growth stat ---- */}
-      <div className="relative mt-7 border-t border-white/10 pt-6">
+      <div className={cn("relative", s.headlineGap)}>
         <p
-          className="font-condensed text-6xl leading-none tracking-wide sm:text-7xl md:text-8xl"
+          className={s.headline}
           style={{ color: accentCfg.stroke }}
         >
           {headline.prefix ?? ""}
@@ -354,7 +410,7 @@ export function GrowthStatsCard({
         </p>
         <span
           className={cn(
-            "mt-3 inline-block rounded-full border px-3.5 py-1.5 text-xs font-semibold sm:text-sm",
+            s.badge,
             accentCfg.badge,
           )}
         >
