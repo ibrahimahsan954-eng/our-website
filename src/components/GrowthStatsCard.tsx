@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowUp, BadgeCheck } from "lucide-react";
 import { formatCompact, useCountUp } from "@/lib/count-up";
@@ -65,7 +65,7 @@ const SIZES = {
     kpiArrowIcon: "size-3",
     chartGap: "mt-7",
     chart: "h-36 w-full sm:h-44",
-    monthLabel: "text-[10px] font-medium tracking-wide text-white/35",
+    monthLabel: "text-xs font-semibold tracking-wide text-white/80",
   },
   large: {
     card: "p-6 sm:p-10",
@@ -85,7 +85,7 @@ const SIZES = {
     kpiArrowIcon: "size-3 sm:size-3.5",
     chartGap: "mt-8 sm:mt-10",
     chart: "h-44 w-full sm:h-64",
-    monthLabel: "text-xs font-medium tracking-wide text-white/40",
+    monthLabel: "text-sm font-semibold tracking-wide text-white/85",
   },
 } as const;
 
@@ -110,24 +110,24 @@ const ACCENTS = {
   },
 } as const;
 
-/* ---- chart geometry (viewBox space) ---- */
+/* ---- chart geometry (pixel space) ----
+   The SVG viewBox is set to the chart's actual rendered size (measured with a
+   ResizeObserver), so geometry maps 1:1 to screen pixels. This avoids the old
+   preserveAspectRatio="none" non-uniform scaling, under which a constant
+   strokeWidth rendered with visibly varying thickness along steep segments.
+   In 1:1 pixel space the stroke is uniform from Jan to Dec. */
 
-const VB_W = 600;
-const VB_H = 170;
-// Asymmetric horizontal padding: the line starts slightly inset on the left
-// (under "Jan") and runs all the way to the right edge (under "Dec"), so the
-// drawn line + end dot land exactly on the final data point at full width.
 const PAD_X_L = 6;
 const PAD_X_R = 2;
 const PAD_TOP = 14;
 const PAD_BOTTOM = 10;
 
-function chartGeometry(points: number[]) {
+function chartGeometry(points: number[], vbW: number, vbH: number) {
   const max = Math.max(...points);
   const min = Math.min(...points);
   const range = Math.max(max - min, 1);
-  const innerH = VB_H - PAD_TOP - PAD_BOTTOM;
-  const stepX = (VB_W - PAD_X_L - PAD_X_R) / Math.max(points.length - 1, 1);
+  const innerH = vbH - PAD_TOP - PAD_BOTTOM;
+  const stepX = (vbW - PAD_X_L - PAD_X_R) / Math.max(points.length - 1, 1);
   const pts = points.map((p, i) => ({
     x: PAD_X_L + i * stepX,
     y: PAD_TOP + (1 - (p - min) / range) * innerH,
@@ -135,7 +135,7 @@ function chartGeometry(points: number[]) {
   const line = pts
     .map((pt, i) => `${i === 0 ? "M" : "L"} ${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`)
     .join(" ");
-  const bottomY = (VB_H - PAD_BOTTOM).toFixed(2);
+  const bottomY = (vbH - PAD_BOTTOM).toFixed(2);
   const area = `${line} L ${pts[pts.length - 1].x.toFixed(2)} ${bottomY} L ${pts[0].x.toFixed(2)} ${bottomY} Z`;
   return { pts, line, area };
 }
@@ -159,8 +159,23 @@ export function GrowthStatsCard({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [avatarFailed, setAvatarFailed] = useState(false);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartBox, setChartBox] = useState({ w: 600, h: 170 });
 
-  const { pts, line, area } = chartGeometry(chart);
+  // Measure the chart box so the SVG viewBox matches rendered pixels 1:1
+  // (keeps the stroke width perfectly uniform — see chartGeometry note).
+  useEffect(() => {
+    const el = chartRef.current;
+    if (!el) return;
+    const update = () => setChartBox({ w: el.clientWidth, h: el.clientHeight });
+    update();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const { pts, line, area } = chartGeometry(chart, chartBox.w, chartBox.h);
   const end = pts[pts.length - 1];
 
   // Staggered starts: Views → Watch Time → Subscribers, so the counters
@@ -256,10 +271,9 @@ export function GrowthStatsCard({
 
       {/* ---- 12-month area chart, line draws in on scroll ---- */}
       <div className={cn("relative", s.chartGap)}>
-        <div className="relative">
+        <div className="relative" ref={chartRef}>
           <svg
-            viewBox={`0 0 ${VB_W} ${VB_H}`}
-            preserveAspectRatio="none"
+            viewBox={`0 0 ${chartBox.w} ${chartBox.h}`}
             role="img"
             aria-label={`12-month growth chart for ${name}`}
             className={s.chart}
@@ -290,7 +304,6 @@ export function GrowthStatsCard({
               strokeWidth={2.5}
               strokeLinecap="round"
               strokeLinejoin="round"
-              vectorEffect="non-scaling-stroke"
               initial={{ pathLength: 0 }}
               animate={inView ? { pathLength: 1 } : { pathLength: 0 }}
               transition={{ duration: 1.7, delay: 0.15, ease: "easeInOut" }}
@@ -298,15 +311,15 @@ export function GrowthStatsCard({
           </svg>
 
           {/* End-of-line dot + glow ring. Rendered as an HTML overlay (not SVG)
-              because the chart stretches via preserveAspectRatio="none" — an
-              SVG circle would render as an oval on narrow screens. Positioned
-              in % of the chart box so it tracks the line end at every width. */}
+              so it is always a perfect circle and precisely aligned. Positioned
+              in % of the measured chart box so it tracks the line end at every
+              width, at the exact 1:1 pixel mapping of the line itself. */}
           <motion.span
             aria-hidden
             className="pointer-events-none absolute z-10"
             style={{
-              left: `${(end.x / VB_W) * 100}%`,
-              top: `${(end.y / VB_H) * 100}%`,
+              left: `${(end.x / chartBox.w) * 100}%`,
+              top: `${(end.y / chartBox.h) * 100}%`,
               x: "-50%",
               y: "-50%",
             }}
