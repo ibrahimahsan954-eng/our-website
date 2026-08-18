@@ -61,8 +61,8 @@ import { cn } from "@/lib/utils";
 const CALENDAR_EMBED_URL = "";
 
 // Primary showreel — YouTube.
-// Source: https://youtu.be/T7pNvhwRNBU?si=ogXx4LKdKcYi_YLx
-const SHOWREEL_ID = "T7pNvhwRNBU";
+// Source: https://youtu.be/FFHYY6bNJlQ?si=wDUvC966N6Xouaqi
+const SHOWREEL_ID = "FFHYY6bNJlQ";
 
 // Local MP4 for the hero showreel (public/showreel.mp4) — the hero renders a
 // native <video> player (muted, loop, autoplay, no controls, playsInline)
@@ -434,7 +434,7 @@ function HeroPortrait() {
 }
 
 const SHOWREEL_EMBED =
-  "https://www.youtube.com/embed/T7pNvhwRNBU?autoplay=1&mute=1&loop=1&playlist=T7pNvhwRNBU&controls=1&rel=0";
+  "https://www.youtube.com/embed/FFHYY6bNJlQ?autoplay=1&mute=1&loop=1&playlist=FFHYY6bNJlQ&controls=1&rel=0";
 
 function Showreel() {
   return (
