@@ -338,8 +338,8 @@ export function GrowthStatsCard({
           </motion.span>
 
           {/* corner month labels */}
-          <span className={cn("pointer-events-none absolute bottom-2 left-2", s.monthLabel)}>Jan</span>
-          <span className={cn("pointer-events-none absolute bottom-2 right-2", s.monthLabel)}>Dec</span>
+          <span className={cn("pointer-events-none absolute bottom-4 left-2", s.monthLabel)}>Jan</span>
+          <span className={cn("pointer-events-none absolute bottom-4 right-2", s.monthLabel)}>Dec</span>
         </div>
       </div>
     </motion.div>

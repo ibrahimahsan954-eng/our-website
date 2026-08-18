@@ -33,7 +33,7 @@ export function GrowthCalloutCard({ value, badge, prefix = "", className }: Grow
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
       className={cn(
-        "relative flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-white px-6 py-14 text-black shadow-[0_0_60px_rgba(37,211,102,0.12)] sm:px-10",
+        "relative flex flex-col items-center justify-center overflow-hidden rounded-3xl border border-gray-200 bg-white px-6 py-14 text-black shadow-[0_8px_30px_rgba(0,0,0,0.2)] sm:px-10",
         className,
       )}
     >
