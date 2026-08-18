@@ -307,11 +307,11 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="gpu-crisp mx-auto w-fit select-none"
         >
-          <h1 className="font-condensed leading-[0.85] text-[#25D366]">
-            <span className="flex items-center justify-center gap-[0.3em] whitespace-nowrap text-[clamp(2.75rem,15vw,20rem)]">
-              <span className="tracking-[0.07em]">EBAD</span>
+          <h1 className="font-script leading-none tracking-normal text-[#25D366]">
+            <span className="flex items-center justify-center gap-[0.3em] whitespace-nowrap text-[clamp(2.5rem,13vw,17rem)]">
+              <span>Ebad</span>
               <HeroPortrait />
-              <span className="tracking-[-0.01em]">AHSAN</span>
+              <span>Ahsan</span>
             </span>
           </h1>
         </motion.div>
@@ -421,12 +421,11 @@ function HeroPortrait() {
           onError={() => setFailed(true)}
           className="h-[0.9em] w-[0.9em] object-cover"
         />
-      ) : (
-        <span className="flex h-[0.9em] w-[0.9em] items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-          <span className="font-condensed text-[0.55em] leading-none text-[#25D366]/85">
-            E
+      ) : (          <span className="flex h-[0.9em] w-[0.9em] items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
+            <span className="font-script text-[0.62em] leading-none text-[#25D366]/85">
+              E
+            </span>
           </span>
-        </span>
       )}
     </span>
   );
