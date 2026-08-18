@@ -307,7 +307,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="gpu-crisp mx-auto w-fit select-none"
         >
-          <h1 className="font-script leading-none tracking-normal text-[#25D366]">
+          <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366]">
             <span className="flex items-center justify-center gap-[0.35em] whitespace-nowrap text-[clamp(2.5rem,13vw,17rem)]">
               {/* Slight vertical offset — "Ebad" sits a touch low, "Ahsan" a
                   touch high, like a natural handwritten signature. */}
@@ -414,18 +414,22 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 
 function HeroPortrait() {
   const [failed, setFailed] = useState(false);
+  // Size lives on the container (single source of truth): 1.2em of the heading
+  // font-size, so the portrait stays proportional to the text at every viewport
+  // (scales with the heading's clamp()) and the photo/fallback can never drift
+  // to different sizes. The img fills the box with object-cover — no distortion.
   return (
-    <span className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[18px] border border-black/10 bg-[#f7f7f4] shadow-[0_8px_30px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#080808] dark:shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
+    <span className="relative inline-flex h-[1.2em] w-[1.2em] shrink-0 items-center justify-center overflow-hidden rounded-[18px] border border-black/10 bg-[#f7f7f4] shadow-[0_8px_30px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#080808] dark:shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
       {!failed ? (
         <img
           src={PORTRAIT_URL}
           alt="Ebad Ahsan"
           onError={() => setFailed(true)}
-          className="h-[1.2em] w-[1.2em] object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
         />
       ) : (
-        <span className="flex h-[1.2em] w-[1.2em] items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-          <span className="font-script text-[0.47em] leading-none text-[#25D366]/85">
+        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
+          <span className="font-script font-bold text-[0.42em] leading-none text-[#25D366]/85">
             E
           </span>
         </span>
