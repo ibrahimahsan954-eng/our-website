@@ -25,10 +25,11 @@ const ytFallback = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 export const PROJECTS: Project[] = [
   {
     id: "project-5",
-    title: "Demo For MDMZ",
+    title: "Corridor Crew Green Screen Video For MDMZ",
     category: "Client Work",
-    videoUrl: "https://player.vimeo.com/video/1218698436",
-    thumbnailUrl: "https://vumbnail.com/1218698436.jpg",
+    videoUrl: "https://www.youtube.com/embed/SIBznvfi6TA?si=LuGwlFGYf3izD1wd",
+    thumbnailUrl: yt("SIBznvfi6TA"),
+    thumbnailFallbackUrl: ytFallback("SIBznvfi6TA"),
   },
   {
     id: "project-4",
