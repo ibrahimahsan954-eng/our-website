@@ -29,9 +29,11 @@ export function VideoModal({
           {src && isDirectVideo(src) ? (
             <video
               src={src}
-              controls
               autoPlay
+              loop
+              muted
               playsInline
+              controls
               controlsList="nodownload"
               onContextMenu={(event) => event.preventDefault()}
               className="h-full w-full bg-black object-contain"

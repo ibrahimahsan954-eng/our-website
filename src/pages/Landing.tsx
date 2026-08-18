@@ -465,10 +465,11 @@ function Showreel() {
             key={showreelMp4}
             src={showreelMp4}
             poster={SHOWREEL_THUMBNAIL}
-            muted
-            loop
-            playsInline
             autoPlay
+            loop
+            muted
+            playsInline
+            controls
             preload="metadata"
             controlsList="nodownload"
             onContextMenu={(event) => event.preventDefault()}
@@ -580,10 +581,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               key={directSrc}
               src={directSrc}
               poster={project.thumbnailUrl}
-              muted
-              loop
-              playsInline
               autoPlay
+              loop
+              muted
+              playsInline
+              controls
               preload="metadata"
               controlsList="nodownload"
               onContextMenu={(event) => event.preventDefault()}
