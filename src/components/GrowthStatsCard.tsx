@@ -237,84 +237,88 @@ export function GrowthStatsCard({
 
       {/* ---- 12-month area chart, line draws in on scroll ---- */}
       <div className="relative mt-7">
-        <svg
-          viewBox={`0 0 ${VB_W} ${VB_H}`}
-          preserveAspectRatio="none"
-          role="img"
-          aria-label={`12-month growth chart for ${name}`}
-          className="h-36 w-full sm:h-44"
-        >
-          <defs>
-            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={accentCfg.stroke} stopOpacity={0.32} />
-              <stop offset="100%" stopColor={accentCfg.stroke} stopOpacity={0} />
-            </linearGradient>
-          </defs>
+        <div className="relative">
+          <svg
+            viewBox={`0 0 ${VB_W} ${VB_H}`}
+            preserveAspectRatio="none"
+            role="img"
+            aria-label={`12-month growth chart for ${name}`}
+            className="h-36 w-full sm:h-44"
+          >
+            <defs>
+              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={accentCfg.stroke} stopOpacity={0.32} />
+                <stop offset="100%" stopColor={accentCfg.stroke} stopOpacity={0} />
+              </linearGradient>
+            </defs>
 
-          {/* dashed gridlines */}
-          {[0.25, 0.5, 0.75].map((t) => (
-            <line
-              key={t}
-              x1={PAD_X}
-              x2={VB_W - PAD_X}
-              y1={PAD_TOP + (VB_H - PAD_TOP - PAD_BOTTOM) * t}
-              y2={PAD_TOP + (VB_H - PAD_TOP - PAD_BOTTOM) * t}
-              stroke="rgba(255,255,255,0.06)"
-              strokeDasharray="3 5"
+            {/* dashed gridlines */}
+            {[0.25, 0.5, 0.75].map((t) => (
+              <line
+                key={t}
+                x1={PAD_X}
+                x2={VB_W - PAD_X}
+                y1={PAD_TOP + (VB_H - PAD_TOP - PAD_BOTTOM) * t}
+                y2={PAD_TOP + (VB_H - PAD_TOP - PAD_BOTTOM) * t}
+                stroke="rgba(255,255,255,0.06)"
+                strokeDasharray="3 5"
+              />
+            ))}
+
+            {/* gradient fill fades in after the line starts drawing */}
+            <motion.path
+              d={area}
+              fill={`url(#${gradientId})`}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.9, delay: 0.85, ease: "easeOut" }}
             />
-          ))}
 
-          {/* gradient fill fades in after the line starts drawing */}
-          <motion.path
-            d={area}
-            fill={`url(#${gradientId})`}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.9, delay: 0.85, ease: "easeOut" }}
-          />
+            {/* line draw left → right */}
+            <motion.path
+              d={line}
+              fill="none"
+              stroke={accentCfg.stroke}
+              strokeWidth={2.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 1.7, ease: "easeInOut" }}
+            />
+          </svg>
 
-          {/* line draw left → right */}
-          <motion.path
-            d={line}
-            fill="none"
-            stroke={accentCfg.stroke}
-            strokeWidth={2.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            vectorEffect="non-scaling-stroke"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 1.7, ease: "easeInOut" }}
-          />
-
-          {/* end-of-line dot + glow ring */}
-          <motion.circle
-            cx={end.x}
-            cy={end.y}
-            r={4}
-            fill={accentCfg.stroke}
-            style={{ transformBox: "fill-box", transformOrigin: "center" }}
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 1.5, duration: 0.3 }}
-          />
-          <motion.circle
-            cx={end.x}
-            cy={end.y}
-            r={9}
-            fill="none"
-            stroke={accentCfg.stroke}
-            strokeOpacity={0.35}
-            style={{ transformBox: "fill-box", transformOrigin: "center" }}
+          {/* End-of-line dot + glow ring. Rendered as an HTML overlay (not SVG)
+              because the chart stretches via preserveAspectRatio="none" — an
+              SVG circle would render as an oval on narrow screens. Positioned
+              in % of the chart box so it tracks the line end at every width. */}
+          <motion.span
+            aria-hidden
+            className="pointer-events-none absolute z-10"
+            style={{
+              left: `${(end.x / VB_W) * 100}%`,
+              top: `${(end.y / VB_H) * 100}%`,
+              x: "-50%",
+              y: "-50%",
+            }}
             initial={{ scale: 0, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 1.6, duration: 0.4 }}
-          />
-        </svg>
+            transition={{ delay: 1.5, duration: 0.35, ease: "easeOut" }}
+          >
+            <span
+              className="absolute -inset-2 rounded-full"
+              style={{ border: `2px solid ${accentCfg.stroke}`, opacity: 0.35 }}
+            />
+            <span
+              className="block size-3 rounded-full border-2 border-[#0a0a0a]"
+              style={{ background: accentCfg.stroke }}
+            />
+          </motion.span>
+        </div>
 
         {/* month labels */}
         <div className="mt-2 flex justify-between px-0.5">
