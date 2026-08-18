@@ -305,12 +305,12 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="gpu-crisp mx-auto w-fit select-none"
+          className="gpu-crisp flex w-full justify-center select-none"
         >
           <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366]">
             {/* One centered line — "Ebad" and "Ahsan" share the same baseline
                 and the portrait sits exactly centered between them. */}
-            <span className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,12vw,17rem)]">
+            <span className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,11vw,16rem)]">
               <span>Ebad</span>
               <HeroPortrait />
               <span>Ahsan</span>
