@@ -337,9 +337,11 @@ export function GrowthStatsCard({
             />
           </motion.span>
 
-          {/* corner month labels */}
-          <span className={cn("pointer-events-none absolute bottom-4 left-2", s.monthLabel)}>Jan</span>
-          <span className={cn("pointer-events-none absolute bottom-4 right-2", s.monthLabel)}>Dec</span>
+        </div>
+        {/* Month labels — positioned below the chart, not inside it */}
+        <div className="flex w-full items-center justify-between px-1 pt-2">
+          <span className={s.monthLabel}>Jan</span>
+          <span className={s.monthLabel}>Dec</span>
         </div>
       </div>
     </motion.div>
