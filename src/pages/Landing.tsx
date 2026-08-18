@@ -310,7 +310,7 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           <h1 className="font-script font-bold leading-none tracking-normal text-[#25D366]">
             {/* One centered line — "Ebad" and "Ahsan" share the same baseline
                 and the portrait sits exactly centered between them. */}
-            <span className="flex items-center justify-center gap-[0.3em] whitespace-nowrap text-[clamp(2.5rem,13vw,17rem)]">
+            <span className="flex items-center justify-center gap-[0.25em] whitespace-nowrap text-[clamp(2.5rem,12vw,17rem)]">
               <span>Ebad</span>
               <HeroPortrait />
               <span>Ahsan</span>
@@ -414,12 +414,12 @@ function ClientAvatar({ src, label }: { src: string; label: string }) {
 
 function HeroPortrait() {
   const [failed, setFailed] = useState(false);
-  // Size lives on the container (single source of truth): 1.6em of the heading
+  // Size lives on the container (single source of truth): 2.4em of the heading
   // font-size, so the portrait stays proportional to the text at every viewport
   // (scales with the heading's clamp()) and the photo/fallback can never drift
   // to different sizes. The img fills the box with object-cover — no distortion.
   return (
-    <span className="relative inline-flex h-[1.6em] w-[1.6em] shrink-0 items-center justify-center overflow-hidden rounded-[18px] border border-black/10 bg-[#f7f7f4] shadow-[0_8px_30px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#080808] dark:shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
+    <span className="relative inline-flex h-[2.4em] w-[2.4em] shrink-0 items-center justify-center overflow-hidden rounded-[24px] border border-black/10 bg-[#f7f7f4] shadow-[0_8px_30px_rgba(0,0,0,0.25)] dark:border-white/15 dark:bg-[#080808] dark:shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
       {!failed ? (
         <img
           src={PORTRAIT_URL}
@@ -429,7 +429,7 @@ function HeroPortrait() {
         />
       ) : (
         <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-          <span className="font-script font-bold text-[0.56em] leading-none text-[#25D366]/85">
+          <span className="font-script font-bold text-[0.84em] leading-none text-[#25D366]/85">
             E
           </span>
         </span>
