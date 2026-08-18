@@ -897,9 +897,7 @@ const BUDGET_RANGES = ["$1k – $3k", "$3k – $7k", "$7k – $15k", "$15k+", "N
 
 const TIMELINES = ["ASAP", "1 – 2 weeks", "3 – 4 weeks", "Next month", "Flexible"];
 
-// Web3Forms access key — configured in the project's Keys/API keys tab.
-// The key below is a placeholder; replace it with your real key.
-const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? "";
+const WEB3FORMS_KEY = "29857f35-c5a0-46fb-b8a4-3d7930ace8b0";
 
 function RequestForm() {
   // Parallel: store in Convex DB + trigger Resend owner notification.
@@ -907,6 +905,7 @@ function RequestForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [invalid, setInvalid] = useState<{
     budget?: boolean;
     timeline?: boolean;
@@ -967,8 +966,14 @@ function RequestForm() {
           access_key: WEB3FORMS_KEY,
           name,
           email,
+          company,
+          phone,
+          niche,
+          budget,
+          timeline,
+          reference,
           message: detailLines,
-          subject: `New Project Inquiry from ${name}`,
+          subject: "New Project Inquiry",
         }),
       });
       const result = (await response.json()) as {
@@ -1028,7 +1033,7 @@ function RequestForm() {
           type="button"
           variant="ghost"
           className="text-glow-green mt-2 rounded-full text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
-          onClick={() => { setIsSuccess(false); setErrorMessage(null); }}
+          onClick={() => { setIsSuccess(false); setErrorMessage(null); formRef.current?.reset(); }}
         >
           Send Another Request
         </Button>
@@ -1038,6 +1043,7 @@ function RequestForm() {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       className="gpu-crisp rounded-2xl border border-black/10 bg-white p-6 sm:p-7 dark:border-white/10 dark:bg-[#080808]"
     >
