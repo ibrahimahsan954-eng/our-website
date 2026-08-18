@@ -126,7 +126,7 @@ export const checkIpRateLimit = internalMutation({
  * Kept as a mutation (instead of doing everything in the HTTP action) so the
  * validation + DB insert run atomically on the primary.
  */
-export const submitInquiry = internalMutation({
+export const submitInquiry = mutation({
   args: {
     name: v.string(),
     email: v.string(),

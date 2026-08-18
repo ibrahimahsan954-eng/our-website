@@ -1,6 +1,6 @@
 import { httpRouter } from "convex/server";
 import { auth } from "./auth";
-import { internal } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 import { httpAction } from "./_generated/server";
 import { validateFormFile } from "./uploadRules";
 
@@ -192,7 +192,7 @@ http.route({
     const str = (value: unknown): string =>
       typeof value === "string" ? value : "";
     const result = await ctx.runMutation(
-      internal.inquiries.submitInquiry,
+      api.inquiries.submitInquiry,
       {
         name: str(body.name),
         email: str(body.email),
