@@ -512,7 +512,7 @@ function Portfolio() {
     <section id="work" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto w-full max-w-7xl">
         <SectionHeading
-          eyebrow={<PillBadge icon={<Home className="size-5" />} label="Portfolio" />}
+          eyebrow={<PillBadge icon={<Clapperboard className="size-5" />} label="Portfolio" />}
           title="My Latest Projects"
           sub="Some Case Studies"
         />
@@ -1367,7 +1367,7 @@ function DmSection() {
             note="DM Me"
           />
           <DmCard
-            href="mailto:onepunchman5005@gmail.com"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=onepunchman5005@gmail.com"
             icon={<Mail className="size-5" />}
             label="Gmail"
             note="Direct Email"
