@@ -734,10 +734,10 @@ function GrowthSection() {
           eyebrow={<PillBadge icon={<TrendingUp className="size-5" />} label="Results" />}
           title={
             <>
-              Client Growth, <span className="text-[#25D366]">By The Numbers</span>
+              Delivered Results, <span className="text-[#25D366]">In Numbers</span>
             </>
           }
-          sub="PMPlace went from 0 to 16.4K subscribers in 12 months — views, watch time, and subscribers heading up month after month."
+          sub="I helped PMPlace grow from 0 to 16.4K subscribers in 12 months using my proven strategy: rebranding, thumbnail design, premium video editing, title optimization, and strategic posting."
         />
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.7fr_1fr]">
           <GrowthStatsCard {...GROWTH_CARD} variant="large" />
