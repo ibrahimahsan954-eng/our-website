@@ -308,10 +308,12 @@ function Hero({ onReserve }: { onReserve?: () => void }) {
           className="gpu-crisp mx-auto w-fit select-none"
         >
           <h1 className="font-script leading-none tracking-normal text-[#25D366]">
-            <span className="flex items-center justify-center gap-[0.3em] whitespace-nowrap text-[clamp(2.5rem,13vw,17rem)]">
-              <span>Ebad</span>
+            <span className="flex items-center justify-center gap-[0.35em] whitespace-nowrap text-[clamp(2.5rem,13vw,17rem)]">
+              {/* Slight vertical offset — "Ebad" sits a touch low, "Ahsan" a
+                  touch high, like a natural handwritten signature. */}
+              <span className="translate-y-[0.07em]">Ebad</span>
               <HeroPortrait />
-              <span>Ahsan</span>
+              <span className="-translate-y-[0.07em]">Ahsan</span>
             </span>
           </h1>
         </motion.div>
@@ -419,13 +421,14 @@ function HeroPortrait() {
           src={PORTRAIT_URL}
           alt="Ebad Ahsan"
           onError={() => setFailed(true)}
-          className="h-[0.9em] w-[0.9em] object-cover"
+          className="h-[1.2em] w-[1.2em] object-cover"
         />
-      ) : (          <span className="flex h-[0.9em] w-[0.9em] items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
-            <span className="font-script text-[0.62em] leading-none text-[#25D366]/85">
-              E
-            </span>
+      ) : (
+        <span className="flex h-[1.2em] w-[1.2em] items-center justify-center bg-gradient-to-br from-[#34362a] via-[#1a1b15] to-[#0c0d0a]">
+          <span className="font-script text-[0.47em] leading-none text-[#25D366]/85">
+            E
           </span>
+        </span>
       )}
     </span>
   );
