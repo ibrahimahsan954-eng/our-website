@@ -71,7 +71,7 @@ const schema = defineSchema(
     }).index("by_slot", ["slot"]),
   },
   {
-    schemaValidation: false,
+    schemaValidation: true,
   },
 );
 

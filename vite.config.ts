@@ -96,9 +96,11 @@ export default defineConfig({
     // dev server in a managed session); an active HMR websocket breaks the
     // preview tunnel, causing "refused to connect" on the sandbox URL.
     hmr: false,
-    // Basic security headers for local dev. The strict production CSP lives
-    // in main.ts; dev needs 'unsafe-inline' for Vite's react-refresh preamble
-    // and open connect-src for the local Convex dev server + HMR websocket.
+    // Basic security headers for local dev, mirroring the production policy in
+    // index.html / main.ts. Dev needs 'unsafe-inline' for Vite's react-refresh
+    // preamble. HMR is disabled (see above), and the Convex client talks to the
+    // cloud deployment over https/wss, so connect-src doesn't need plaintext
+    // http: or insecure ws: — 'self' still covers the localhost dev origin.
     headers: {
       "X-Frame-Options": "DENY",
       "Content-Security-Policy": [
@@ -108,7 +110,7 @@ export default defineConfig({
         "font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com",
         "img-src 'self' data: blob: https:",
         "media-src 'self' blob: https:",
-        "connect-src 'self' http: https: ws: wss:",
+        "connect-src 'self' https: wss:",
         "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://player.cloudinary.com https://cal.com https://app.cal.com https://calendly.com",
         "object-src 'none'",
         "base-uri 'self'",

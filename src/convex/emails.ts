@@ -3,6 +3,7 @@
 import { Resend } from "resend";
 import { action } from "./_generated/server";
 import { v } from "convex/values";
+import { getOwnerEmail } from "./ownerConfig";
 
 // Escape user-supplied text before it's interpolated into HTML email bodies,
 // so any HTML/script tags submitted by users render as plain text and can
@@ -54,7 +55,7 @@ async function deliverEmail(opts: {
         subject,
         text,
         html,
-        ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(replyTo ? { replyTo } : {}),
       });
       return { channel: "resend" };
     } catch (error) {
@@ -96,8 +97,8 @@ async function deliverEmail(opts: {
  * 1. A confirmation to the visitor (via Resend — Web3Forms can only deliver
  *    to the inbox registered with its key, not to arbitrary recipients).
  * 2. An instant notification to the site owner with all inquiry details,
- *    sent to ibrahimahsan954@gmail.com (override with the OWNER_NOTIFICATION_EMAIL
- *    env var in the project's Keys/API keys tab).
+ *    sent to the address resolved by ownerConfig.ts (the OWNER_NOTIFICATION_EMAIL
+ *    env var, or the default there).
  *    This one falls back to Web3Forms so it always arrives.
  */
 export const sendInquiryEmails = action({
@@ -113,8 +114,7 @@ export const sendInquiryEmails = action({
     reference: v.optional(v.string()),
   },
   handler: async (_ctx, args) => {
-    const ownerEmail =
-      process.env.OWNER_NOTIFICATION_EMAIL ?? "ibrahimahsan954@gmail.com";
+    const ownerEmail = getOwnerEmail();
 
     // Escaped copies of every user field, used only inside the HTML bodies.
     const safe = {

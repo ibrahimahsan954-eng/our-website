@@ -8,17 +8,20 @@ const app = new Hono();
 //   clickjacking — the site can never be embedded in another page's iframe.
 // - Content-Security-Policy restricts which origins scripts, frames, fonts,
 //   and connections can come from. The 'sha256-...' entry allows the small
-//   inline theme script in index.html; everything else must load from the
-//   site itself. Video embeds, the Google/SF Pro font CDNs, the Convex
-//   backend (cloud + site URLs), and the booking endpoint are allowlisted.
+//   inline theme script in index.html (stricter than 'unsafe-inline' — only
+//   that exact script runs); the Plausible/GTM hosts allow the analytics
+//   snippet. connect-src permits any HTTPS/WSS origin so the Convex backend,
+//   the Web3Forms fallback, the presigned S3/R2 upload host (configured per
+//   deploy), and the Plausible beacon all work — but never plaintext http:/ws:.
+//   Kept in sync with the meta policy in index.html.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'sha256-8a4ae73aa2ed9e19a2939b2891b42182f8de158444084e83d50a88915da81b63'",
+  "script-src 'self' 'sha256-8a4ae73aa2ed9e19a2939b2891b42182f8de158444084e83d50a88915da81b63' https://plausible.io https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.cdnfonts.com",
   "font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com",
   "img-src 'self' data: blob: https:",
   "media-src 'self' blob: https:",
-  "connect-src 'self' https://*.convex.cloud wss://*.convex.cloud https://*.convex.site",
+  "connect-src 'self' https: wss:",
   "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://player.cloudinary.com https://cal.com https://app.cal.com https://calendly.com",
   "object-src 'none'",
   "base-uri 'self'",
