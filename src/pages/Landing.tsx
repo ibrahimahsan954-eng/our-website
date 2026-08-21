@@ -1408,7 +1408,7 @@ function DmSection() {
             note="DM Me"
           />
           <DmCard
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=onepunchman5005@gmail.com"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=ibrahimahsan954@gmail.com"
             icon={<Mail className="size-5" />}
             label="Gmail"
             note="Direct Email"

@@ -2,6 +2,7 @@
 
 import { action } from "./_generated/server";
 import { v } from "convex/values";
+import { api } from "./_generated/api";
 import { MEDIA_SLOTS } from "./videoAssets";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -41,10 +42,18 @@ function requireBucket(): string {
  * Returns a presigned PUT URL so the browser can upload the MP4 directly to
  * S3/R2 storage — the file never passes through Convex. Also returns the
  * public URL the site will use to serve the video.
+ *
+ * Owner-only: this is a Node action (no ctx.db), so it confirms the caller is
+ * the site owner via the internal isOwner query. Without this, any visitor
+ * could mint presigned upload URLs and write arbitrary objects into the bucket.
  */
 export const getUploadUrl = action({
   args: { slot: v.string(), fileName: v.string(), contentType: v.string() },
-  handler: async (_ctx, args) => {
+  handler: async (ctx, args) => {
+    const isOwner = await ctx.runQuery(api.inquiries.isOwner, {});
+    if (!isOwner) {
+      throw new Error("Not the site owner");
+    }
     if (!MEDIA_SLOTS.includes(args.slot as (typeof MEDIA_SLOTS)[number])) {
       throw new Error("Unknown media slot.");
     }

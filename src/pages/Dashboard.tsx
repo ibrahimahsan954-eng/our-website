@@ -193,8 +193,8 @@ export default function Dashboard() {
           </div>
           <ul className="flex flex-col gap-2">
             <DeliveryRow
-              ok={emailStatus?.vlyConfigured}
-              label="VLY email (Resend) — primary channel"
+              ok={emailStatus?.resendConfigured}
+              label="Resend — primary channel"
             />
             <DeliveryRow
               ok={emailStatus?.web3formsConfigured}
@@ -202,11 +202,11 @@ export default function Dashboard() {
             />
           </ul>
           {emailStatus &&
-            !emailStatus.vlyConfigured &&
+            !emailStatus.resendConfigured &&
             !emailStatus.web3formsConfigured && (
               <p className="rounded-lg border border-red-400/25 bg-red-400/10 px-3 py-2 text-sm leading-relaxed text-red-300">
                 No email provider is configured yet. Add{" "}
-                <code className="rounded bg-white/10 px-1 py-0.5 font-mono">VLY_INTEGRATION_KEY</code>{" "}
+                <code className="rounded bg-white/10 px-1 py-0.5 font-mono">RESEND_API_KEY</code>{" "}
                 (or{" "}
                 <code className="rounded bg-white/10 px-1 py-0.5 font-mono">WEB3FORMS_ACCESS_KEY</code>{" "}
                 as fallback) in the project&apos;s Keys/API keys tab so inquiries

@@ -8,29 +8,47 @@ import {
   QueryCtx,
 } from "./_generated/server";
 import { v } from "convex/values";
+import { getOwnerEmail } from "./ownerConfig";
 
 /**
  * Resolve the current user id, but only when they're the site owner.
  *
- * The owner is identified by the OWNER_NOTIFICATION_EMAIL environment
- * variable (set in the project's Keys/API keys tab). While that variable is
- * unset, any authenticated user can access the inbox so the owner isn't
- * locked out before configuring it.
+ * The owner is whoever signs in with the address returned by getOwnerEmail()
+ * (the OWNER_NOTIFICATION_EMAIL env var, or the default in ownerConfig.ts).
+ *
+ * This is fail-safe: unless we can positively confirm the signed-in account's
+ * email matches the owner, we return null. Anonymous accounts have no email
+ * and are always denied. (Previously, while OWNER_NOTIFICATION_EMAIL was
+ * unset, ANY authenticated user — including a one-click anonymous session —
+ * could read every inquiry, exposing submitters' names, emails, phone numbers
+ * and messages.)
  */
 export async function getOwnerUserId(ctx: QueryCtx | MutationCtx) {
   const userId = await getAuthUserId(ctx);
   if (userId === null) {
     return null;
   }
-  const ownerEmail = process.env.OWNER_NOTIFICATION_EMAIL;
-  if (ownerEmail) {
-    const user = await ctx.db.get(userId);
-    if (!user || user.email !== ownerEmail) {
-      return null;
-    }
+  const user = await ctx.db.get(userId);
+  const email = (user?.email ?? "").trim().toLowerCase();
+  if (email.length === 0 || email !== getOwnerEmail()) {
+    return null;
   }
   return userId;
 }
+
+/**
+ * Public boolean — is the current caller the site owner? Safe to expose to the
+ * client: it returns only true/false (never any inquiry data), derived from the
+ * caller's own auth. Used two ways:
+ *   - the media upload action confirms ownership via ctx.runQuery (it's a Node
+ *     action with no ctx.db of its own), and
+ *   - RequireAuth uses it to keep non-owners (including one-click guests) out
+ *     of the owner-only dashboard.
+ */
+export const isOwner = query({
+  args: {},
+  handler: async (ctx) => (await getOwnerUserId(ctx)) !== null,
+});
 
 // Limits enforced server-side before anything is written to the DB.
 const MAX_NAME = 100;
@@ -121,10 +139,12 @@ export const checkIpRateLimit = internalMutation({
 });
 
 /**
- * Internal mutation — only reachable through the public HTTP action at
- * POST /inquiry, which enforces the per-IP rate limit before delegating here.
- * Kept as a mutation (instead of doing everything in the HTTP action) so the
- * validation + DB insert run atomically on the primary.
+ * Public mutation — the booking form calls this directly (see Landing.tsx).
+ * It's intentionally unauthenticated so any visitor can submit, but it defends
+ * itself: honeypot check, strict server-side validation, input sanitization,
+ * and a per-email 60s throttle before anything is written. (The alternative
+ * ingress at POST /inquiry in http.ts adds a per-IP hourly cap on top of this
+ * same handler; both paths converge here so validation always runs.)
  */
 export const submitInquiry = mutation({
   args: {
@@ -203,6 +223,45 @@ export const submitInquiry = mutation({
         success: false,
         message: "Thanks — please wait a moment before sending another request.",
       };
+    }
+
+    // Global abuse ceiling: cap total accepted inquiries site-wide per hour,
+    // independent of the per-email throttle above. This is the real backstop —
+    // submitInquiry is a PUBLIC mutation, so it can be called directly with the
+    // deployment URL, bypassing the Origin check and per-IP limit that only
+    // guard the /inquiry HTTP route. Each accepted call sends two emails (a
+    // confirmation to the visitor-supplied address + the owner alert), so
+    // without a ceiling an attacker rotating the email field could use the site
+    // as a spam relay and exhaust email credits. Counted only for submissions
+    // that already passed the honeypot, validation and per-email throttle, so
+    // junk traffic can't consume the budget and lock out real visitors.
+    const GLOBAL_HOURLY_LIMIT = 30;
+    const GLOBAL_WINDOW_MS = 60 * 60 * 1000;
+    const globalKey = "global:inquiries";
+    const now = Date.now();
+    const globalRow = await ctx.db
+      .query("rateLimits")
+      .withIndex("by_key", (q) => q.eq("key", globalKey))
+      .first();
+    if (!globalRow || now - globalRow.windowStart >= GLOBAL_WINDOW_MS) {
+      // First submission, or the hourly window rolled over — start fresh.
+      if (globalRow) {
+        await ctx.db.patch(globalRow._id, { windowStart: now, count: 1, updatedAt: now });
+      } else {
+        await ctx.db.insert("rateLimits", {
+          key: globalKey,
+          windowStart: now,
+          count: 1,
+          updatedAt: now,
+        });
+      }
+    } else if (globalRow.count >= GLOBAL_HOURLY_LIMIT) {
+      return {
+        success: false,
+        message: "We're receiving a lot of requests right now — please try again shortly.",
+      };
+    } else {
+      await ctx.db.patch(globalRow._id, { count: globalRow.count + 1, updatedAt: now });
     }
 
     await ctx.db.insert("projectInquiries", {
